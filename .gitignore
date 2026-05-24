@@ -88,3 +88,6 @@ user_history.txt
 
 # CMake build directories
 cmake-build-*/
+
+# node_modules
+node_modules/
