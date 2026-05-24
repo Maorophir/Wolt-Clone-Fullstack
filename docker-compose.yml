@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  recommendation-system:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wolt-recommendation-server
+
+    # This connects your host's port 5555 to the container's port 5555.
+    ports:
+      - "5555:5555"
+
+    # Volume mapping for data persistence (Perfect, exactly as we discussed)
+    volumes:
+      - ./data:/app/data
+
+    # EX2 UPDATE: Pass the port number to the main() function as argv[1].
+    # (Assumes your Dockerfile has an ENTRYPOINT like: ENTRYPOINT ["./build/WoltProject"])
+    command: ["5555"]
+
+    # Optional environment variables
+    environment:
+      - APP_DATA_DIR=/app/data
+
+    # Restart policy
+    restart: unless-stopped
