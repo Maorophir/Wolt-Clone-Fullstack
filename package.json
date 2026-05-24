@@ -1,0 +1,24 @@
+{
+  "name": "wolt-project-ex3",
+  "version": "1.0.0",
+  "description": "Node.js MVC server for Wolt Delivery App",
+  "main": "server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maorophir/Wolt-Clone-Project-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Maorophir/Wolt-Clone-Project-/issues"
+  },
+  "homepage": "https://github.com/Maorophir/Wolt-Clone-Project-#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
