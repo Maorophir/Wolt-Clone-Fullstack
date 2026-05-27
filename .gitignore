@@ -81,6 +81,12 @@ test.sh
 run_docker.sh
 run_docker_tests.sh
 
+# IDE files
+.idea/
+*.iml
+*.iws
+*.ipr
+
 
 # user history
 data/user_history.txt
