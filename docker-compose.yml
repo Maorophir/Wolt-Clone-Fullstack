@@ -1,27 +1,37 @@
 version: '3.8'
 
 services:
-  recommendation-system:
+  # --------------------------------------------------------
+  # Service 1: The New Node.js Web Server (Ex3)
+  # --------------------------------------------------------
+  web-server:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: wolt-recommendation-server
+    container_name: wolt-web-server
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      # Critical for Epic 7: In Docker, containers communicate using service names, not localhost
+      - RECOMMENDATION_SERVER_HOST=recommendation-server
+      - RECOMMENDATION_SERVER_PORT=5555
+    depends_on:
+      - recommendation-server
+    restart: unless-stopped
 
-    # This connects your host's port 5555 to the container's port 5555.
+  # --------------------------------------------------------
+  # Service 2: The C++ TCP Recommendation Server (Ex2)
+  # --------------------------------------------------------
+  recommendation-server:
+    build:
+      # Assumes the C++ project files (CMakeLists, src, Dockerfile) are in this folder
+      context: ./cpp-server
+      dockerfile: Dockerfile
+    container_name: wolt-recommendation-server
     ports:
       - "5555:5555"
-
-    # Volume mapping for data persistence (Perfect, exactly as we discussed)
     volumes:
+      # Persist user history data
       - ./data:/app/data
-
-    # EX2 UPDATE: Pass the port number to the main() function as argv[1].
-    # (Assumes your Dockerfile has an ENTRYPOINT like: ENTRYPOINT ["./build/WoltProject"])
-    command: ["5555"]
-
-    # Optional environment variables
-    environment:
-      - APP_DATA_DIR=/app/data
-
-    # Restart policy
     restart: unless-stopped
