@@ -6,7 +6,6 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
     libgtest-dev \
-    python3 \
     && rm -rf /var/lib/apt/lists/*
 
 # Compile and install Google Test library
