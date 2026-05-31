@@ -87,6 +87,8 @@ run_docker_tests.sh
 *.iws
 *.ipr
 
+# Mock data
+src/utils/
 
 # user history
 data/user_history.txt

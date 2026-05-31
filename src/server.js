@@ -1,4 +1,5 @@
 const express = require('express');
+const searchRoutes = require('./routes/searchRoutes');
 const app = express();
 
 // Port configuration - 3000 as default
@@ -17,10 +18,16 @@ app.get('/api/health', (req, res) => {
     res.status(200).json({ message: "WoltProject Node.js Server is up and running!" });
 });
 
+
+
+
+app.use('/api/search', searchRoutes);
+
 // Handle 404 errors (non-existent route)
 app.use((req, res) => {
     res.status(404).json({ error: "Endpoint Not Found" });
 });
+
 
 // Start the server
 app.listen(PORT, () => {
