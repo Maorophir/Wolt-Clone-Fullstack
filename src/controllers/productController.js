@@ -1,4 +1,6 @@
 const productModel = require('../models/productModel');
+const userModel = require('../models/userModel');
+const recommendationService = require('../services/recommendationService');
 
 const getProducts = (req, res) => {
     const { id } = req.params;
@@ -13,8 +15,16 @@ const getProductById = (req, res) => {
     if (!product) {
         return res.status(404).json({ error: "Product not found" });
     }
-    
-    // TODO for Maor/Eden: Add C++ TCP server call here to register product view
+
+    // If a logged-in user is viewing this product, record the view in the
+    // recommendation server (Ex2). Best-effort and non-blocking: an absent or
+    // unknown viewer, or a down recommendation server, never affects this
+    // response.
+    const viewerId = req.header('X-User-Id');
+    if (viewerId && userModel.getUserById(viewerId)) {
+        recommendationService.registerView(viewerId, product.id);
+    }
+
     res.status(200).json(product);
 };
 
