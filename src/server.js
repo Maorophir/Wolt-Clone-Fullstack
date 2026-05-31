@@ -8,10 +8,14 @@ const PORT = process.env.PORT || 3000;
 // Critical Middleware: allows the server to read the request body in JSON format
 app.use(express.json());
 
-// --- Here we will later import and connect the Routes from other team members ---
-// For example (currently commented out so it doesn't crash):
-// const userRoutes = require('./routes/userRoutes');
-// app.use('/api/users', userRoutes);
+// --- Authentication & Orders routes (PRS-91, PRS-118) ---
+const userRoutes = require('./routes/userRoutes');
+const tokenRoutes = require('./routes/tokenRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
+app.use('/api/users', userRoutes);
+app.use('/api/tokens', tokenRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Temporary route to check that the server is running (Health Check)
 app.get('/api/health', (req, res) => {
