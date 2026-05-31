@@ -9,6 +9,16 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+// --- Authentication & Orders routes (PRS-91, PRS-118) ---
+const userRoutes = require('./routes/userRoutes');
+const tokenRoutes = require('./routes/tokenRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
+app.use('/api/users', userRoutes);
+app.use('/api/tokens', tokenRoutes);
+app.use('/api/orders', orderRoutes);
+
+// Temporary route to check that the server is running (Health Check)
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'WoltProject Node.js Server is up and running!' });
 });
