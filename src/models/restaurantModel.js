@@ -1,33 +1,53 @@
-const { v4: uuidv4 } = require('uuid');
-
-let restaurants = []; // In-memory data store
+const { randomUUID } = require('crypto');
+const storage = require('./storage');
 
 const getAllRestaurants = () => {
-    return restaurants;
+    return Array.from(storage.restaurants.values());
 };
 
 const getRestaurantById = (id) => {
-    return restaurants.find(restaurant => restaurant.id === id);
+    return storage.restaurants.get(id) || null;
 };
 
 const createRestaurant = (restaurantData) => {
-    const newRestaurant = { id: uuidv4(), ...restaurantData };
-    restaurants.push(newRestaurant);
+    const newRestaurant = {
+        id: randomUUID(),
+        ...restaurantData
+    };
+
+    storage.restaurants.set(newRestaurant.id, newRestaurant);
     return newRestaurant;
 };
 
 const updateRestaurant = (id, updateData) => {
-    const index = restaurants.findIndex(r => r.id === id);
-    if (index === -1) return null; // Restaurant not found
-    
-    restaurants[index] = { ...restaurants[index], ...updateData };
-    return restaurants[index];
+    const restaurant = storage.restaurants.get(id);
+
+    if (!restaurant) {
+        return null;
+    }
+
+    const updatedRestaurant = {
+        ...restaurant,
+        ...updateData,
+        id
+    };
+
+    storage.restaurants.set(id, updatedRestaurant);
+    return updatedRestaurant;
 };
 
 const deleteRestaurant = (id) => {
-    const initialLength = restaurants.length;
-    restaurants = restaurants.filter(r => r.id !== id);
-    return restaurants.length < initialLength; // True if deleted
+    const deleted = storage.restaurants.delete(id);
+
+    if (deleted) {
+        for (const [productId, product] of storage.products.entries()) {
+            if (product.restaurantId === id) {
+                storage.products.delete(productId);
+            }
+        }
+    }
+
+    return deleted;
 };
 
 module.exports = {
