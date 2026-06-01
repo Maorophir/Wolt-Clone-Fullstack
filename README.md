@@ -128,5 +128,12 @@ curl -i -X DELETE http://localhost:3000/api/restaurants/<id>
 ```
 *Expected Output:* `204 No Content`
 
+**9. Search Restaurants & Products**
+```bash
+# Searches for the query in both restaurant and product names/descriptions
+curl -i http://localhost:3000/api/search/pizza
+```
+*Expected Output:* `200 OK` (returns a JSON array of matching items)
+
 > Note: For actions requiring an authenticated user (like placing an order or viewing a product), you must pass the connected user's ID within the HTTP headers. 
 Example: -H "x-user-id: <user_id>"
