@@ -33,7 +33,9 @@ const createUser = (req, res) => {
 
     const createdUser = userModel.createUser({ name, email, phone, address, password });
 
-    res.status(201).location(`/api/users/${createdUser.id}`).end();
+    res.status(201)
+   .location(`/api/users/${createdUser.id}`)
+   .json(toPublic(createdUser));
 };
 
 /**

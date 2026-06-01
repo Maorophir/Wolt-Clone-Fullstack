@@ -23,7 +23,7 @@ const createRestaurant = (req, res) => {
     const newRestaurantData = { name, description, address, rating };
     const createdRestaurant = restaurantModel.createRestaurant(newRestaurantData);
 
-    res.status(201).json(createdRestaurant);
+    res.status(201).location(`/api/restaurants/${createdRestaurant.id}`).end();
 };
 
 const updateRestaurant = (req, res) => {

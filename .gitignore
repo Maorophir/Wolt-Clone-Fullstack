@@ -67,14 +67,11 @@ vcpkg_installed/
 # test output & cache
 Testing/
 .cache/
+tests/
 
 # instruction file
-Ex1.pdf
-Ex1.txt
-Writing Better Code (1).pdf
-Writing Better Code.pdf
-5-Sockets.pdf
-Ex2.pdf
+Ex3.txt
+Ex3.pdf
 
 # run script
 test.sh
@@ -86,6 +83,7 @@ run_docker_tests.sh
 *.iml
 *.iws
 *.ipr
+/.vscode/
 
 # Mock data
 src/utils/

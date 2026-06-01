@@ -40,7 +40,7 @@ const createProduct = (req, res) => {
     const newProductData = { name, description, price, isAvailable };
     const createdProduct = productModel.createProduct(id, newProductData);
 
-    res.status(201).json(createdProduct);
+    res.status(201).location(`/api/restaurants/${id}/products/${createdProduct.id}`).end();
 };
 
 const updateProduct = (req, res) => {

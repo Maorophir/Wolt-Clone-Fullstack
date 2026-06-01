@@ -5,6 +5,13 @@ const searchRoutes = require('./routes/searchRoutes');
 
 const app = express();
 
+// Disable ETag and Date header generation for cleaner responses
+app.disable('etag');
+app.use((req, res, next) => {
+    res.removeHeader('Date');
+    next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
