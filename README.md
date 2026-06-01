@@ -128,4 +128,5 @@ curl -i -X DELETE http://localhost:3000/api/restaurants/<id>
 ```
 *Expected Output:* `204 No Content`
 
-> *Note: For actions requiring an authenticated user (like placing an order), you must pass the connected user's ID within the HTTP headers per your implementation.*
+Note: For actions requiring an authenticated user (like placing an order or viewing a product), you must pass the connected user's ID within the HTTP headers. 
+Example: -H "x-user-id: <user_id>"
