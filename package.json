@@ -4,7 +4,8 @@
   "description": "Node.js MVC server for Wolt Delivery App",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test": "node tests/api.test.js"
   },
   "repository": {
     "type": "git",
