@@ -1,5 +1,3 @@
-// src/utils/api.js
-
 /**
  * A global wrapper function for all API calls in the application.
  * Handles JSON parsing, network errors, and can be easily extended
