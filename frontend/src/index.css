@@ -1,5 +1,32 @@
+/* Global theme tokens. PRS-158 theme toggle flips [data-theme] on <html>,
+   which switches every variable below and re-themes the whole app. */
+:root {
+  --brand: #009de0;
+  --brand-dark: #007cb0;
+  --bg: #f7f7f7;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6b6b;
+  --border: #ececec;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --danger: #c0392b;
+}
+
+[data-theme="dark"] {
+  --bg: #121212;
+  --surface: #1e1e1e;
+  --text: #f2f2f2;
+  --muted: #a8a8a8;
+  --border: #2c2c2c;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+  --danger: #ff6b6b;
+}
+
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.2s ease, color 0.2s ease;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;

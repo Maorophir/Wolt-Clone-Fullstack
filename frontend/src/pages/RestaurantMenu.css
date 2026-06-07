@@ -7,29 +7,21 @@
  */
 
 .restaurant-menu-page {
-    /* Light theme (default) */
-    --wolt-brand: #009de0;
-    --wolt-brand-dark: #007cb0;
-    --wolt-bg: #f7f7f7;
-    --wolt-surface: #ffffff;
-    --wolt-text: #1a1a1a;
-    --wolt-text-muted: #6b6b6b;
-    --wolt-border: #ececec;
-    --wolt-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    /* Theme tokens aliased to the global set (index.css) so the theme toggle
+       drives every page from one source of truth (light + dark). */
+    --wolt-brand: var(--brand);
+    --wolt-brand-dark: var(--brand-dark);
+    --wolt-bg: var(--bg);
+    --wolt-surface: var(--surface);
+    --wolt-text: var(--text);
+    --wolt-text-muted: var(--muted);
+    --wolt-border: var(--border);
+    --wolt-shadow: var(--shadow);
 
     max-width: 960px;
     margin: 0 auto;
     padding: 1.5rem 1rem 4rem;
     color: var(--wolt-text);
-}
-
-[data-theme="dark"] .restaurant-menu-page {
-    --wolt-bg: #121212;
-    --wolt-surface: #1e1e1e;
-    --wolt-text: #f2f2f2;
-    --wolt-text-muted: #a8a8a8;
-    --wolt-border: #2c2c2c;
-    --wolt-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 /* --- Back link --- */
@@ -179,11 +171,11 @@
     margin: 4rem auto;
     text-align: center;
     font-size: 1.1rem;
-    color: #6b6b6b;
+    color: var(--wolt-text-muted);
 }
 
 .menu-status--error {
-    color: #c0392b;
+    color: var(--danger);
 }
 
 /* --- Toast --- */

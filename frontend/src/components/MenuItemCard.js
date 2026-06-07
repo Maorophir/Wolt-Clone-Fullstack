@@ -1,15 +1,5 @@
 import React from 'react';
-
-/**
- * Formats a numeric price as Israeli Shekels (e.g. 42 -> "₪42.00").
- * Returns an empty string for missing / non-numeric prices so the card
- * still renders gracefully when the server omits a price.
- */
-const formatPrice = (price) => {
-    const value = Number(price);
-    if (Number.isNaN(value)) return '';
-    return `₪${value.toFixed(2)}`;
-};
+import { formatPrice } from '../utils/format';
 
 /**
  * A single menu item (dish) inside a restaurant's menu.

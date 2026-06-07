@@ -4,8 +4,7 @@ import { apiCall } from '../utils/api';
 import { authHeaders, getCurrentUser } from '../utils/auth';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
-
-const formatPrice = (n) => `₪${(Number(n) || 0).toFixed(2)}`;
+import { formatPrice } from '../utils/format';
 
 /**
  * PRS-160 — Checkout page (/checkout). Reachable only by a logged-in user

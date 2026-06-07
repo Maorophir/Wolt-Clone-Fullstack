@@ -1,7 +1,6 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-
-const formatPrice = (n) => `₪${(Number(n) || 0).toFixed(2)}`;
+import { formatPrice } from '../utils/format';
 
 /**
  * A single line in the cart: name, unit price, quantity stepper, line subtotal

@@ -14,13 +14,13 @@ const getRestaurantById = (req, res) => {
 };
 
 const createRestaurant = (req, res) => {
-    const { name, description, address, rating } = req.body;
+    const { name, description, address, rating, category } = req.body;
 
     if (!name) {
         return res.status(400).json({ error: "Name is required" });
     }
 
-    const newRestaurantData = { name, description, address, rating };
+    const newRestaurantData = { name, description, address, rating, category };
     const createdRestaurant = restaurantModel.createRestaurant(newRestaurantData);
 
     res.status(201).location(`/api/restaurants/${createdRestaurant.id}`).end();

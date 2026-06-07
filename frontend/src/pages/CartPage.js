@@ -3,8 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CartItemRow from '../components/CartItemRow';
 import './Cart.css';
-
-const formatPrice = (n) => `₪${(Number(n) || 0).toFixed(2)}`;
+import { formatPrice } from '../utils/format';
 
 /**
  * PRS-160 — Cart page (/cart). Lists the items in the cart, lets the user adjust
