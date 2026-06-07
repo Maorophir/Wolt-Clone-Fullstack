@@ -1,13 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import RestaurantMenu from './pages/RestaurantMenu';
 
 // Placeholder components (will be moved to their own files in the /pages directory later)
 const Home = () => <div><h2>Home Page (Restaurant Feed)</h2></div>;
 const Login = () => <div><h2>Login Page</h2></div>;
 const Register = () => <div><h2>Register Page</h2></div>;
-const RestaurantMenu = () => <div><h2>Restaurant Menu</h2></div>;
 
 // Placeholder Navbar (will be moved to /components)
 const Navbar = () => (

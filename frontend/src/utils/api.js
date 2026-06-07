@@ -39,7 +39,7 @@ export const apiCall = async (endpoint, options = {}) => {
 
         if (!response.ok) {
             // Throw a structured error so components can display it to the user
-            throw new Error(data.message || 'Something went wrong while communicating with the server');
+            throw new Error(data.error || data.message || 'Something went wrong while communicating with the server');
         }
 
         return data;
