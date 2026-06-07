@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiCall } from '../utils/api';
+import { useCart } from '../context/CartContext';
 import RestaurantHeader from '../components/RestaurantHeader';
 import MenuList from '../components/MenuList';
 import './RestaurantMenu.css';
@@ -17,11 +18,11 @@ import './RestaurantMenu.css';
  *   - loading / error       : request lifecycle, surfaced clearly to the user
  *   - toast                 : transient "added to cart" confirmation
  *
- * `handleAddToCart` is the integration seam for PRS-160: today it only shows a
- * toast; once the cart context exists it will also call cart.addItem(product).
+ * "Add to cart" is wired to the PRS-160 cart context.
  */
 const RestaurantMenu = () => {
     const { id } = useParams();
+    const { addItem } = useCart();
 
     const [restaurant, setRestaurant] = useState(null);
     const [products, setProducts] = useState([]);
@@ -74,7 +75,11 @@ const RestaurantMenu = () => {
     }, []);
 
     const handleAddToCart = (product) => {
-        // PRS-160 will add: cart.addItem(product) here.
+        // Single-restaurant cart: addItem returns false if the user declined to
+        // replace a cart from a different restaurant — only confirm on a real add.
+        const added = addItem(product, restaurant);
+        if (added === false) return;
+
         setToast(`${product.name} added to cart`);
         if (toastTimer.current) clearTimeout(toastTimer.current);
         toastTimer.current = setTimeout(() => setToast(''), 2000);

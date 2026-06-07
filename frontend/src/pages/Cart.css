@@ -1,0 +1,264 @@
+/*
+ * PRS-160 Cart & Checkout styles. Theme-ready: colors come from CSS variables
+ * with a [data-theme="dark"] override, matching the Restaurant Menu page so the
+ * global theme toggle (PRS) drives the whole app consistently.
+ */
+
+.cart-page {
+    --wolt-brand: #009de0;
+    --wolt-brand-dark: #007cb0;
+    --wolt-surface: #ffffff;
+    --wolt-text: #1a1a1a;
+    --wolt-text-muted: #6b6b6b;
+    --wolt-border: #ececec;
+    --wolt-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    color: var(--wolt-text);
+}
+
+[data-theme="dark"] .cart-page {
+    --wolt-surface: #1e1e1e;
+    --wolt-text: #f2f2f2;
+    --wolt-text-muted: #a8a8a8;
+    --wolt-border: #2c2c2c;
+    --wolt-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cart-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0 0 1.25rem;
+}
+
+/* --- Items panel --- */
+.cart-items {
+    background: var(--wolt-surface);
+    border: 1px solid var(--wolt-border);
+    border-radius: 14px;
+    box-shadow: var(--wolt-shadow);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+}
+
+.cart-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.1rem;
+    border-bottom: 1px solid var(--wolt-border);
+}
+
+.cart-row:last-child {
+    border-bottom: none;
+}
+
+.cart-row__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-row__name {
+    font-weight: 700;
+}
+
+.cart-row__price {
+    color: var(--wolt-text-muted);
+    font-size: 0.85rem;
+}
+
+.cart-row__qty {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.cart-row__qty button {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--wolt-border);
+    background: var(--wolt-surface);
+    color: var(--wolt-text);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.cart-row__qty button:hover {
+    border-color: var(--wolt-brand);
+    color: var(--wolt-brand);
+}
+
+.cart-row__subtotal {
+    font-weight: 800;
+    min-width: 72px;
+    text-align: right;
+}
+
+.cart-row__remove {
+    background: none;
+    border: none;
+    color: var(--wolt-text-muted);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.cart-row__remove:hover {
+    color: #c0392b;
+}
+
+/* --- Summary & actions --- */
+.cart-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 0 0.4rem 1.25rem;
+}
+
+.cart-summary__total {
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+.cart-actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.cart-checkout {
+    background: var(--wolt-brand);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.8rem 1.6rem;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.cart-checkout:hover:not(:disabled) {
+    background: var(--wolt-brand-dark);
+}
+
+.cart-checkout:disabled {
+    background: #c4c4c4;
+    cursor: not-allowed;
+}
+
+.cart-checkout--link {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.cart-clear {
+    background: none;
+    border: 1px solid var(--wolt-border);
+    color: var(--wolt-text-muted);
+    border-radius: 999px;
+    padding: 0.8rem 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cart-clear:hover {
+    border-color: #c0392b;
+    color: #c0392b;
+}
+
+/* --- Empty / checkout extras --- */
+.cart-empty {
+    text-align: center;
+    padding-top: 4rem;
+    color: var(--wolt-text-muted);
+}
+
+.cart-link {
+    color: var(--wolt-brand);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.checkout-user {
+    color: var(--wolt-text-muted);
+    margin: -0.5rem 0 1.25rem;
+}
+
+.checkout-line {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.7rem 1.1rem;
+    border-bottom: 1px solid var(--wolt-border);
+}
+
+.checkout-line:last-child {
+    border-bottom: none;
+}
+
+.checkout-error {
+    color: #c0392b;
+    font-weight: 600;
+    margin: 0.75rem 0;
+}
+
+/* --- Order confirmation --- */
+.order-confirmation {
+    text-align: center;
+    padding-top: 3.5rem;
+}
+
+.confirmation-check {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1.25rem;
+    border-radius: 50%;
+    background: #2ecc71;
+    color: #fff;
+    font-size: 2.5rem;
+    line-height: 72px;
+    font-weight: 800;
+}
+
+.order-confirmation h2 {
+    font-size: 1.8rem;
+    margin: 0 0 0.5rem;
+}
+
+.order-confirmation p {
+    color: var(--wolt-text-muted);
+    margin-bottom: 1.5rem;
+}
+
+/* --- Cart button in the navbar --- */
+.cart-button {
+    position: relative;
+    text-decoration: none;
+    font-size: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.cart-button__badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background: #009de0;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
