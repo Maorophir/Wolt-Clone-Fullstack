@@ -1,0 +1,194 @@
+/*
+ * PRS-159 Restaurant Menu View styles.
+ *
+ * Theme-ready: colors are driven by CSS variables defined for the page in light
+ * mode, with a [data-theme="dark"] override. When PRS's global theme toggle sets
+ * data-theme="dark" on a parent element, this page follows automatically.
+ */
+
+.restaurant-menu-page {
+    /* Theme tokens aliased to the global set (index.css) so the theme toggle
+       drives every page from one source of truth (light + dark). */
+    --wolt-brand: var(--brand);
+    --wolt-brand-dark: var(--brand-dark);
+    --wolt-bg: var(--bg);
+    --wolt-surface: var(--surface);
+    --wolt-text: var(--text);
+    --wolt-text-muted: var(--muted);
+    --wolt-border: var(--border);
+    --wolt-shadow: var(--shadow);
+
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    color: var(--wolt-text);
+}
+
+/* --- Back link --- */
+.menu-back-link {
+    display: inline-block;
+    margin-bottom: 1rem;
+    color: var(--wolt-brand);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.menu-back-link:hover {
+    text-decoration: underline;
+}
+
+/* --- Restaurant header --- */
+.restaurant-header {
+    background: var(--wolt-surface);
+    border: 1px solid var(--wolt-border);
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: var(--wolt-shadow);
+    margin-bottom: 2rem;
+}
+
+.restaurant-header__name {
+    margin: 0 0 0.5rem;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.restaurant-header__desc {
+    margin: 0 0 1rem;
+    color: var(--wolt-text-muted);
+    line-height: 1.5;
+}
+
+.restaurant-header__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: 0.95rem;
+}
+
+.restaurant-header__rating {
+    background: var(--wolt-brand);
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 700;
+}
+
+.restaurant-header__address {
+    color: var(--wolt-text-muted);
+}
+
+/* --- Menu list --- */
+.menu-list__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 1rem;
+}
+
+.menu-list__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+/* --- Menu item card --- */
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: var(--wolt-surface);
+    border: 1px solid var(--wolt-border);
+    border-radius: 14px;
+    padding: 1rem 1.1rem 1.1rem;
+    box-shadow: var(--wolt-shadow);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.menu-item--unavailable {
+    opacity: 0.55;
+}
+
+.menu-item__body {
+    margin-bottom: 0.9rem;
+}
+
+.menu-item__name {
+    margin: 0 0 0.35rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.menu-item__desc {
+    margin: 0 0 0.6rem;
+    color: var(--wolt-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.menu-item__price {
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+
+.menu-item__add {
+    align-self: flex-start;
+    background: var(--wolt-brand);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.5rem 1.1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.12s ease;
+}
+
+.menu-item__add:hover:not(:disabled) {
+    background: var(--wolt-brand-dark);
+}
+
+.menu-item__add:disabled {
+    background: #c4c4c4;
+    cursor: not-allowed;
+}
+
+/* --- States --- */
+.menu-empty {
+    color: var(--wolt-text-muted);
+    font-size: 1rem;
+    padding: 1rem 0;
+}
+
+.menu-status {
+    max-width: 960px;
+    margin: 4rem auto;
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--wolt-text-muted);
+}
+
+.menu-status--error {
+    color: var(--danger);
+}
+
+/* --- Toast --- */
+.menu-toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a1a;
+    color: #fff;
+    padding: 0.7rem 1.3rem;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}

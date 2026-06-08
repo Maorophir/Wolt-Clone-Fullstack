@@ -1,31 +1,61 @@
 // src/context/ThemeContext.js
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
-// Create the context
-const ThemeContext = createContext();
+const ThemeContext = createContext(null);
+const STORAGE_KEY = 'wolt_theme_is_dark';
+
+/**
+ * Safely reads the theme preference from localStorage.
+ * Handles cases where localStorage might be blocked (e.g., private browsing).
+ */
+const readStoredTheme = () => {
+    try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored === 'true'; // Convert string back to boolean
+    } catch {
+        return false; // Default to light mode (false) if storage is unavailable
+    }
+};
 
 export const ThemeProvider = ({ children }) => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    // Initialize state from local storage (PRS-158 persistence)
+    const [isDarkMode, setIsDarkMode] = useState(readStoredTheme);
 
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => !prevMode);
     };
 
-    // Automatically update the body tag whenever the theme state changes
+    // Sync with DOM and localStorage whenever the theme changes
     useEffect(() => {
+        // 1. Update the DOM class for our CSS variables (main branch logic)
         if (isDarkMode) {
             document.body.classList.add('app-dark');
         } else {
             document.body.classList.remove('app-dark');
         }
+
+        // 2. Persist the choice safely (PRS-158 logic)
+        try {
+            localStorage.setItem(STORAGE_KEY, String(isDarkMode));
+        } catch {
+            /* storage unavailable — keep the in-memory theme */
+        }
     }, [isDarkMode]);
 
     return (
         <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
-            {/* The wrapper div is no longer needed since the body tag handles the theme class */}
             {children}
         </ThemeContext.Provider>
     );
 };
 
-export const useTheme = () => useContext(ThemeContext);
+/**
+ * Custom hook with safety checks (PRS-158)
+ */
+export const useTheme = () => {
+    const ctx = useContext(ThemeContext);
+    if (!ctx) {
+        throw new Error('useTheme must be used within a ThemeProvider');
+    }
+    return ctx;
+};

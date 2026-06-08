@@ -30,14 +30,18 @@ export const apiCall = async (endpoint, options = {}) => {
     try {
         const response = await fetch(endpoint, config);
 
-        // If the status is 204 (No Content), there is no JSON to parse
+        // 204 (No Content) and empty 201 (Created — the resource is in the
+        // Location header) responses have no JSON body to parse.
         if (response.status === 204) return null;
 
-        const data = await response.json();
+        const text = await response.text();
+        const data = text ? JSON.parse(text) : null;
 
         if (!response.ok) {
-            // Throw a structured error so components can display it to the user
-            throw new Error(data.message || 'Something went wrong while communicating with the server');
+            // Throw a structured error so components can display it to the user.
+            const message = (data && (data.error || data.message)) ||
+                'Something went wrong while communicating with the server';
+            throw new Error(message);
         }
 
         return data;
