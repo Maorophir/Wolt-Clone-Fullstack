@@ -50,7 +50,7 @@ const Navbar = () => {
                     onClick={toggleTheme}
                     title="Toggle theme"
                 >
-                    {isDarkMode ? '☀️ Light Mode' : '🌙 Dark Mode'}
+                    {isDarkMode ? '☀️' : '🌙'}
                 </button>
 
                 {loggedIn && <Link to="/orders" className="navbar-link">My orders</Link>}
