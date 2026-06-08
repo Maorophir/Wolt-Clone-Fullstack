@@ -1,48 +1,57 @@
+// src/context/ThemeContext.js
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-/**
- * PRS-158 — App-wide light/dark theme.
- *
- * Sets a `data-theme` attribute on the document root; every page's CSS reacts to
- * `[data-theme="dark"]`, so toggling here re-themes the whole app (home, menu,
- * cart, orders) consistently. The choice is persisted to localStorage.
- *
- * localStorage access is guarded so the app still mounts where storage is
- * unavailable (e.g. private mode), matching the defensive pattern used by the
- * cart and auth modules.
- */
 const ThemeContext = createContext(null);
-const STORAGE_KEY = 'wolt_theme';
+const STORAGE_KEY = 'wolt_theme_is_dark';
 
+/**
+ * Safely reads the theme preference from localStorage.
+ * Handles cases where localStorage might be blocked (e.g., private browsing).
+ */
 const readStoredTheme = () => {
     try {
-        return localStorage.getItem(STORAGE_KEY) || 'light';
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored === 'true'; // Convert string back to boolean
     } catch {
-        return 'light';
+        return false; // Default to light mode (false) if storage is unavailable
     }
 };
 
 export const ThemeProvider = ({ children }) => {
-    const [theme, setTheme] = useState(readStoredTheme);
+    // Initialize state from local storage (PRS-158 persistence)
+    const [isDarkMode, setIsDarkMode] = useState(readStoredTheme);
 
+    const toggleTheme = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+    };
+
+    // Sync with DOM and localStorage whenever the theme changes
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
+        // 1. Update the DOM class for our CSS variables (main branch logic)
+        if (isDarkMode) {
+            document.body.classList.add('app-dark');
+        } else {
+            document.body.classList.remove('app-dark');
+        }
+
+        // 2. Persist the choice safely (PRS-158 logic)
         try {
-            localStorage.setItem(STORAGE_KEY, theme);
+            localStorage.setItem(STORAGE_KEY, String(isDarkMode));
         } catch {
             /* storage unavailable — keep the in-memory theme */
         }
-    }, [theme]);
-
-    const toggleTheme = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));
+    }, [isDarkMode]);
 
     return (
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
+        <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
             {children}
         </ThemeContext.Provider>
     );
 };
 
+/**
+ * Custom hook with safety checks (PRS-158)
+ */
 export const useTheme = () => {
     const ctx = useContext(ThemeContext);
     if (!ctx) {

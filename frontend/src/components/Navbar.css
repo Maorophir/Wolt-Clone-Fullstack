@@ -1,29 +1,35 @@
+/* src/components/Navbar.css */
+
+/* --- Main Navbar Container --- */
 .navbar {
     position: sticky;
     top: 0;
     z-index: 100;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 1.25rem;
-    padding: 0.75rem 1.5rem;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 2rem;
+    background-color: var(--navbar-bg);
+    border-bottom: 1px solid var(--navbar-border);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.navbar__brand {
+/* --- Brand Logo --- */
+.navbar-brand {
     font-size: 1.6rem;
     font-weight: 900;
     text-decoration: none;
-    color: var(--text);
+    color: var(--text-color);
     flex-shrink: 0;
     letter-spacing: -0.5px;
 }
 
-.navbar__brand span {
-    color: var(--brand);
+.navbar-brand span {
+    color: var(--link-color);
 }
 
-/* --- Search --- */
+/* --- SearchBar (Imported from PRS-158, adapted to our Theme Variables) --- */
 .searchbar {
     flex: 1;
     max-width: 560px;
@@ -31,10 +37,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background-color: var(--bg-color);
+    border: 1px solid var(--input-border);
     border-radius: 999px;
     padding: 0.55rem 1.1rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .searchbar__btn {
@@ -42,14 +49,16 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    color: var(--muted);
+    color: var(--text-color);
+    opacity: 0.7;
     font-size: 0.95rem;
     display: flex;
     align-items: center;
 }
 
 .searchbar__btn:hover {
-    color: var(--brand);
+    opacity: 1;
+    color: var(--link-color);
 }
 
 .searchbar__input {
@@ -58,24 +67,25 @@
     background: transparent;
     outline: none;
     font-size: 0.95rem;
-    color: var(--text);
+    color: var(--text-color);
 }
 
 .searchbar__input::placeholder {
-    color: var(--muted);
+    color: var(--text-color);
+    opacity: 0.5;
 }
 
-/* --- Right-side actions --- */
-.navbar__actions {
+/* --- Right-side Actions & Theme Toggle --- */
+.navbar-actions {
     display: flex;
     align-items: center;
     gap: 1rem;
     flex-shrink: 0;
 }
 
-.navbar__icon-btn {
-    background: var(--bg);
-    border: 1px solid var(--border);
+.theme-toggle-btn {
+    background-color: var(--bg-color);
+    border: 1px solid var(--input-border);
     border-radius: 50%;
     width: 38px;
     height: 38px;
@@ -84,36 +94,27 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text-color);
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-.navbar__icon-btn:hover {
-    border-color: var(--brand);
+.theme-toggle-btn:hover {
+    border-color: var(--link-color);
 }
 
-.navbar__link {
+.navbar-link {
     text-decoration: none;
-    color: var(--text);
+    color: var(--text-color);
     font-weight: 600;
     font-size: 0.95rem;
+    transition: color 0.3s ease;
 }
 
-.navbar__link:hover {
-    color: var(--brand);
+.navbar-link:hover {
+    color: var(--link-color);
 }
 
-.navbar__login {
-    text-decoration: none;
-    background: var(--brand);
-    color: #fff;
-    font-weight: 700;
-    padding: 0.5rem 1.1rem;
-    border-radius: 999px;
-}
-
-.navbar__login:hover {
-    background: var(--brand-dark);
-}
-
+/* --- User Authentication Styles (From PRS-158) --- */
 .navbar__user {
     display: flex;
     align-items: center;
@@ -124,7 +125,7 @@
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: var(--brand);
+    background-color: var(--link-color); /* Using Wolt Cyan */
     color: #fff;
     font-size: 0.78rem;
     font-weight: 800;
@@ -140,24 +141,27 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: var(--text-color);
 }
 
 .navbar__logout {
     background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
+    border: 1px solid var(--input-border);
+    color: var(--text-color);
     border-radius: 999px;
     padding: 0.35rem 0.8rem;
     font-weight: 600;
     font-size: 0.82rem;
     cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .navbar__logout:hover {
-    border-color: var(--danger);
-    color: var(--danger);
+    border-color: #ff4d4f; /* Danger red */
+    color: #ff4d4f;
 }
 
+/* --- Responsive Design (From PRS-158) --- */
 @media (max-width: 640px) {
     .navbar {
         flex-wrap: wrap;
