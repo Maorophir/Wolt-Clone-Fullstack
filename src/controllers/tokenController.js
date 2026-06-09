@@ -8,18 +8,18 @@ const userModel = require('../models/userModel');
  * into a real token in a later exercise.
  */
 const login = (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Username and password are required' });
     }
 
-    const user = userModel.getUserByEmail(email);
+    const user = userModel.getUserByUsername(username);
 
     // Same response for "no such user" and "wrong password" so we don't leak
-    // which emails are registered.
+    // which usernames are registered.
     if (!user || user.password !== password) {
-        return res.status(401).json({ error: 'Invalid email or password' });
+        return res.status(401).json({ message: 'Invalid username or password' });
     }
 
     res.status(200).json({ userId: user.id });

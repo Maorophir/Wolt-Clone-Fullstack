@@ -21,12 +21,17 @@ const getUserById = (id) => {
     return users.find(user => user.id === id);
 };
 
-const getUserByEmail = (email) => {
-    return users.find(user => user.email === email);
+const getUserByUsername = (username) => {
+    return users.find(user => user.username === username);
+};
+
+const getAllUsers = () => {
+    return users;
 };
 
 module.exports = {
     createUser,
     getUserById,
-    getUserByEmail
+    getUserByUsername,
+    getAllUsers
 };
