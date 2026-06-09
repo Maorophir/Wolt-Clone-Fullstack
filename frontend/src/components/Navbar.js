@@ -36,7 +36,9 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div>
-                <Link to="/" className="navbar-brand">WoltClone</Link>
+                <Link to="/" className="navbar-brand">
+                    <span>Wolt</span>Clone
+                </Link>
             </div>
 
             {/* Using the extracted SearchBar component from PRS-158 instead of inline form */}
@@ -44,14 +46,18 @@ const Navbar = () => {
 
             <div className="navbar-actions">
                 {/* Theme Toggle from main branch */}
-                <button 
-                    type="button" 
-                    className="theme-toggle-btn" 
-                    onClick={toggleTheme}
-                    title="Toggle theme"
-                >
-                    {isDarkMode ? '☀️' : '🌙'}
-                </button>
+                <label className="theme-switch" aria-label="Toggle theme">
+                    <input
+                        type="checkbox"
+                        checked={isDarkMode}
+                        onChange={toggleTheme}
+                    />
+                    <div className="switch-slider">
+                        <div className="switch-thumb">
+                            {isDarkMode ? '🌙' : '☀️'}
+                        </div>
+                    </div>
+                </label>
 
                 {loggedIn && <Link to="/orders" className="navbar-link">My orders</Link>}
 

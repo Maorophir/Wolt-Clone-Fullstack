@@ -1,4 +1,4 @@
-/* src/components/Navbar.css */
+
 
 /* --- Main Navbar Container --- */
 .navbar {
@@ -83,25 +83,6 @@
     flex-shrink: 0;
 }
 
-.theme-toggle-btn {
-    background-color: var(--bg-color);
-    border: 1px solid var(--input-border);
-    border-radius: 50%;
-    width: 38px;
-    height: 38px;
-    font-size: 1.05rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-color);
-    transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.theme-toggle-btn:hover {
-    border-color: var(--link-color);
-}
-
 .navbar-link {
     text-decoration: none;
     color: var(--text-color);
@@ -159,6 +140,81 @@
 .navbar__logout:hover {
     border-color: #ff4d4f; /* Danger red */
     color: #ff4d4f;
+}
+
+/* --- Modern Theme Toggle Switch (Perfect Vertical Center) --- */
+.theme-switch {
+    position: relative;
+    display: flex; /* Flex prevents inherited line-height weirdness */
+    align-items: center;
+    width: 56px;
+    height: 32px;
+    margin-left: 1rem;
+    flex-shrink: 0;
+}
+
+/* Hide default HTML checkbox */
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slim track (background) */
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    /* Force exact vertical centering */
+    top: 50%;
+    transform: translateY(-50%);
+    height: 16px; /* Explicit slim height */
+    left: 0;
+    right: 0;
+    background-color: #e4e4e4;
+    transition: 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    border-radius: 34px;
+}
+
+/* Dark mode track color */
+.app-dark .switch-slider {
+    background-color: #1a2f4c;
+}
+
+/* The big thumb (moving circle) */
+.switch-thumb {
+    position: absolute;
+    /* Force exact vertical centering */
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 32px;
+    height: 32px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    /* Transition includes the transform property */
+    transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    color: #f39c12;
+    z-index: 2;
+}
+
+/* Move the thumb to the right when checked */
+.theme-switch input:checked + .switch-slider .switch-thumb {
+    /* Keep the -50% Y centering, and add the 24px X slide */
+    transform: translate(24px, -50%);
+    background-color: #0a1526;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    color: #f1c40f;
+}
+
+/* Focus state for keyboard navigation */
+.theme-switch input:focus-visible + .switch-slider {
+    outline: 2px solid var(--link-color);
+    outline-offset: 4px;
 }
 
 /* --- Responsive Design (From PRS-158) --- */

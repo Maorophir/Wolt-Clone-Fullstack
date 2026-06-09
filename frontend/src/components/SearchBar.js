@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import './SearchBar.css';
+import {useTheme} from "../context/ThemeContext";
 
 /**
  * The top-bar search box. Submitting navigates to the search results page with
@@ -11,6 +13,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
  */
 const SearchBar = () => {
     const inputRef = useRef(null);
+    const { isDarkMode, toggleTheme } = useTheme();
     const navigate = useNavigate();
     const [params] = useSearchParams();
     const activeQuery = params.get('q') || '';
@@ -28,14 +31,16 @@ const SearchBar = () => {
     };
 
     return (
-        <form className="searchbar" onSubmit={handleSubmit} role="search">
-            <button type="submit" className="searchbar__btn" aria-label="Search">🔍</button>
+        <form className="searchbar" data-theme={isDarkMode ? 'dark' : 'light'} onSubmit={handleSubmit} role="search">
+            <button type="submit" className="searchbar__btn" aria-label="Search">
+                <span className="searchbar__icon"></span>
+            </button>
             <input
                 ref={inputRef}
                 type="search"
                 className="searchbar__input"
-                placeholder="Search restaurants or dishes…"
-                aria-label="Search restaurants or dishes"
+                placeholder="Search in WoltClone…"
+                aria-label="Search in WoltClone"
                 defaultValue={activeQuery}
             />
         </form>

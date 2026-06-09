@@ -45,9 +45,14 @@ services:
     ports:
       # Host port 3000 maps to Container port 3000 (resolves collision with Node.js port 3001)
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     environment:
       # Optional: Explicitly tell the React app where to send API requests
       - REACT_APP_API_URL=http://localhost:3000
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       - web-server
     # Critical flags to keep Create React App running in the background inside Docker

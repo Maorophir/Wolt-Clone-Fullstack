@@ -1,0 +1,28 @@
+/* SearchBar.css */
+
+.searchbar__btn {
+    /* איפוס עיצוב ברירת מחדל של כפתור (אם צריך) */
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px; /* קצת מרווח סביב האייקון */
+}
+
+/* מצב רגיל (Light Mode) */
+.searchbar__icon {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'%3E%3C/circle%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'%3E%3C/line%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* מצב Dark Mode - מופעל אוטומטית כשהטופס מקבל data-theme="dark" */
+.searchbar[data-theme="dark"] .searchbar__icon {
+    filter: invert(1);
+}
