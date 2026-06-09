@@ -12,11 +12,18 @@ import { formatPrice } from '../utils/format';
  * server explicitly sends `false`, so older items without the field still work.
  */
 const MenuItemCard = ({ product, onAddToCart }) => {
-    const { name, description, price, isAvailable } = product;
+    const { name, description, price, isAvailable, image } = product;
     const available = isAvailable !== false;
 
     return (
         <article className={`menu-item${available ? '' : ' menu-item--unavailable'}`}>
+            {image && (
+                <img
+                    src={image}
+                    alt={name || 'Dish'}
+                    className="menu-item__image"
+                />
+            )}
             <div className="menu-item__body">
                 <h3 className="menu-item__name">{name}</h3>
                 {description && <p className="menu-item__desc">{description}</p>}

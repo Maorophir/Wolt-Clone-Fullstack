@@ -1,8 +1,18 @@
 const { randomUUID } = require('crypto');
 const storage = require('./storage');
 
-const getAllRestaurants = () => {
-    return Array.from(storage.restaurants.values());
+const getAllRestaurants = (searchQuery = '') => {
+    const allRestaurants = Array.from(storage.restaurants.values());
+    if (!searchQuery) {
+        return allRestaurants;
+    }
+
+    const query = searchQuery.toLowerCase();
+
+    return allRestaurants.filter(restaurant =>
+        (restaurant.name && restaurant.name.toLowerCase().includes(query)) ||
+        (restaurant.category && restaurant.category.toLowerCase().includes(query))
+    );
 };
 
 const getRestaurantById = (id) => {

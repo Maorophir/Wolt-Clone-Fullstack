@@ -1,7 +1,8 @@
 const restaurantModel = require('../models/restaurantModel');
 
 const getAllRestaurants = (req, res) => {
-    const restaurants = restaurantModel.getAllRestaurants();
+    const { q } = req.query;
+    const restaurants = restaurantModel.getAllRestaurants(q);
     res.status(200).json(restaurants);
 };
 

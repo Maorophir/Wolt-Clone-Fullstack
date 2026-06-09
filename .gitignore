@@ -97,3 +97,6 @@ cmake-build-*/
 
 # node_modules
 node_modules/
+Ex4.pdf
+Ex4.txt
+.gitignore

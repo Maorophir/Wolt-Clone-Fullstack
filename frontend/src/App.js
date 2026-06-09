@@ -30,10 +30,10 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              
+
               {/* Maintained dynamic URL parameters from main branch architecture */}
               <Route path="/restaurant/:id" element={<RestaurantMenu />} />
-              <Route path="/search/:query" element={<SearchResults />} />
+              <Route path="/search/" element={<SearchResults />} />
 
               {/* Integrated order and checkout routes from PRS-158 */}
               <Route path="/cart" element={<CartPage />} />

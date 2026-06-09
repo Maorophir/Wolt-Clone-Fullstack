@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import './SearchBar.css';
-import {useTheme} from "../context/ThemeContext";
+import { useTheme } from "../context/ThemeContext";
 
 /**
  * The top-bar search box. Submitting navigates to the search results page with
@@ -13,7 +13,7 @@ import {useTheme} from "../context/ThemeContext";
  */
 const SearchBar = () => {
     const inputRef = useRef(null);
-    const { isDarkMode, toggleTheme } = useTheme();
+    const { isDarkMode } = useTheme();
     const navigate = useNavigate();
     const [params] = useSearchParams();
     const activeQuery = params.get('q') || '';

@@ -30,7 +30,7 @@ const pickGradient = (key = '') => {
  * hides any that are missing.
  */
 const RestaurantCard = ({ restaurant }) => {
-    const { id, name, description, address, rating } = restaurant;
+    const { id, name, description, address, rating, image } = restaurant;
 
     return (
         <Link
@@ -40,12 +40,20 @@ const RestaurantCard = ({ restaurant }) => {
         >
             <div
                 className="restaurant-card__banner"
-                style={{ background: pickGradient(name) }}
+                style={image ? {} : { background: pickGradient(name) }}
                 aria-hidden="true"
             >
-                <span className="restaurant-card__initial">
-                    {name ? name.charAt(0).toUpperCase() : '🍽'}
-                </span>
+                {image ? (
+                    <img
+                        src={image}
+                        alt={name || 'Restaurant'}
+                        className="restaurant-card__image"
+                    />
+                ) : (
+                    <span className="restaurant-card__initial">
+                        {name ? name.charAt(0).toUpperCase() : '🍽'}
+                    </span>
+                )}
             </div>
 
             <div className="restaurant-card__body">

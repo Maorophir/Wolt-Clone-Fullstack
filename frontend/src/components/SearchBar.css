@@ -1,17 +1,16 @@
 /* SearchBar.css */
 
 .searchbar__btn {
-    /* איפוס עיצוב ברירת מחדל של כפתור (אם צריך) */
     background: transparent;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px; /* קצת מרווח סביב האייקון */
+    padding: 8px;
 }
 
-/* מצב רגיל (Light Mode) */
+/*  (Light Mode) */
 .searchbar__icon {
     display: inline-block;
     width: 16px;
@@ -22,7 +21,7 @@
     background-position: center;
 }
 
-/* מצב Dark Mode - מופעל אוטומטית כשהטופס מקבל data-theme="dark" */
+/*  Dark Mode  data-theme="dark" */
 .searchbar[data-theme="dark"] .searchbar__icon {
     filter: invert(1);
 }
