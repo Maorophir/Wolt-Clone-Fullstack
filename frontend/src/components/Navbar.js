@@ -66,12 +66,17 @@ const Navbar = () => {
 
                 {/* Conditional rendering based on Auth state */}
                 {loggedIn ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginLeft: '1rem' }}>
-                        <span style={{ background: '#00C2E8', padding: '6px 10px', borderRadius: '50%', color: '#fff', fontWeight: 'bold' }}>
-                            {initialsOf(user)}
-                        </span>
-                        <span style={{ fontWeight: 'bold' }}>{user?.name || user?.email}</span>
-                        <button type="button" onClick={handleLogout} style={{ marginLeft: '10px', cursor: 'pointer', padding: '5px 10px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '1rem' }}>
+                        {/* Profile Picture Circle */}
+                        <div className="profile-avatar">
+                            {user?.profileImage ? (
+                                <img src={user.profileImage} alt={user.displayName || user.username} />
+                            ) : (
+                                <span>{initialsOf(user)}</span>
+                            )}
+                        </div>
+                        <span style={{ fontWeight: '600', fontSize: '14px' }}>{user?.displayName || user?.username || 'User'}</span>
+                        <button type="button" onClick={handleLogout} style={{ marginLeft: '10px', cursor: 'pointer', padding: '6px 12px', borderRadius: '6px', background: '#ff4757', color: 'white', border: 'none', fontWeight: '600', fontSize: '13px' }}>
                             Log out
                         </button>
                     </div>

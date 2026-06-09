@@ -10,28 +10,37 @@ const toPublic = (user) => {
 };
 
 /**
+ * GET /api/users (Test endpoint - see all registered users)
+ */
+const getAllUsers = (req, res) => {
+    const allUsers = userModel.getAllUsers();
+    const publicUsers = allUsers.map(toPublic);
+    res.status(200).json(publicUsers);
+};
+
+/**
  * POST /api/users  (PRS-95)
  * Registers a new user. Per the spec the response carries the new resource's
  * location in the Location header with an empty body (201 Created).
  */
 const createUser = (req, res) => {
-    const { name, email, phone, address, password } = req.body;
+    const { displayName, username, password } = req.body;
 
-    if (!name) {
-        return res.status(400).json({ error: 'Name is required' });
+    if (!displayName) {
+        return res.status(400).json({ message: 'Display name is required' });
     }
-    if (!email) {
-        return res.status(400).json({ error: 'Email is required' });
+    if (!username) {
+        return res.status(400).json({ message: 'Username is required' });
     }
     if (!password) {
-        return res.status(400).json({ error: 'Password is required' });
+        return res.status(400).json({ message: 'Password is required' });
     }
 
-    if (userModel.getUserByEmail(email)) {
-        return res.status(409).json({ error: 'Email already registered' });
+    if (userModel.getUserByUsername(username)) {
+        return res.status(409).json({ message: 'Username already taken' });
     }
 
-    const createdUser = userModel.createUser({ name, email, phone, address, password });
+    const createdUser = userModel.createUser({ displayName, username, password });
 
     res.status(201)
    .location(`/api/users/${createdUser.id}`)
@@ -53,6 +62,7 @@ const getUserById = (req, res) => {
 };
 
 module.exports = {
+    getAllUsers,
     createUser,
     getUserById
 };

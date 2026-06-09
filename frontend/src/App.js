@@ -13,10 +13,8 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrdersPage from './pages/OrdersPage';
-
-// Login and Register screens are still placeholders
-const Login = () => <div style={{ padding: '2rem' }}><h2>Login Page</h2></div>;
-const Register = () => <div style={{ padding: '2rem' }}><h2>Register Page</h2></div>;
+import Login from './Login';
+import Register from './Register';
 
 const App = () => {
   return (
