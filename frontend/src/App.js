@@ -5,7 +5,7 @@ import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
-// Real components imported from PRS-158 branch
+
 import Home from './pages/Home';
 import SearchResults from './pages/SearchResults';
 import RestaurantMenu from './pages/RestaurantMenu';

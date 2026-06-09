@@ -30,14 +30,14 @@ const getProductById = (req, res) => {
 
 const createProduct = (req, res) => {
     const { id } = req.params; 
-    const { name, description, price, isAvailable } = req.body;
+    const { name, description, price, isAvailable, image } = req.body;
 
     // Validate required fields
     if (!name) {
         return res.status(400).json({ error: "Product name is required" });
     }
 
-    const newProductData = { name, description, price, isAvailable };
+    const newProductData = { name, description, price, isAvailable, image };
     const createdProduct = productModel.createProduct(id, newProductData);
 
     res.status(201).location(`/api/restaurants/${id}/products/${createdProduct.id}`).end();

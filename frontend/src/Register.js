@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import WoltInput from './WoltInput';
 import { useRegister } from './useRegister';
 import './Login.css';
 
