@@ -1,4 +1,4 @@
-// PRS-60: Logical validation rules.
+//Logical validation rules.
 //
 // The protocol distinguishes two failure modes:
 //   - 400 Bad Request  -> the command itself is malformed (syntax)

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useLogin } from './useLogin';
+import { useLogin } from '../hooks/useLogin';
 import './Login.css';
 
 export default function Login() {
@@ -10,7 +10,7 @@ export default function Login() {
         isLoading,
         handleInputChange,
         submitForm
-    } = useLogin();
+    } = useLogin;
 
     const usernameRef = useRef(null);
 

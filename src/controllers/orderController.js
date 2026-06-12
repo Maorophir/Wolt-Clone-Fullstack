@@ -1,7 +1,7 @@
 const orderModel = require('../models/orderModel');
 
 /**
- * Orders API (PRS-118 / PRS-119).
+ * Orders API (/).
  *
  * Every endpoint here runs behind the auth middleware, so `req.userId` is
  * always the authenticated user. Orders are strictly scoped to their owner:

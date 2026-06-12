@@ -34,8 +34,8 @@ bool PostCommand::isCommandValid(const std::vector<std::string>& args) {
             stoi(args[i]);
         }
     } catch (...) {
-        return false; 
-    
+        return false;
+   
     }
 
     return true;

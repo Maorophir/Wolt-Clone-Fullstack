@@ -28,13 +28,13 @@ const std::string kExpectedHelp =
 
 } // namespace
 
-// PRS-57: unknown command -> 400 Bad Request.
+//unknown command -> 400 Bad Request.
 TEST_F(ParserTest, IgnoreUnrecognizedCommand) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("UNKNOWN COMMAND"));
 }
 
-// PRS-55 + PRS-57: old `recommend` keyword is no longer a valid command..
+//+old `recommend` keyword is no longer a valid command..
 TEST_F(ParserTest, OldRecommendKeywordIsBadRequest) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("recommend 1 100"));
@@ -77,65 +77,65 @@ TEST_F(ParserTest, IgnoreEmptyOrWhitespaceCommand) {
     EXPECT_EQ("400 Bad Request", parser.processCommand("   "));
 }
 
-// PRS-56: help command returns the new help text.
+//help command returns the new help text.
 TEST_F(ParserTest, HelpCommandReturnsHelpText) {
     CommandParser parser(testFilePath);
     EXPECT_EQ(kExpectedHelp, parser.processCommand("help"));
 }
 
-// PRS-55/57: GET with insufficient args -> 400.
+///57: GET with insufficient args -> 400.
 TEST_F(ParserTest, GetInsufficientArgs) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("get 1"));
 }
 
-// PRS-57: GET against an unknown user -> 404.
+//GET against an unknown user -> 404.
 TEST_F(ParserTest, GetUnknownUserReturnsNotFound) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("404 Not Found", parser.processCommand("get 1 100"));
 }
 
-// PRS-55: GET against an existing user with no recs -> "200 Ok\n\n".
+//GET against an existing user with no recs -> "200 Ok\n\n".
 TEST_F(ParserTest, GetExistingUserNoRecs) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("201 Created", parser.processCommand("post 1 100"));
     EXPECT_EQ("200 Ok\n\n", parser.processCommand("get 1 200"));
 }
 
-// PRS-53: PATCH on a never-created user -> 404 Not Found.
+//PATCH on a never-created user -> 404 Not Found.
 TEST_F(ParserTest, PatchUnknownUserReturnsNotFound) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("404 Not Found", parser.processCommand("patch 1 100"));
 }
 
-// PRS-53: PATCH on existing user appends + 204 No Content.
+//PATCH on existing user appends + 204 No Content.
 TEST_F(ParserTest, PatchExistingUserReturnsNoContent) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("201 Created",   parser.processCommand("post 1 100"));
     EXPECT_EQ("204 No Content", parser.processCommand("patch 1 200 300"));
 }
 
-// PRS-53/57: malformed PATCH -> 400 Bad Request.
+///57: malformed PATCH -> 400 Bad Request.
 TEST_F(ParserTest, PatchMissingProductIdsReturnsBadRequest) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("patch 1"));
     EXPECT_EQ("400 Bad Request", parser.processCommand("patch 1 abc"));
 }
 
-// PRS-54: DELETE on a never-created user -> 404 Not Found.
+//DELETE on a never-created user -> 404 Not Found.
 TEST_F(ParserTest, DeleteUnknownUserReturnsNotFound) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("404 Not Found", parser.processCommand("delete 1 100"));
 }
 
-// PRS-54: DELETE for a product the user never viewed -> 404 Not Found.
+//DELETE for a product the user never viewed -> 404 Not Found.
 TEST_F(ParserTest, DeleteMissingProductReturnsNotFound) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("201 Created", parser.processCommand("post 1 100 200"));
     EXPECT_EQ("404 Not Found", parser.processCommand("delete 1 300"));
 }
 
-// PRS-54: valid DELETE removes the products + returns 204.
+//valid DELETE removes the products + returns 204.
 TEST_F(ParserTest, DeleteValidRemovesAndReturnsNoContent) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("201 Created", parser.processCommand("post 1 100 200 300"));
@@ -144,7 +144,7 @@ TEST_F(ParserTest, DeleteValidRemovesAndReturnsNoContent) {
     EXPECT_EQ("404 Not Found", parser.processCommand("delete 1 100"));
 }
 
-// PRS-54/57: malformed DELETE -> 400 Bad Request.
+///57: malformed DELETE -> 400 Bad Request.
 TEST_F(ParserTest, DeleteMissingProductIdsReturnsBadRequest) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("delete 1"));

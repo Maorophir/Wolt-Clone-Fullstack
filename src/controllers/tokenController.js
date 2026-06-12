@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel');
 
 /**
- * POST /api/tokens  (PRS-104)
+ * POST /api/tokens 
  * Verifies a user's credentials (login screen). On success it returns the
  * user's id, which the client then passes back as the auth header on protected
  * requests. This is intentionally minimal for this exercise and will evolve

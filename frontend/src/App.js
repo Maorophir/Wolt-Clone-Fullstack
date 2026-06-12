@@ -13,8 +13,10 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrderConfirmation from './pages/OrderConfirmation';
 import OrdersPage from './pages/OrdersPage';
-import Login from './Login';
-import Register from './Register';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import AddRestaurant from './pages/AddRestaurant';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -28,12 +30,29 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+             
+              <Route
+                path="/add-restaurant"
+                element={
+                  <ProtectedRoute>
+                    <AddRestaurant />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Maintained dynamic URL parameters from main branch architecture */}
               <Route path="/restaurant/:id" element={<RestaurantMenu />} />
               <Route path="/search/" element={<SearchResults />} />
 
-              {/* Integrated order and checkout routes from PRS-158 */}
+              {/* Integrated order and checkout routes from*/}
               <Route path="/cart" element={<CartPage />} />
               <Route
                 path="/checkout"

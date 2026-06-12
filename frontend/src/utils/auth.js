@@ -1,5 +1,5 @@
 /**
- * Minimal auth helper for PRS-160 (cart & checkout).
+ * Minimal auth helper for(cart & checkout).
  *
  * The full authentication flow (login / register screens + JWT) is a separate
  * ticket that isn't merged yet. Until then, this thin shim stores the

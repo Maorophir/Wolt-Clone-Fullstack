@@ -31,7 +31,7 @@ std::string CommandParser::processCommand(const std::string& line) {
     if (commands.count(cmdName)) {
         return commands[cmdName]->execute(args);
     }
-    // PRS-57: malformed or unsupported command -> 400 Bad Request.
+    //malformed or unsupported command -> 400 Bad Request.
     return "400 Bad Request";
 }
 

@@ -9,7 +9,7 @@
 class ICommandHandler {
 public:
     virtual ~ICommandHandler() = default;
-    
+   
     // Process the command with the provided arguments.
     virtual std::string execute(const std::vector<std::string>& args) = 0;
 };

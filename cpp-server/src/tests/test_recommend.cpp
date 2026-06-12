@@ -30,7 +30,7 @@ TEST(RecommendationEngineTest, ReturnsAppendixRecommendations)
     };
 
     EXPECT_EQ(expected, actual);
-} 
+}
 
 TEST(RecommendationEngineTest, ReturnsEmptyForUnknownUser)
 {
@@ -41,7 +41,7 @@ TEST(RecommendationEngineTest, ReturnsEmptyForUnknownUser)
 
    // Request recommendations for user 99, who does not exist
     std::vector<int> actual = engine.recommend(99, 100);
-    
+   
     EXPECT_TRUE(actual.empty());
 }
 
@@ -56,7 +56,7 @@ TEST(RecommendationEngineTest, ReturnsEmptyWhenNoOneElseWatchedProduct)
 
     // Request recommendations based on product 200
     std::vector<int> actual = engine.recommend(1, 200);
-    
+   
     EXPECT_TRUE(actual.empty());
 }
 
@@ -81,6 +81,6 @@ TEST(RecommendationEngineTest, SortsByScoreThenByProductId)
      */
     std::vector<int> actual = engine.recommend(1, 10);
     std::vector<int> expected = {40, 50, 60};
-    
+   
     EXPECT_EQ(expected, actual);
 }

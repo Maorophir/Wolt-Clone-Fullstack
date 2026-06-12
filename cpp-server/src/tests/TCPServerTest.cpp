@@ -25,12 +25,12 @@ protected:
 
     void SetUp() override {
         server = new TCPServer(testPort, fakeHandler);
-        
+       
         // Run server in a detached thread so it doesn't block the test
         serverThread = std::thread([this]() {
             server->start();
         });
-        
+       
         // Give the server a moment to bind and listen
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
@@ -76,7 +76,7 @@ protected:
 TEST_F(TCPServerTest, HandlesSingleClientRequestSuccessfully) {
     // Send request without newline (client handles adding it)
     std::string response = sendRequestAsClient("Hello Server");
-    
+   
     // Ex2 explicitly requires every response to end with a newline
     EXPECT_EQ("ECHO: Hello Server\n", response);
 }

@@ -1,4 +1,4 @@
-// PRS-67: parser-only / command-recognition tests.
+//parser-only / command-recognition tests.
 //
 // These tests focus narrowly on the COMMAND PARSER:
 //   - Every Ex2 verb (post, patch, delete, get, help) is recognized.

@@ -4,7 +4,7 @@ const router = express.Router();
 
 const tokenController = require('../controllers/tokenController');
 
-// POST /api/tokens   -> log in / verify credentials (PRS-104)
+// POST /api/tokens   -> log in / verify credentials
 router.post('/', tokenController.login);
 
 module.exports = router;

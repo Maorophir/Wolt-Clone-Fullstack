@@ -1,4 +1,4 @@
-// PRS-68: response-format contract.
+//response-format contract.
 //
 // These tests pin every exact protocol response string the assignment
 // mandates. They are deliberately format-focused, not business-focused:
@@ -50,28 +50,28 @@ protected:
 // Layer 1: CommandParser-level response strings (no socket).
 // =====================================================================
 
-// PRS-68: POST success is EXACTLY "201 Created" (no trailing newline,
+//POST success is EXACTLY "201 Created" (no trailing newline,
 // no leading/trailing whitespace, no extra text).
 TEST_F(ResponseFormatTest, PostSuccessIsExact201Created) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("201 Created", parser.processCommand("post 1 100"));
 }
 
-// PRS-68: PATCH success is EXACTLY "204 No Content".
+//PATCH success is EXACTLY "204 No Content".
 TEST_F(ResponseFormatTest, PatchSuccessIsExact204NoContent) {
     CommandParser parser(testFilePath);
     ASSERT_EQ("201 Created", parser.processCommand("post 1 100"));
     EXPECT_EQ("204 No Content", parser.processCommand("patch 1 200"));
 }
 
-// PRS-68: DELETE success is EXACTLY "204 No Content".
+//DELETE success is EXACTLY "204 No Content".
 TEST_F(ResponseFormatTest, DeleteSuccessIsExact204NoContent) {
     CommandParser parser(testFilePath);
     ASSERT_EQ("201 Created", parser.processCommand("post 1 100 200"));
     EXPECT_EQ("204 No Content", parser.processCommand("delete 1 100"));
 }
 
-// PRS-68: 404 Not Found is exact, everywhere it can appear.
+//404 Not Found is exact, everywhere it can appear.
 TEST_F(ResponseFormatTest, NotFoundIsExact404NotFound) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("404 Not Found", parser.processCommand("patch 1 100"));
@@ -83,7 +83,7 @@ TEST_F(ResponseFormatTest, NotFoundIsExact404NotFound) {
     EXPECT_EQ("404 Not Found", parser.processCommand("delete 1 999"));    // unviewed product
 }
 
-// PRS-68: 400 Bad Request is exact, everywhere it can appear.
+//400 Bad Request is exact, everywhere it can appear.
 TEST_F(ResponseFormatTest, BadRequestIsExact400BadRequest) {
     CommandParser parser(testFilePath);
     EXPECT_EQ("400 Bad Request", parser.processCommand("foobar"));
@@ -94,7 +94,7 @@ TEST_F(ResponseFormatTest, BadRequestIsExact400BadRequest) {
     EXPECT_EQ("400 Bad Request", parser.processCommand("delete 1 abc"));      // non-int
 }
 
-// PRS-68: GET success response starts with "200 Ok", followed by EXACTLY
+//GET success response starts with "200 Ok", followed by EXACTLY
 // two newline characters, followed by the recommendation body. There must
 // not be a third newline, leading whitespace, prefix prose, etc.
 TEST_F(ResponseFormatTest, GetSuccessStartsWith200OkExactlyTwoNewlinesThenBody) {
@@ -121,7 +121,7 @@ TEST_F(ResponseFormatTest, GetSuccessStartsWith200OkExactlyTwoNewlinesThenBody) 
     EXPECT_EQ("40 50 60", response.substr(8));
 }
 
-// PRS-68: A GET response must never contain any explanatory text like
+//A GET response must never contain any explanatory text like
 // "Result:" or "Recommendations:" -- only the protocol status and the body.
 TEST_F(ResponseFormatTest, GetResponseHasNoExtraExplanatoryText) {
     CommandParser parser(testFilePath);
@@ -139,7 +139,7 @@ TEST_F(ResponseFormatTest, GetResponseHasNoExtraExplanatoryText) {
     }
 }
 
-// PRS-68: empty input through the parser produces no body (the server-level
+//empty input through the parser produces no body (the server-level
 // trailing newline test below confirms the wire view).
 TEST_F(ResponseFormatTest, EmptyInputProducesEmptyParserResponse) {
     CommandParser parser(testFilePath);
@@ -221,7 +221,7 @@ protected:
 
 } // namespace
 
-// PRS-68: every successful command response, when delivered through the
+//every successful command response, when delivered through the
 // TCP server, terminates with exactly one '\n' that the server appended.
 TEST_F(ResponseFormatThroughServerTest, SuccessResponsesEndWithExactlyOneTrailingNewline) {
     EXPECT_EQ("201 Created\n",   send("post 1 100"));
@@ -229,7 +229,7 @@ TEST_F(ResponseFormatThroughServerTest, SuccessResponsesEndWithExactlyOneTrailin
     EXPECT_EQ("204 No Content\n", send("delete 1 100"));
 }
 
-// PRS-68: every error response (404 / 400) terminates with exactly one
+//every error response (404 / 400) terminates with exactly one
 // '\n' over the wire.
 TEST_F(ResponseFormatThroughServerTest, ErrorResponsesEndWithExactlyOneTrailingNewline) {
     EXPECT_EQ("404 Not Found\n",   send("patch 1 100"));
@@ -240,7 +240,7 @@ TEST_F(ResponseFormatThroughServerTest, ErrorResponsesEndWithExactlyOneTrailingN
     EXPECT_EQ("400 Bad Request\n", send("post"));           // missing args
 }
 
-// PRS-68: GET's success wire format -- "200 Ok\n\n<body>\n" -- with the
+//GET's success wire format -- "200 Ok\n\n<body>\n" -- with the
 // blank line preserved between status and body, and a single trailing
 // newline appended by the server.
 TEST_F(ResponseFormatThroughServerTest, GetSuccessHasBlankLineAndSingleTrailingNewline) {

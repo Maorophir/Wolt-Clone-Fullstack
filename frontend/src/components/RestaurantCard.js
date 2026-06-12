@@ -26,7 +26,7 @@ const pickGradient = (key = '') => {
 
 /**
  * A restaurant tile used on the home feed and in search results. Clicking it
- * opens that restaurant's menu (PRS-159). Renders only real server fields and
+ * opens that restaurant's menu . Renders only real server fields and
  * hides any that are missing.
  */
 const RestaurantCard = ({ restaurant }) => {

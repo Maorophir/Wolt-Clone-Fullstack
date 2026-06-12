@@ -21,7 +21,7 @@ protected:
 
 } // namespace
 
-// PRS-53: PATCH on a never-created user returns 404 Not Found.
+//PATCH on a never-created user returns 404 Not Found.
 TEST_F(PatchCommandTest, UnknownUserReturnsNotFound) {
     StorageManager storage(testFilePath);
     PatchCommand patch(&storage);
@@ -29,7 +29,7 @@ TEST_F(PatchCommandTest, UnknownUserReturnsNotFound) {
     EXPECT_EQ("404 Not Found", patch.execute({"patch", "1", "100"}));
 }
 
-// PRS-53: PATCH on an existing user appends the products and returns 204.
+//PATCH on an existing user appends the products and returns 204.
 TEST_F(PatchCommandTest, ExistingUserAppendsAndReturnsNoContent) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200});
@@ -43,7 +43,7 @@ TEST_F(PatchCommandTest, ExistingUserAppendsAndReturnsNoContent) {
     EXPECT_TRUE(storage.hasUserViewedProduct(1, 400));
 }
 
-// PRS-53: PATCH duplicate products is idempotent (set semantics).
+//PATCH duplicate products is idempotent (set semantics).
 TEST_F(PatchCommandTest, PatchIsIdempotentForDuplicates) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200});
@@ -54,7 +54,7 @@ TEST_F(PatchCommandTest, PatchIsIdempotentForDuplicates) {
     EXPECT_EQ(3, storage.getUserProductCount(1));
 }
 
-// PRS-70 (malformed): PATCH with no userid -> 400 Bad Request.
+//(malformed): PATCH with no userid -> 400 Bad Request.
 TEST_F(PatchCommandTest, MissingUserIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     PatchCommand patch(&storage);
@@ -62,7 +62,7 @@ TEST_F(PatchCommandTest, MissingUserIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", patch.execute({"patch"}));
 }
 
-// PRS-53/57: PATCH with no product ids is malformed -> 400 Bad Request.
+///57: PATCH with no product ids is malformed -> 400 Bad Request.
 TEST_F(PatchCommandTest, MissingProductIdsReturnsBadRequest) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100});
@@ -72,7 +72,7 @@ TEST_F(PatchCommandTest, MissingProductIdsReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", patch.execute({"patch", "1"}));
 }
 
-// PRS-70 (malformed): a malformed PATCH must not mutate stored data.
+//(malformed): a malformed PATCH must not mutate stored data.
 TEST_F(PatchCommandTest, MalformedPatchDoesNotMutateStorage) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200});
@@ -85,7 +85,7 @@ TEST_F(PatchCommandTest, MalformedPatchDoesNotMutateStorage) {
     EXPECT_TRUE(storage.hasUserViewedProduct(1, 200));
 }
 
-// PRS-53/57: PATCH with non-integer args is malformed -> 400 Bad Request.
+///57: PATCH with non-integer args is malformed -> 400 Bad Request.
 TEST_F(PatchCommandTest, NonIntegerArgsReturnsBadRequest) {
     StorageManager storage(testFilePath);
 

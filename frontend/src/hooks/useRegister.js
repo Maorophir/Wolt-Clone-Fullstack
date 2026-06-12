@@ -15,7 +15,7 @@ export const useRegister = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
    
-    const navigate = useNavigate();
+    const navigate = useNavigate;
 
     // Cleanup blob URL on unmount or image change
     useEffect(() => {
@@ -129,7 +129,7 @@ const submitForm = async (e) => {
                 body: JSON.stringify(dataPayload)
             });
 
-            const data = await response.json();
+            const data = await response.json;
 
             if (!response.ok) {
                 setErrors(prev => ({

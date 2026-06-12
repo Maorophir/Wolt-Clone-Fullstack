@@ -21,7 +21,7 @@ protected:
 
 } // namespace
 
-// PRS-69: a valid POST for a new user returns exactly "201 Created".
+//a valid POST for a new user returns exactly "201 Created".
 TEST_F(PostCommandTest, ValidPostForNewUserReturns201Created) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -29,7 +29,7 @@ TEST_F(PostCommandTest, ValidPostForNewUserReturns201Created) {
     EXPECT_EQ("201 Created", post.execute({"post", "1", "100", "200"}));
 }
 
-// PRS-69: a valid POST stores every supplied product id under the new user.
+//a valid POST stores every supplied product id under the new user.
 TEST_F(PostCommandTest, ValidPostStoresProductIdsForUser) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -43,7 +43,7 @@ TEST_F(PostCommandTest, ValidPostStoresProductIdsForUser) {
     EXPECT_EQ(3, storage.getUserProductCount(42));
 }
 
-// PRS-69: a valid POST with a single product id still succeeds.
+//a valid POST with a single product id still succeeds.
 TEST_F(PostCommandTest, ValidPostWithSingleProductIdSucceeds) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -52,7 +52,7 @@ TEST_F(PostCommandTest, ValidPostWithSingleProductIdSucceeds) {
     EXPECT_TRUE(storage.hasUserViewedProduct(7, 100));
 }
 
-// PRS-69: POST for an already existing user returns exactly "404 Not Found".
+//POST for an already existing user returns exactly "404 Not Found".
 TEST_F(PostCommandTest, PostForExistingUserReturns404NotFound) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -61,7 +61,7 @@ TEST_F(PostCommandTest, PostForExistingUserReturns404NotFound) {
     EXPECT_EQ("404 Not Found", post.execute({"post", "1", "200", "300"}));
 }
 
-// PRS-69: POST for an already existing user must NOT mutate stored data.
+//POST for an already existing user must NOT mutate stored data.
 TEST_F(PostCommandTest, PostForExistingUserDoesNotUpdateStorage) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -79,7 +79,7 @@ TEST_F(PostCommandTest, PostForExistingUserDoesNotUpdateStorage) {
     EXPECT_FALSE(storage.hasUserViewedProduct(1, 400));
 }
 
-// PRS-69 (malformed): POST with no userid -> 400 Bad Request.
+//(malformed): POST with no userid -> 400 Bad Request.
 TEST_F(PostCommandTest, MissingUserIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -87,7 +87,7 @@ TEST_F(PostCommandTest, MissingUserIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", post.execute({"post"}));
 }
 
-// PRS-69 (malformed): POST with userid but no product ids -> 400 Bad Request.
+//(malformed): POST with userid but no product ids -> 400 Bad Request.
 TEST_F(PostCommandTest, MissingProductIdsReturnsBadRequest) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -95,7 +95,7 @@ TEST_F(PostCommandTest, MissingProductIdsReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", post.execute({"post", "1"}));
 }
 
-// PRS-69 (malformed): non-integer userid -> 400 Bad Request.
+//(malformed): non-integer userid -> 400 Bad Request.
 TEST_F(PostCommandTest, NonIntegerUserIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -103,7 +103,7 @@ TEST_F(PostCommandTest, NonIntegerUserIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", post.execute({"post", "one", "100"}));
 }
 
-// PRS-69 (malformed): non-integer product id -> 400 Bad Request.
+//(malformed): non-integer product id -> 400 Bad Request.
 TEST_F(PostCommandTest, NonIntegerProductIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);
@@ -112,7 +112,7 @@ TEST_F(PostCommandTest, NonIntegerProductIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", post.execute({"post", "1", "100", "xyz"}));
 }
 
-// PRS-69 (malformed): a malformed POST must not create the user.
+//(malformed): a malformed POST must not create the user.
 TEST_F(PostCommandTest, MalformedPostDoesNotCreateUser) {
     StorageManager storage(testFilePath);
     PostCommand post(&storage);

@@ -19,7 +19,7 @@ const getAllUsers = (req, res) => {
 };
 
 /**
- * POST /api/users  (PRS-95)
+ * POST /api/users 
  * Registers a new user. Per the spec the response carries the new resource's
  * location in the Location header with an empty body (201 Created).
  */
@@ -48,7 +48,7 @@ const createUser = (req, res) => {
 };
 
 /**
- * GET /api/users/:id  (PRS-100)
+ * GET /api/users/:id 
  * Returns the profile details of the requested user (without the password).
  */
 const getUserById = (req, res) => {

@@ -23,7 +23,7 @@ protected:
 
 } // namespace
 
-// PRS-72 (malformed): GET with no userid -> 400 Bad Request.
+//(malformed): GET with no userid -> 400 Bad Request.
 TEST_F(GetCommandTest, MissingUserIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     GetCommand get(&storage);
@@ -31,7 +31,7 @@ TEST_F(GetCommandTest, MissingUserIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", get.execute({"get"}));
 }
 
-// PRS-72 (malformed): GET with no productid -> 400 Bad Request.
+//(malformed): GET with no productid -> 400 Bad Request.
 TEST_F(GetCommandTest, MissingProductIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     GetCommand get(&storage);
@@ -39,7 +39,7 @@ TEST_F(GetCommandTest, MissingProductIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", get.execute({"get", "1"}));
 }
 
-// PRS-72 (malformed): GET with too many arguments -> 400 Bad Request.
+//(malformed): GET with too many arguments -> 400 Bad Request.
 TEST_F(GetCommandTest, TooManyArgumentsReturnsBadRequest) {
     StorageManager storage(testFilePath);
     GetCommand get(&storage);
@@ -55,7 +55,7 @@ TEST_F(GetCommandTest, InsufficientArgsReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", get.execute({"get", "1"}));
 }
 
-// PRS-57: non-integer ids -> 400 Bad Request.
+//non-integer ids -> 400 Bad Request.
 TEST_F(GetCommandTest, NonIntegerArgsReturnsBadRequest) {
     StorageManager storage(testFilePath);
     GetCommand get(&storage);
@@ -63,7 +63,7 @@ TEST_F(GetCommandTest, NonIntegerArgsReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", get.execute({"get", "one", "100"}));
 }
 
-// PRS-57: user that was never created (no POST) -> 404 Not Found.
+//user that was never created (no POST) -> 404 Not Found.
 TEST_F(GetCommandTest, UnknownUserReturnsNotFound) {
     StorageManager storage(testFilePath);
     GetCommand get(&storage);
@@ -71,7 +71,7 @@ TEST_F(GetCommandTest, UnknownUserReturnsNotFound) {
     EXPECT_EQ("404 Not Found", get.execute({"get", "1", "100"}));
 }
 
-// PRS-55: existing user with no recommendations -> "200 Ok" + two newlines + empty body.
+//existing user with no recommendations -> "200 Ok" + two newlines + empty body.
 TEST_F(GetCommandTest, ExistingUserWithNoRecsReturnsOkEmptyBody) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100});
@@ -80,7 +80,7 @@ TEST_F(GetCommandTest, ExistingUserWithNoRecsReturnsOkEmptyBody) {
     EXPECT_EQ("200 Ok\n\n", get.execute({"get", "1", "200"}));
 }
 
-// PRS-55: existing user with recommendations -> "200 Ok\n\n<space-separated ids>".
+//existing user with recommendations -> "200 Ok\n\n<space-separated ids>".
 TEST_F(GetCommandTest, ReturnsOkAndSpaceSeparatedRecommendations) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {10, 20, 30});
@@ -94,7 +94,7 @@ TEST_F(GetCommandTest, ReturnsOkAndSpaceSeparatedRecommendations) {
     EXPECT_EQ("200 Ok\n\n40 50 60", get.execute({"get", "1", "10"}));
 }
 
-// PRS-72: a valid GET response starts EXACTLY with "200 Ok" and is followed by
+//a valid GET response starts EXACTLY with "200 Ok" and is followed by
 // exactly two newline characters before the recommendation body, with no other
 // content between them.
 TEST_F(GetCommandTest, ResponseStartsWith200OkFollowedByExactlyTwoNewlines) {
@@ -123,7 +123,7 @@ TEST_F(GetCommandTest, ResponseStartsWith200OkFollowedByExactlyTwoNewlines) {
     EXPECT_EQ("40 50 60", response.substr(8));
 }
 
-// PRS-58: GET must REUSE the Exercise 1 RecommendationEngine -- no second
+//GET must REUSE the Exercise 1 RecommendationEngine -- no second
 // algorithm. Compute the recommendation directly via the Ex1 engine, then
 // compute it via GetCommand, and assert byte-for-byte equality of the body.
 // If anyone ever forked the algorithm, this test breaks.
@@ -156,7 +156,7 @@ TEST_F(GetCommandTest, GetCommandReusesEx1RecommendationEngine) {
     EXPECT_EQ(oss.str(), body);
 }
 
-// PRS-72: GET delegates to the recommendation flow -- the body must match
+//GET delegates to the recommendation flow -- the body must match
 // the engine's output for that (user, product) pair.
 TEST_F(GetCommandTest, RecommendationBodyMatchesRecommendationFlow) {
     StorageManager storage(testFilePath);

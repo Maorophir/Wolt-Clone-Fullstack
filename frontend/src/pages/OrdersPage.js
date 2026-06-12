@@ -9,7 +9,7 @@ const orderTotal = (items = []) =>
     items.reduce((sum, i) => sum + (Number(i.price) || 0) * (i.quantity || 0), 0);
 
 /**
- * PRS-158 — Past orders ("My orders", /orders).
+ *Past orders ("My orders", /orders).
  *
  * Protected route: loads the authenticated user's orders from the Ex3 server
  * and lists them newest-first with their items, total and status.

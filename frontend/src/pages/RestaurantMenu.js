@@ -7,7 +7,7 @@ import MenuList from '../components/MenuList';
 import './RestaurantMenu.css';
 
 /**
- * PRS-159 — Restaurant Menu View.
+ *Restaurant Menu View.
  *
  * Page at /restaurant/:id. Loads a single restaurant and its menu from the
  * Ex3 server (no hard-coded data) and renders them. Browsing is public, so this
@@ -18,7 +18,7 @@ import './RestaurantMenu.css';
  *   - loading / error       : request lifecycle, surfaced clearly to the user
  *   - toast                 : transient "added to cart" confirmation
  *
- * "Add to cart" is wired to the PRS-160 cart context.
+ * "Add to cart" is wired to thecart context.
  */
 const RestaurantMenu = () => {
     const { id } = useParams();

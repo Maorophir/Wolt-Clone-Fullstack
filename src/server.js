@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-// --- Authentication & Orders routes (PRS-91, PRS-118) ---
+// --- Authentication & Orders routes  ---
 const userRoutes = require('./routes/userRoutes');
 const tokenRoutes = require('./routes/tokenRoutes');
 const orderRoutes = require('./routes/orderRoutes');

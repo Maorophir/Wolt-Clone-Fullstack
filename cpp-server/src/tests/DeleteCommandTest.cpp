@@ -21,7 +21,7 @@ protected:
 
 } // namespace
 
-// PRS-54: DELETE on a never-created user returns 404 Not Found.
+//DELETE on a never-created user returns 404 Not Found.
 TEST_F(DeleteCommandTest, UnknownUserReturnsNotFound) {
     StorageManager storage(testFilePath);
     DeleteCommand del(&storage);
@@ -29,7 +29,7 @@ TEST_F(DeleteCommandTest, UnknownUserReturnsNotFound) {
     EXPECT_EQ("404 Not Found", del.execute({"delete", "1", "100"}));
 }
 
-// PRS-54: DELETE for a product not in the user's history returns 404.
+//DELETE for a product not in the user's history returns 404.
 TEST_F(DeleteCommandTest, ProductNotViewedReturnsNotFound) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200});
@@ -42,7 +42,7 @@ TEST_F(DeleteCommandTest, ProductNotViewedReturnsNotFound) {
     EXPECT_TRUE(storage.hasUserViewedProduct(1, 200));
 }
 
-// PRS-54: if any requested product is missing, no products are deleted.
+//if any requested product is missing, no products are deleted.
 TEST_F(DeleteCommandTest, PartiallyMissingProductsLeavesStorageUnchanged) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200, 300});
@@ -56,7 +56,7 @@ TEST_F(DeleteCommandTest, PartiallyMissingProductsLeavesStorageUnchanged) {
     EXPECT_TRUE(storage.hasUserViewedProduct(1, 300));
 }
 
-// PRS-54: valid DELETE removes the requested products and returns 204.
+//valid DELETE removes the requested products and returns 204.
 TEST_F(DeleteCommandTest, ValidDeleteRemovesAndReturnsNoContent) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100, 200, 300});
@@ -70,7 +70,7 @@ TEST_F(DeleteCommandTest, ValidDeleteRemovesAndReturnsNoContent) {
     EXPECT_FALSE(storage.hasUserViewedProduct(1, 300));
 }
 
-// PRS-71 (malformed): DELETE with no userid -> 400 Bad Request.
+//(malformed): DELETE with no userid -> 400 Bad Request.
 TEST_F(DeleteCommandTest, MissingUserIdReturnsBadRequest) {
     StorageManager storage(testFilePath);
     DeleteCommand del(&storage);
@@ -78,7 +78,7 @@ TEST_F(DeleteCommandTest, MissingUserIdReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", del.execute({"delete"}));
 }
 
-// PRS-54/57: DELETE with missing product ids is malformed -> 400 Bad Request.
+///57: DELETE with missing product ids is malformed -> 400 Bad Request.
 TEST_F(DeleteCommandTest, MissingProductIdsReturnsBadRequest) {
     StorageManager storage(testFilePath);
     storage.addProductsToUser(1, {100});
@@ -88,7 +88,7 @@ TEST_F(DeleteCommandTest, MissingProductIdsReturnsBadRequest) {
     EXPECT_EQ("400 Bad Request", del.execute({"delete", "1"}));
 }
 
-// PRS-54/57: DELETE with non-integer args is malformed -> 400 Bad Request.
+///57: DELETE with non-integer args is malformed -> 400 Bad Request.
 TEST_F(DeleteCommandTest, NonIntegerArgsReturnsBadRequest) {
     StorageManager storage(testFilePath);
 

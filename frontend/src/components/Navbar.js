@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CartButton from './CartButton';
@@ -10,7 +10,7 @@ import './Navbar.css';
  * Extracts initials from user name or email for the avatar.
  */
 const initialsOf = (user) => {
-    const source = (user?.name || user?.email || '?').trim();
+    const source = (user?.displayName || user?.username || user?.name || user?.email || '?').trim();
     const parts = source.split(/\s+/);
     const letters = parts.length > 1
         ? parts[0][0] + parts[parts.length - 1][0]
@@ -19,18 +19,41 @@ const initialsOf = (user) => {
 };
 
 const Navbar = () => {
-    // Using our precise ThemeContext variables from the main branch
     const { isDarkMode, toggleTheme } = useTheme();
     const navigate = useNavigate();
-    
-    // Auth state from the PRS-158 branch
-    const loggedIn = isAuthenticated();
-    const user = getCurrentUser();
 
-    // Handles clearing the session and redirecting
+    const loggedIn = isAuthenticated();
+    const [user, setUser] = useState(() => getCurrentUser());
+
+    useEffect(() => {
+        const handleUserUpdated = () => setUser(getCurrentUser());
+        window.addEventListener('user_updated', handleUserUpdated);
+        return () => window.removeEventListener('user_updated', handleUserUpdated);
+    }, []);
+
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+                setDropdownOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const handleLogout = () => {
+        setDropdownOpen(false);
         clearCurrentUser();
-        navigate('/login');
+        navigate('/');
+    };
+
+    const handleProfileClick = () => {
+        setDropdownOpen(false);
+        navigate('/profile');
     };
 
     return (
@@ -41,11 +64,10 @@ const Navbar = () => {
                 </Link>
             </div>
 
-            {/* Using the extracted SearchBar component from PRS-158 instead of inline form */}
             <SearchBar />
 
             <div className="navbar-actions">
-                {/* Theme Toggle from main branch */}
+                {/* Theme Toggle */}
                 <label className="theme-switch" aria-label="Toggle theme">
                     <input
                         type="checkbox"
@@ -59,26 +81,59 @@ const Navbar = () => {
                     </div>
                 </label>
 
-                {loggedIn && <Link to="/orders" className="navbar-link">My orders</Link>}
+                {loggedIn && <Link to="/orders" className="navbar-link">Your Orders</Link>}
+                {loggedIn && <Link to="/add-restaurant" className="navbar-link">+ Add Restaurant</Link>}
 
-                {/* Cart component from PRS-158 */}
                 <CartButton />
 
-                {/* Conditional rendering based on Auth state */}
+                {/* User Dropdown or Login/Register links */}
                 {loggedIn ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '1rem' }}>
-                        {/* Profile Picture Circle */}
-                        <div className="profile-avatar">
-                            {user?.profileImage ? (
-                                <img src={user.profileImage} alt={user.displayName || user.username} />
-                            ) : (
-                                <span>{initialsOf(user)}</span>
-                            )}
-                        </div>
-                        <span style={{ fontWeight: '600', fontSize: '14px' }}>{user?.displayName || user?.username || 'User'}</span>
-                        <button type="button" onClick={handleLogout} style={{ marginLeft: '10px', cursor: 'pointer', padding: '6px 12px', borderRadius: '6px', background: '#ff4757', color: 'white', border: 'none', fontWeight: '600', fontSize: '13px' }}>
-                            Log out
+                    <div className="user-dropdown" ref={dropdownRef}>
+                        <button
+                            className="user-dropdown__trigger"
+                            onClick={() => setDropdownOpen(prev => !prev)}
+                            aria-expanded={dropdownOpen}
+                            aria-label="User menu"
+                        >
+                            {/* SVG chevron — centered via flex in CSS */}
+                            <span className={`user-dropdown__chevron ${dropdownOpen ? 'open' : ''}`}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" strokeWidth="2.5"
+                                    strokeLinecap="round" strokeLinejoin="round">
+                                    <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                            </span>
+
+                            {/* Avatar */}
+                            <div className="profile-avatar">
+                                {user?.profileImage ? (
+                                    <img src={user.profileImage} alt={user.displayName || user.username} />
+                                ) : (
+                                    <span>{initialsOf(user)}</span>
+                                )}
+                            </div>
                         </button>
+
+                        {dropdownOpen && (
+                            <div className="user-dropdown__menu">
+                                <div className="user-dropdown__header">
+                                    <strong>{user?.displayName || user?.username || 'User'}</strong>
+                                </div>
+                                <hr className="user-dropdown__divider" />
+                                <button
+                                    className="user-dropdown__item"
+                                    onClick={handleProfileClick}
+                                >
+                                    👤 Profile
+                                </button>
+                                <button
+                                    className="user-dropdown__item user-dropdown__item--danger"
+                                    onClick={handleLogout}
+                                >
+                                    🚪 Log Out
+                                </button>
+                            </div>
+                        )}
                     </div>
                 ) : (
                     <>

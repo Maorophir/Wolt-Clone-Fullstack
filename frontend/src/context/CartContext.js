@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 /**
- * PRS-160 — Shopping cart state, shared across the whole app via React Context.
+ *Shopping cart state, shared across the whole app via React Context.
  *
  * A cart holds items from a SINGLE restaurant (the real Wolt rule, and the Ex3
  * `POST /api/orders` endpoint takes exactly one restaurantId). Adding an item

@@ -6,7 +6,7 @@ import './Home.css';
 import { formatPrice } from '../utils/format';
 
 /**
- * PRS-158 — Search results page (/search?q=…).
+ *Search results page (/search?q=…).
  *
  * Reads the query from the URL and asks the Ex3 search endpoint, which returns a
  * mixed list of restaurants and products. Restaurants render as cards; dish

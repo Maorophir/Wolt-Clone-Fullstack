@@ -16,7 +16,7 @@ const ICONS = {
 const iconFor = (c) => ICONS[c] || '🍽️';
 
 /**
- * PRS-158 — Category filter row on the home feed (Wolt-style).
+ *Category filter row on the home feed (Wolt-style).
  *
  * The list of categories is derived from the restaurants the server returned,
  * not hard-coded. Selecting a category filters the feed; clicking the active one

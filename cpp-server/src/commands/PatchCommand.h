@@ -4,7 +4,7 @@
 #include "../interfaces/ICommandHandler.h"
 #include "data_management/StorageManager.h"
 
-// PRS-53: PATCH [userid] [productid1] [productid2] ...
+//PATCH [userid] [productid1] [productid2] ...
 // Appends watched products to an existing user (created via POST).
 class PatchCommand : public ICommandHandler {
 private:

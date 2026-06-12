@@ -28,7 +28,7 @@ const std::string kExpectedHelp =
 
 } // namespace
 
-// PRS-56: HelpCommand returns the exact required help text.
+//HelpCommand returns the exact required help text.
 TEST_F(HelpCommandTest, ReturnsExactHelpMessage) {
     StorageManager storage(testFilePath);
     HelpCommand helpCommand(&storage);

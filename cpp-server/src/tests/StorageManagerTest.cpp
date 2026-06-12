@@ -26,7 +26,7 @@ protected:
 TEST_F(StorageManagerTest, AddProductsToUser) {
     std::vector<int> products = {100, 200, 300};
     manager->addProductsToUser(1, products);
-    
+   
     std::unordered_set<int> userProducts = manager->getUserProducts(1);
     EXPECT_EQ(userProducts.size(), 3);
     EXPECT_TRUE(userProducts.count(100) > 0);
@@ -39,7 +39,7 @@ TEST_F(StorageManagerTest, AddProductsToMultipleUsers) {
     manager->addProductsToUser(1, {100, 200});
     manager->addProductsToUser(2, {150, 250});
     manager->addProductsToUser(3, {100});
-    
+   
     EXPECT_EQ(manager->getUserProducts(1).size(), 2);
     EXPECT_EQ(manager->getUserProducts(2).size(), 2);
     EXPECT_EQ(manager->getUserProducts(3).size(), 1);
@@ -48,7 +48,7 @@ TEST_F(StorageManagerTest, AddProductsToMultipleUsers) {
 // Test: Get user products
 TEST_F(StorageManagerTest, GetUserProducts) {
     manager->addProductsToUser(1, {100, 200, 300});
-    
+   
     std::unordered_set<int> products = manager->getUserProducts(1);
     EXPECT_EQ(products.size(), 3);
     EXPECT_TRUE(products.count(100) > 0);
@@ -63,7 +63,7 @@ TEST_F(StorageManagerTest, GetProductsNonExistentUser) {
 // Test: Check if user has viewed a product
 TEST_F(StorageManagerTest, HasUserViewedProduct) {
     manager->addProductsToUser(1, {100, 200});
-    
+   
     EXPECT_TRUE(manager->hasUserViewedProduct(1, 100));
     EXPECT_TRUE(manager->hasUserViewedProduct(1, 200));
     EXPECT_FALSE(manager->hasUserViewedProduct(1, 300));
@@ -74,7 +74,7 @@ TEST_F(StorageManagerTest, GetAllUsers) {
     manager->addProductsToUser(1, {100});
     manager->addProductsToUser(2, {200});
     manager->addProductsToUser(3, {300});
-    
+   
     std::vector<int> users = manager->getAllUsers();
     EXPECT_EQ(users.size(), 3);
     EXPECT_TRUE(std::find(users.begin(), users.end(), 1) != users.end());
@@ -85,7 +85,7 @@ TEST_F(StorageManagerTest, GetAllUsers) {
 // Test: Get user product count
 TEST_F(StorageManagerTest, GetUserProductCount) {
     manager->addProductsToUser(1, {100, 200, 300});
-    
+   
     EXPECT_EQ(manager->getUserProductCount(1), 3);
 }
 
@@ -97,7 +97,7 @@ TEST_F(StorageManagerTest, GetProductCountNonExistentUser) {
 // Test: User existence check
 TEST_F(StorageManagerTest, UserExists) {
     manager->addProductsToUser(1, {100});
-    
+   
     EXPECT_TRUE(manager->userExists(1));
     EXPECT_FALSE(manager->userExists(2));
 }
@@ -106,9 +106,9 @@ TEST_F(StorageManagerTest, UserExists) {
 TEST_F(StorageManagerTest, ClearData) {
     manager->addProductsToUser(1, {100});
     manager->addProductsToUser(2, {200});
-    
+   
     manager->clear();
-    
+   
     EXPECT_EQ(manager->getAllUsers().size(), 0);
     EXPECT_FALSE(manager->userExists(1));
     EXPECT_FALSE(manager->userExists(2));
@@ -118,14 +118,14 @@ TEST_F(StorageManagerTest, ClearData) {
 TEST_F(StorageManagerTest, SaveAndLoadData) {
     manager->addProductsToUser(1, {100, 200});
     manager->addProductsToUser(2, {300, 400, 500});
-    
+   
     // Delete the current manager and create a new one that loads from the same file
     if (manager) {
         delete manager;
         manager = nullptr;
     }
     StorageManager manager2(testFilePath);
-    
+   
     EXPECT_TRUE(manager2.userExists(1));
     EXPECT_TRUE(manager2.userExists(2));
     EXPECT_EQ(manager2.getUserProducts(1).size(), 2);
@@ -136,7 +136,7 @@ TEST_F(StorageManagerTest, SaveAndLoadData) {
 
 TEST_F(StorageManagerTest, AddDuplicateProducts) {
     manager->addProductsToUser(1, {100, 200, 100});
-    
+   
     // Set should eliminate duplicates
     EXPECT_EQ(manager->getUserProductCount(1), 2);
 }
@@ -148,12 +148,12 @@ TEST_F(StorageManagerTest, GetAllUsersEmpty) {
 }
 
 // --------------------------------------------------------------------------
-// PRS-59: Storage operations that the Ex2 POST/PATCH/DELETE handlers depend on.
+//Storage operations that the Ex2 POST/PATCH/DELETE handlers depend on.
 // These tests lock the public API surface that command handlers MUST go
 // through -- they do not poke raw internals.
 // --------------------------------------------------------------------------
 
-// PRS-59 (POST): create a user the handler can detect didn't exist before.
+//(POST): create a user the handler can detect didn't exist before.
 TEST_F(StorageManagerTest, PostFlowCreatesUserDetectableViaUserExists) {
     EXPECT_FALSE(manager->userExists(1));
 
@@ -163,7 +163,7 @@ TEST_F(StorageManagerTest, PostFlowCreatesUserDetectableViaUserExists) {
     EXPECT_EQ(2, manager->getUserProductCount(1));
 }
 
-// PRS-59 (PATCH): update an EXISTING user's history without losing prior data.
+//(PATCH): update an EXISTING user's history without losing prior data.
 TEST_F(StorageManagerTest, PatchFlowAppendsToExistingUserHistory) {
     manager->addProductsToUser(1, {100, 200});
     ASSERT_TRUE(manager->userExists(1));
@@ -178,7 +178,7 @@ TEST_F(StorageManagerTest, PatchFlowAppendsToExistingUserHistory) {
     EXPECT_EQ(4, manager->getUserProductCount(1));
 }
 
-// PRS-59 (DELETE): remove specific products and let the handler verify
+//(DELETE): remove specific products and let the handler verify
 // presence via hasUserViewedProduct beforehand.
 TEST_F(StorageManagerTest, DeleteFlowRemovesOnlyRequestedProducts) {
     manager->addProductsToUser(1, {100, 200, 300, 400});
@@ -195,7 +195,7 @@ TEST_F(StorageManagerTest, DeleteFlowRemovesOnlyRequestedProducts) {
     EXPECT_TRUE(manager->hasUserViewedProduct(1, 400));
 }
 
-// PRS-59 (DELETE): handler-facing predicates correctly report missing data
+//(DELETE): handler-facing predicates correctly report missing data
 // BEFORE any mutation. This is what lets DeleteCommand return 404 atomically.
 TEST_F(StorageManagerTest, HasUserViewedProductReportsMissingMembership) {
     manager->addProductsToUser(1, {100});
@@ -205,7 +205,7 @@ TEST_F(StorageManagerTest, HasUserViewedProductReportsMissingMembership) {
     EXPECT_FALSE(manager->hasUserViewedProduct(42, 100));   // user doesn't exist
 }
 
-// PRS-59 (preserves Ex1 invariant): the recommendation engine reads through
+//(preserves Ex1 invariant): the recommendation engine reads through
 // getUserHistory(); POST/PATCH/DELETE must keep that view consistent so the
 // engine still produces correct results after Ex2-style mutations.
 TEST_F(StorageManagerTest, UserHistoryViewStaysConsistentAfterMutations) {

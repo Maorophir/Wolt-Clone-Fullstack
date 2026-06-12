@@ -24,7 +24,7 @@ std::string DeleteCommand::execute(const std::vector<std::string>& args) {
     }
 
     for (int productId : productIds) {
-        // PRS-54: "requested product relationship does not exist" -> 404.
+        //"requested product relationship does not exist" -> 404.
         if (!storageManager->hasUserViewedProduct(userId, productId)) {
             return "404 Not Found";
         }

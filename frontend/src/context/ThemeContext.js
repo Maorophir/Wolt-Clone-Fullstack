@@ -18,7 +18,7 @@ const readStoredTheme = () => {
 };
 
 export const ThemeProvider = ({ children }) => {
-    // Initialize state from local storage (PRS-158 persistence)
+    // Initialize state from local storage (persistence)
     const [isDarkMode, setIsDarkMode] = useState(readStoredTheme);
 
     const toggleTheme = () => {
@@ -34,7 +34,7 @@ export const ThemeProvider = ({ children }) => {
             document.body.classList.remove('app-dark');
         }
 
-        // 2. Persist the choice safely (PRS-158 logic)
+        // 2. Persist the choice safely (logic)
         try {
             localStorage.setItem(STORAGE_KEY, String(isDarkMode));
         } catch {
@@ -50,7 +50,7 @@ export const ThemeProvider = ({ children }) => {
 };
 
 /**
- * Custom hook with safety checks (PRS-158)
+ * Custom hook with safety checks
  */
 export const useTheme = () => {
     const ctx = useContext(ThemeContext);

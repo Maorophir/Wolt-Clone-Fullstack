@@ -7,7 +7,7 @@ RecommendationEngine::RecommendationEngine(
     : watchedProductsByUser(watchedProductsByUser)
 {
 }
-    
+   
 std::vector<int> RecommendationEngine::recommend(int userId, int productId) const
 {
     /*
@@ -131,7 +131,7 @@ int RecommendationEngine::countCommonProducts(
     int count = 0;
     const auto* smallerSet = &firstProducts;
     const auto* largerSet = &secondProducts;
-    
+   
     if (firstProducts.size() > secondProducts.size()) {
         smallerSet = &secondProducts;
         largerSet = &firstProducts;

@@ -10,8 +10,8 @@
   --link-color: #00C2E8; /* Wolt Cyan */
   --input-border: #cccccc;
 
-  /* Variables required by PRS-158 branch (Cart, Checkout, Orders) */
-  --brand: #00C2E8; 
+  /* Variables required bybranch (Cart, Checkout, Orders) */
+  --brand: #00C2E8;
   --brand-dark: #00a0c4;
   --surface: #ffffff;
   --muted: #6b6b6b;
@@ -30,7 +30,7 @@
   --link-color: #00C2E8;
   --input-border: #1a2f4c;
 
-  /* PRS-158 variables adapted for the Deep Navy aesthetic */
+  /*variables adapted for the Deep Navy aesthetic */
   --brand: #00C2E8;
   --brand-dark: #00a0c4;
   --surface: #112036; /* Matching navbar-bg so item cards blend well */

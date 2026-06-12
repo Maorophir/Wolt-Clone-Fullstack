@@ -7,7 +7,7 @@
 // Storage format (one user per line):
 // userId productId1 productId2 ...
 
-StorageManager::StorageManager(const std::string& filePath) 
+StorageManager::StorageManager(const std::string& filePath)
     : dataFile(filePath) {
     loadFromFile();
 }
@@ -97,7 +97,7 @@ void StorageManager::saveToFile() const {
     for (const auto& userPair : userHistory) {
         int userId = userPair.first;
         const auto& products = userPair.second;
-        
+       
         file << userId;
         for (int productId : products) {
             file << " " << productId;
@@ -124,4 +124,4 @@ void StorageManager::deleteProductsFromUser(int userId, const std::vector<int>& 
         userHistory[userId].erase(productId);
     }
     saveToFile();
-}    
+}   

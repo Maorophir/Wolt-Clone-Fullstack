@@ -5,7 +5,7 @@ import CategoryBar from '../components/CategoryBar';
 import './Home.css';
 
 /**
- * PRS-158 — Home / main screen.
+ *Home / main screen.
  *
  * Loads all restaurants from the Ex3 server (no hard-coded data) and presents
  * them as a Wolt-style feed: a category filter row, a "Popular right now" row of

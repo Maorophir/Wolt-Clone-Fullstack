@@ -1,7 +1,7 @@
 const userModel = require('../models/userModel');
 
 /**
- * Authentication middleware (PRS-106).
+ * Authentication middleware .
  *
  * Protected routes (e.g. Orders) require a logged-in user. The client sends the
  * authenticated user's id in the `X-User-Id` HTTP header (obtained from the

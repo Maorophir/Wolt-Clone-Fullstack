@@ -11,7 +11,7 @@ const getProducts = (req, res) => {
 const getProductById = (req, res) => {
     const { pId } = req.params;
     const product = productModel.getProductById(pId);
-    
+   
     if (!product) {
         return res.status(404).json({ error: "Product not found" });
     }
@@ -29,7 +29,7 @@ const getProductById = (req, res) => {
 };
 
 const createProduct = (req, res) => {
-    const { id } = req.params; 
+    const { id } = req.params;
     const { name, description, price, isAvailable, image } = req.body;
 
     // Validate required fields
@@ -44,7 +44,7 @@ const createProduct = (req, res) => {
 };
 
 const updateProduct = (req, res) => {
-    const { pId } = req.params; 
+    const { pId } = req.params;
     const updateData = req.body;
 
     if (updateData.name === "") {
@@ -52,7 +52,7 @@ const updateProduct = (req, res) => {
     }
 
     const updatedProduct = productModel.updateProduct(pId, updateData);
-    
+   
     if (!updatedProduct) {
         return res.status(404).json({ error: "Product not found" });
     }

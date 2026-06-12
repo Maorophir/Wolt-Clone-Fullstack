@@ -11,7 +11,10 @@
     background-color: var(--navbar-bg);
     border-bottom: 1px solid var(--navbar-border);
     transition: background-color 0.3s ease, border-color 0.3s ease;
+    width: 100%;
+    min-width: 0;
 }
+
 
 /* --- Brand Logo --- */
 .navbar-brand {
@@ -27,7 +30,7 @@
     color: var(--link-color);
 }
 
-/* --- SearchBar (Imported from PRS-158, adapted to our Theme Variables) --- */
+/* --- SearchBar --- */
 .searchbar {
     flex: 1;
     max-width: 300px;
@@ -35,11 +38,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background-color: var(--bg-color);
-    border: 1px solid var(--input-border);
+    background-color: var(--surface-muted);
+    border: none;
     border-radius: 999px;
     padding: 0.55rem 1.1rem;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .searchbar__btn {
@@ -78,7 +81,9 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    flex-shrink: 0;
+    flex-shrink: 1;
+    min-width: 0;
+    flex-wrap: wrap;
 }
 
 .navbar-link {
@@ -93,7 +98,7 @@
     color: var(--link-color);
 }
 
-/* --- User Authentication Styles (From PRS-158) --- */
+/* --- User Authentication Styles --- */
 .navbar__user {
     display: flex;
     align-items: center;
@@ -105,7 +110,6 @@
     height: 34px;
     border-radius: 50%;
     background-color: var(--link-color);
-    /* Using Wolt Cyan */
     color: #fff;
     font-size: 0.78rem;
     font-weight: 800;
@@ -138,38 +142,32 @@
 
 .navbar__logout:hover {
     border-color: #ff4d4f;
-    /* Danger red */
     color: #ff4d4f;
 }
 
-/* --- Modern Theme Toggle Switch (Perfect Vertical Center) --- */
+/* --- Modern Theme Toggle Switch --- */
 .theme-switch {
     position: relative;
     display: flex;
-    /* Flex prevents inherited line-height weirdness */
     align-items: center;
-    width: 56px;
+    width: 44px;
     height: 32px;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
     flex-shrink: 0;
 }
 
-/* Hide default HTML checkbox */
 .theme-switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
 
-/* The slim track (background) */
 .switch-slider {
     position: absolute;
     cursor: pointer;
-    /* Force exact vertical centering */
     top: 50%;
     transform: translateY(-50%);
     height: 16px;
-    /* Explicit slim height */
     left: 0;
     right: 0;
     background-color: #e4e4e4;
@@ -177,15 +175,12 @@
     border-radius: 34px;
 }
 
-/* Dark mode track color */
 .app-dark .switch-slider {
     background-color: #1a2f4c;
 }
 
-/* The big thumb (moving circle) */
 .switch-thumb {
     position: absolute;
-    /* Force exact vertical centering */
     top: 50%;
     transform: translateY(-50%);
     left: 0;
@@ -193,77 +188,216 @@
     height: 28px;
     background-color: #ffffff;
     border-radius: 50%;
-    /* Transition includes the transform property */
     transition: transform 0.2s cubic-bezier(0.4, 0.0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 16px;
+    /* Fix emoji vertical offset caused by font descender space */
+    line-height: 1;
+    padding-bottom: 1px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     color: #f39c12;
     z-index: 2;
 }
 
-/* Move the thumb to the right when checked */
-.theme-switch input:checked + .switch-slider .switch-thumb {
-    /* Keep the -50% Y centering, and add the 28px X slide */
-    transform: translate(28px, -50%);
+.theme-switch input:checked+.switch-slider .switch-thumb {
+    /* 44px track - 28px thumb = 16px */
+    transform: translate(16px, -50%);
     background-color: #0a1526;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
     color: #f1c40f;
 }
 
-/* Focus state for keyboard navigation */
 .theme-switch input:focus-visible+.switch-slider {
     outline: 2px solid var(--link-color);
     outline-offset: 4px;
 }
 
-/* --- Responsive Design (From PRS-158) --- */
-@media (max-width: 640px) {
+/* --- Responsive Design --- */
+
+/* Medium screens */
+@media (max-width: 900px) {
     .navbar {
-        flex-wrap: wrap;
-        gap: 0.75rem;
+        gap: 0.6rem;
+        padding: 0.65rem 1rem;
+    }
+
+    .navbar-actions {
+        gap: 0.5rem;
+    }
+
+    .navbar-link {
+        font-size: 0.82rem;
     }
 
     .searchbar {
-        order: 3;
-        max-width: none;
-        flex-basis: 100%;
+        max-width: 200px;
+        padding: 0.45rem 0.75rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.3rem;
+    }
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0.6rem 0.75rem;
     }
 
     .navbar__username {
         display: none;
     }
+
+    .theme-switch {
+        margin-left: 0;
+    }
 }
 
-/* --- User Profile Avatar --- */
+/* Extra small */
+@media (max-width: 480px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .navbar-link {
+        display: none;
+    }
+}
+
+/* --- User Profile Avatar (smaller, inside the pill trigger) --- */
 .profile-avatar {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    font-size: 14px;
+    font-size: 11px;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    border: 2px solid var(--navbar-bg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-    cursor: pointer;
     flex-shrink: 0;
-}
-
-.profile-avatar:hover {
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .profile-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+/* --- User Dropdown Menu --- */
+.user-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* Always-visible soft grey pill trigger */
+.user-dropdown__trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--surface-muted);
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px 5px 5px;
+    border-radius: 999px;
+    height: 40px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-dropdown__trigger:hover {
+    filter: brightness(0.94);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* SVG chevron — perfectly centered via flex */
+.user-dropdown__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--text-color);
+    line-height: 0;
+    transition: transform 0.25s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform: rotate(0deg);
+}
+
+/* Flip upward when open */
+.user-dropdown__chevron.open {
+    transform: rotate(180deg);
+}
+
+/* The dropdown card */
+.user-dropdown__menu {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    min-width: 200px;
+    background-color: var(--navbar-bg);
+    border: 1px solid var(--navbar-border);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    z-index: 200;
+    animation: dropdownFadeIn 0.18s ease;
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-dropdown__header {
+    padding: 14px 16px 10px;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.user-dropdown__divider {
+    border: none;
+    border-top: 1px solid var(--navbar-border);
+    margin: 0;
+}
+
+.user-dropdown__item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.user-dropdown__item:hover {
+    background-color: var(--input-border);
+    color: var(--link-color);
+}
+
+.user-dropdown__item--danger:hover {
+    background-color: rgba(255, 77, 79, 0.1);
+    color: #ff4d4f;
 }

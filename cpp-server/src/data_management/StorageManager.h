@@ -13,7 +13,7 @@
 // - Handles file persistence (save/load)
 class StorageManager : public IStorageManager, public IUserHistoryProvider {
 private:
-    // userHistory: maps user ID to the set of product IDs they've viewed. 
+    // userHistory: maps user ID to the set of product IDs they've viewed.
     // Optimization: Using unordered_map and unordered_set for O(1) average time lookups.
     std::unordered_map<int, std::unordered_set<int>> userHistory;
     std::string dataFile;

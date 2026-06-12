@@ -29,18 +29,18 @@ const createRestaurant = (req, res) => {
 
 const updateRestaurant = (req, res) => {
     const { id } = req.params;
-    
-    const updateData = req.body; 
-
    
+    const updateData = req.body;
+
+  
     if (updateData.name === "") {
         return res.status(400).json({ error: "Name cannot be empty" });
     }
 
-    
-    const updatedRestaurant = restaurantModel.updateRestaurant(id, updateData);
-    
    
+    const updatedRestaurant = restaurantModel.updateRestaurant(id, updateData);
+   
+  
     if (!updatedRestaurant) {
         return res.status(404).json({ error: 'Restaurant not found' });
     }
@@ -48,9 +48,9 @@ const updateRestaurant = (req, res) => {
 };
 
 const deleteRestaurant = (req, res) => {
-    
+   
     const { id } = req.params;
-    
+   
     const isDeleted = restaurantModel.deleteRestaurant(id);
 
 
@@ -58,7 +58,7 @@ const deleteRestaurant = (req, res) => {
         return res.status(404).json({ error: 'Restaurant not found' });
     }
 
-   
+  
     res.status(204).send();
 };
 

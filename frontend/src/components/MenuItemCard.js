@@ -6,7 +6,7 @@ import { formatPrice } from '../utils/format';
  *
  * Presentational component: it owns no state. It receives one `product` and an
  * `onAddToCart` callback supplied by the page. This keeps the cart logic out of
- * the card (PRS-160 will wire `onAddToCart` to the cart context).
+ * the card (will wire `onAddToCart` to the cart context).
  *
  * `isAvailable` defaults to "available" and only disables the button when the
  * server explicitly sends `false`, so older items without the field still work.

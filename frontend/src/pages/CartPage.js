@@ -6,7 +6,7 @@ import './Cart.css';
 import { formatPrice } from '../utils/format';
 
 /**
- * PRS-160 — Cart page (/cart). Lists the items in the cart, lets the user adjust
+ *Cart page (/cart). Lists the items in the cart, lets the user adjust
  * quantities or clear it, shows the total, and sends them to checkout. Browsing
  * the cart is public; the auth gate is on the checkout step.
  */

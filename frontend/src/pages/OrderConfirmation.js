@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import './Cart.css';
 
 /**
- * PRS-160 — Order confirmation (/order-confirmation). Shown after an order is
+ *Order confirmation (/order-confirmation). Shown after an order is
  * successfully placed. Past orders themselves live in the orders history
- * (PRS-158).
+ * .
  */
 const OrderConfirmation = () => (
     <div className="cart-page order-confirmation">

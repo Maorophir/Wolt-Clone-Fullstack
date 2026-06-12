@@ -7,7 +7,7 @@ import './Cart.css';
 import { formatPrice } from '../utils/format';
 
 /**
- * PRS-160 — Checkout page (/checkout). Reachable only by a logged-in user
+ *Checkout page (/checkout). Reachable only by a logged-in user
  * (wrapped in <ProtectedRoute>). Shows the final order summary and places the
  * order against the Ex3 server: POST /api/orders with the authenticated user's
  * credential. On success it clears the cart and shows the confirmation page.

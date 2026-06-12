@@ -10,8 +10,8 @@ std::string PatchCommand::execute(const std::vector<std::string>& args) {
 
     int userId = std::stoi(args[1]);
 
-    // PRS-53: PATCH is valid only if the user already exists (created by POST).
-    // PRS-57: syntactically valid but logically impossible -> 404 Not Found.
+    //PATCH is valid only if the user already exists (created by POST).
+    //syntactically valid but logically impossible -> 404 Not Found.
     if (!storageManager->userExists(userId)) {
         return "404 Not Found";
     }
