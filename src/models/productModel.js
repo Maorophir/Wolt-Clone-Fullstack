@@ -13,8 +13,12 @@ const createProduct = (restaurantId, productData) => {
     const newProduct = {
         id: randomUUID(),
         restaurantId,
+        isAvailable: true,
         ...productData
     };
+    if (newProduct.isAvailable === undefined) {
+        newProduct.isAvailable = true;
+    }
 
     storage.products.set(newProduct.id, newProduct);
     return newProduct;

@@ -11,6 +11,7 @@ export default function Register() {
         isLoading,
         successMessage,
         handleInputChange,
+        handleToggleChange,
         handleImageChange,
         submitForm
     } = useRegister();
@@ -141,6 +142,20 @@ export default function Register() {
                             disabled={isLoading}
                         />
                         {errors.confirmPassword && <span className="auth-error">{errors.confirmPassword}</span>}
+                    </div>
+
+                    <div className="auth-toggle-group" style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                        <label className="auth-toggle-label" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '14px', fontWeight: '600', color: '#333' }}>
+                            <input
+                                type="checkbox"
+                                name="isBusinessOwner"
+                                checked={formData.isBusinessOwner}
+                                onChange={handleToggleChange}
+                                disabled={isLoading}
+                                style={{ marginRight: '10px', width: '18px', height: '18px', accentColor: 'var(--brand)' }}
+                            />
+                            I am a Business Owner
+                        </label>
                     </div>
 
                     <button

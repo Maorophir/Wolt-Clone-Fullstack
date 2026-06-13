@@ -97,6 +97,27 @@
     color: var(--link-color);
 }
 
+.navbar-btn-add-restaurant {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    background: linear-gradient(135deg, #009de0, #007bb5);
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0, 157, 224, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.navbar-btn-add-restaurant:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 157, 224, 0.4);
+    filter: brightness(1.05);
+    color: white;
+}
+
 /* --- User Authentication Styles --- */
 .navbar__user {
     display: flex;

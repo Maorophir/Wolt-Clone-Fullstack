@@ -16,6 +16,8 @@ import OrdersPage from './pages/OrdersPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AddRestaurant from './pages/AddRestaurant';
+import EditRestaurant from './pages/EditRestaurant';
+import ManageMenu from './pages/ManageMenu';
 import Profile from './pages/Profile';
 
 const App = () => {
@@ -36,6 +38,22 @@ const App = () => {
                 element={
                   <ProtectedRoute>
                     <AddRestaurant />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/edit-restaurant/:id"
+                element={
+                  <ProtectedRoute>
+                    <EditRestaurant />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/manage-menu/:id"
+                element={
+                  <ProtectedRoute>
+                    <ManageMenu />
                   </ProtectedRoute>
                 }
               />

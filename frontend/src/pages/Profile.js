@@ -164,38 +164,40 @@ const Profile = () => {
                         </form>
                     </section>
 
-                    <section className="profile-section my-restaurants-section">
-                        <div className="my-restaurants-header">
-                            <h2>My Restaurants</h2>
-                            <button className="profile-btn-secondary" onClick={() => navigate('/add-restaurant')}>
-                                + Add Restaurant
-                            </button>
-                        </div>
+                    {user.isBusinessOwner && (
+                        <section className="profile-section my-restaurants-section">
+                            <div className="my-restaurants-header">
+                                <h2>My Restaurants</h2>
+                                <button className="profile-btn-secondary" onClick={() => navigate('/add-restaurant')}>
+                                     + Add Restaurant
+                                </button>
+                            </div>
 
-                        {isLoading ? (
-                            <p className="loading-text">Loading your restaurants...</p>
-                        ) : restaurants.length > 0 ? (
-                            <div className="profile-restaurants-grid">
-                                {restaurants.map(restaurant => (
-                                    <div key={restaurant.id} className="profile-restaurant-wrapper">
-                                        <RestaurantCard restaurant={restaurant} />
-                                        <div className="profile-restaurant-overlay">
-                                            <button
-                                                className="edit-restaurant-btn"
-                                                onClick={() => alert('Edit restaurant page coming soon!')}
-                                            >
-                                                Edit
-                                            </button>
+                            {isLoading ? (
+                                <p className="loading-text">Loading your restaurants...</p>
+                            ) : restaurants.length > 0 ? (
+                                <div className="profile-restaurants-grid">
+                                    {restaurants.map(restaurant => (
+                                        <div key={restaurant.id} className="profile-restaurant-wrapper">
+                                            <RestaurantCard restaurant={restaurant} />
+                                            <div className="profile-restaurant-overlay">
+                                                <button
+                                                    className="edit-restaurant-btn"
+                                                    onClick={() => navigate(`/edit-restaurant/${restaurant.id}`)}
+                                                >
+                                                    Edit
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="no-restaurants-box">
-                                <p>You haven't added any restaurants yet.</p>
-                            </div>
-                        )}
-                    </section>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="no-restaurants-box">
+                                    <p>You haven't added any restaurants yet.</p>
+                                </div>
+                            )}
+                        </section>
+                    )}
                 </div>
             </div>
         </div>

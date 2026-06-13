@@ -12,7 +12,7 @@ const { randomUUID } = require('crypto');
 let users = [];
 
 const createUser = (userData) => {
-    const newUser = { id: randomUUID(), ...userData };
+    const newUser = { id: randomUUID(), isBusinessOwner: false, ...userData };
     users.push(newUser);
     return newUser;
 };

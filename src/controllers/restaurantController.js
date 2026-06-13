@@ -21,6 +21,7 @@ const createRestaurant = (req, res) => {
         return res.status(400).json({ error: "Name is required" });
     }
 
+    const ownerId = req.userId;
     const newRestaurantData = { name, description, address, rating, category, image, ownerId };
     const createdRestaurant = restaurantModel.createRestaurant(newRestaurantData);
 

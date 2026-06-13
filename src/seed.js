@@ -8,7 +8,15 @@ const seedDatabase = () => {
         displayName: 'Lecturer',
         username: 'lecturer',
         password: 'password123',
+        isBusinessOwner: true,
         profileImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200' // Professional avatar
+    });
+
+    const normalUser = userModel.createUser({
+        displayName: 'Test User',
+        username: 'testuser',
+        password: 'password123',
+        isBusinessOwner: false
     });
 
     // 2. Seed Restaurants
@@ -21,7 +29,7 @@ const seedDatabase = () => {
         rating: 4.8,
         priceRange: '$$',
         image: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=800',
-        userId: lecturer.id
+        ownerId: lecturer.id
     });
 
     const r2 = restaurantModel.createRestaurant({
@@ -33,7 +41,7 @@ const seedDatabase = () => {
         rating: 4.9,
         priceRange: '$$$',
         image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=800',
-        userId: lecturer.id
+        ownerId: lecturer.id
     });
 
     const r3 = restaurantModel.createRestaurant({
@@ -44,8 +52,8 @@ const seedDatabase = () => {
         deliveryTime: '25-40 min',
         rating: 4.6,
         priceRange: '$$',
-        image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&q=80&w=800',
-        userId: lecturer.id
+        image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&q=80&w=800',
+        ownerId: lecturer.id
     });
 
     // 3. Seed Products for Burger Joint
@@ -85,7 +93,7 @@ const seedDatabase = () => {
         name: 'Miso Soup',
         description: 'Traditional Japanese soup with tofu and wakame.',
         price: 4.50,
-        image: 'https://images.unsplash.com/photo-1582283921137-fc2a291f03f5?auto=format&fit=crop&q=80&w=500'
+        image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=500'
     });
 
     // Seed Products for Napoli Pizza
