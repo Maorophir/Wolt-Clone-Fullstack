@@ -6,7 +6,8 @@ export const useRegister = () => {
         displayName: '',
         username: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        isBusinessOwner: false
     });
 
     const [imagePreview, setImagePreview] = useState(null);
@@ -81,6 +82,14 @@ export const useRegister = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const handleToggleChange = (e) => {
+        const { name, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: checked
+        }));
+    };
+
     const convertToBase64 = (file) => {
     return new Promise((resolve, reject) => {
         const fileReader = new FileReader();
@@ -118,7 +127,8 @@ const submitForm = async (e) => {
                 displayName: formData.displayName,
                 username: formData.username,
                 password: formData.password,
-                profileImage: base64Image
+                profileImage: base64Image,
+                isBusinessOwner: formData.isBusinessOwner
             };
 
             const response = await fetch('/api/users', {
@@ -170,6 +180,7 @@ const submitForm = async (e) => {
         isLoading,
         successMessage,
         handleInputChange,
+        handleToggleChange,
         handleImageChange,
         submitForm
     };

@@ -13,7 +13,10 @@ router.post('/', userController.createUser);
 // GET  /api/users/:id    -> view a user's profile
 router.get('/:id', userController.getUserById);
 
-const authenticate = require('../middlewares/authMiddleware');
+// GET /api/users/:id/restaurants -> view a user's restaurants
+router.get('/:id/restaurants', userController.getUserRestaurants);
+
+const { authenticate } = require('../middlewares/authMiddleware');
 
 // PATCH /api/users/:id    -> update a user's profile
 router.patch('/:id', authenticate, userController.updateUser);

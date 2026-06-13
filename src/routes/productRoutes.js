@@ -4,14 +4,15 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const productController = require('../controllers/productController');
+const { authenticate, authorizeBusiness, authorizeRestaurantOwner } = require('../middlewares/authMiddleware');
 
 // Map endpoints for /api/restaurants/:id/products
 router.get('/', productController.getProducts);
-router.post('/', productController.createProduct);
+router.post('/', authenticate, authorizeBusiness, authorizeRestaurantOwner, productController.createProduct);
 
 // Map endpoints for /api/restaurants/:id/products/:pId
 router.get('/:pId', productController.getProductById);
-router.patch('/:pId', productController.updateProduct);
-router.delete('/:pId', productController.deleteProduct);
+router.patch('/:pId', authenticate, authorizeBusiness, authorizeRestaurantOwner, productController.updateProduct);
+router.delete('/:pId', authenticate, authorizeBusiness, authorizeRestaurantOwner, productController.deleteProduct);
 
 module.exports = router;

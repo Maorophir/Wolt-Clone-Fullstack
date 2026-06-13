@@ -10,7 +10,10 @@ import MenuItemCard from './MenuItemCard';
  * page above.
  */
 const MenuList = ({ products, onAddToCart }) => {
-    if (!products || products.length === 0) {
+    // Only show products that are explicitly available (or undefined which defaults to available)
+    const visibleProducts = products ? products.filter(p => p.isAvailable !== false) : [];
+
+    if (visibleProducts.length === 0) {
         return <p className="menu-empty">This restaurant has no menu items yet.</p>;
     }
 
@@ -18,7 +21,7 @@ const MenuList = ({ products, onAddToCart }) => {
         <section className="menu-list">
             <h2 className="menu-list__title">Menu</h2>
             <div className="menu-list__grid">
-                {products.map((product) => (
+                {visibleProducts.map((product) => (
                     <MenuItemCard
                         key={product.id}
                         product={product}

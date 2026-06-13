@@ -25,7 +25,7 @@ const getAllUsers = (req, res) => {
  * location in the Location header with an empty body (201 Created).
  */
 const createUser = (req, res) => {
-    const { displayName, username, password, profileImage } = req.body;
+    const { displayName, username, password, profileImage, isBusinessOwner } = req.body;
 
     if (!displayName) {
         return res.status(400).json({ message: 'Display name is required' });
@@ -41,7 +41,7 @@ const createUser = (req, res) => {
         return res.status(409).json({ message: 'Username already taken' });
     }
 
-    const createdUser = userModel.createUser({ displayName, username, password, profileImage });
+    const createdUser = userModel.createUser({ displayName, username, password, profileImage, isBusinessOwner });
 
     const token = createToken({ userId: createdUser.id });
 
@@ -87,9 +87,21 @@ const updateUser = (req, res) => {
     res.status(200).json(toPublic(updatedUser));
 };
 
+/**
+ * GET /api/users/:id/restaurants
+ * Returns all restaurants owned by the specified user.
+ */
+const getUserRestaurants = (req, res) => {
+    const restaurantModel = require('../models/restaurantModel');
+    const allRestaurants = restaurantModel.getAllRestaurants();
+    const userRestaurants = allRestaurants.filter(r => r.ownerId === req.params.id);
+    res.status(200).json(userRestaurants);
+};
+
 module.exports = {
     getAllUsers,
     createUser,
     getUserById,
-    updateUser
+    updateUser,
+    getUserRestaurants
 };

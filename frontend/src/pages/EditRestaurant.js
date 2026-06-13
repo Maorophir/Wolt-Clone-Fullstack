@@ -1,25 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { authHeaders, getCurrentUser } from '../utils/auth';
-import './AddRestaurant.css';
+import './EditRestaurant.css';
 
 /**
- * AddRestaurant page — allows logged-in users to create a new restaurant.
- *
- * React hooks used (as required by the assignment):
- *  - useState  : manages all form fields, submission state, errors, and image preview
- *  - useRef    : auto-focuses the restaurant name input on mount
- *  - useEffect : triggers the auto-focus side-effect after the component mounts
- *
- * API contract (POST /api/restaurants):
- *  Body:    { name, description, address, category, rating, image }
- *  Auth:    Authorization: <logged-in user's id>  (server middleware requirement)
- *  Success: HTTP 201 Created
- *
- * Note: When the server is upgraded to issue real JWT tokens (POST /api/tokens),
- *       swap the Authorization header here for Authorization: Bearer <token>.
+ * EditRestaurant page — allows logged-in business owners to edit their restaurant.
  */
-const AddRestaurant = () => {
+const EditRestaurant = () => {
+    const { id } = useParams();
     const navigate = useNavigate();
 
     // Manage all form field values in a single state object (useState)
@@ -43,20 +31,40 @@ const AddRestaurant = () => {
     // Ref attached to the first input so it gets keyboard focus immediately (useRef)
     const nameInputRef = useRef(null);
 
-    // Auto-focus the restaurant name field when the component first renders (useEffect)
+    // Fetch existing restaurant data
     useEffect(() => {
-        if (nameInputRef.current) {
-            nameInputRef.current.focus();
-        }
-    }, []);
+        const fetchRestaurant = async () => {
+            try {
+                const res = await fetch(`/api/restaurants/${id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    
+                    // Verify ownership
+                    const user = getCurrentUser();
+                    if (!user || user.id !== data.ownerId) {
+                        navigate('/');
+                        return;
+                    }
 
-    // Restrict access to business owners
-    useEffect(() => {
-        const user = getCurrentUser();
-        if (!user || !user.isBusinessOwner) {
-            navigate('/');
-        }
-    }, [navigate]);
+                    setFormData({
+                        name: data.name || '',
+                        description: data.description || '',
+                        address: data.address || '',
+                        category: data.category || '',
+                        image: data.image || '',
+                    });
+                    if (data.image) {
+                        setImagePreview(data.image);
+                    }
+                } else {
+                    navigate('/');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchRestaurant();
+    }, [id, navigate]);
 
     // Revoke the blob URL when the component unmounts or when the image changes
     useEffect(() => {
@@ -123,8 +131,8 @@ const AddRestaurant = () => {
 
             // The authenticated user is automatically captured via JWT in backend authMiddleware
 
-            const response = await fetch('/api/restaurants', {
-                method: 'POST',
+            const response = await fetch(`/api/restaurants/${id}`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     ...authHeaders(),
@@ -134,20 +142,18 @@ const AddRestaurant = () => {
                     description: formData.description.trim(),
                     address: formData.address.trim(),
                     category: formData.category.trim(),
-                    rating: 0,
-                    image: imageValue || undefined,
+                    image: imageValue || formData.image || undefined,
                 }),
             });
 
             if (response.ok) {
-                // The server responds with 201 + Location header (no body)
-                setSuccessMessage('Restaurant created successfully! Redirecting to home…');
-                setTimeout(() => navigate('/'), 1500);
+                setSuccessMessage('Restaurant updated successfully!');
+                setTimeout(() => navigate('/profile'), 1500);
             } else {
                 const data = await response.json.catch(() => ({}));
                 setErrors(prev => ({
                     ...prev,
-                    submit: data.error || data.message || 'Failed to create restaurant. Please try again.',
+                    submit: data.error || data.message || 'Failed to update restaurant. Please try again.',
                 }));
             }
         } catch (err) {
@@ -155,7 +161,7 @@ const AddRestaurant = () => {
                 ...prev,
                 submit: 'Network error — could not reach the server.',
             }));
-            console.error('Create restaurant error:', err);
+            console.error('Update restaurant error:', err);
         } finally {
             setIsSubmitting(false);
         }
@@ -167,8 +173,8 @@ const AddRestaurant = () => {
 
                 {/* ── Page header ── */}
                 <div className="ar-header">
-                    <h1 className="ar-title">Add New Restaurant</h1>
-                    <p className="ar-subtitle">Fill in the details below to list your restaurant on WoltClone.</p>
+                    <h1 className="ar-title">Edit Restaurant</h1>
+                    <p className="ar-subtitle">Update your restaurant details.</p>
                 </div>
 
                 {/* ── Global error / success banners ── */}
@@ -295,7 +301,15 @@ const AddRestaurant = () => {
                         <button
                             type="button"
                             className="ar-btn ar-btn--secondary"
-                            onClick={() => navigate('/')}
+                            onClick={() => navigate(`/manage-menu/${id}`)}
+                            disabled={isSubmitting}
+                        >
+                            Manage Menu
+                        </button>
+                        <button
+                            type="button"
+                            className="ar-btn ar-btn--secondary"
+                            onClick={() => navigate(-1)}
                             disabled={isSubmitting}
                         >
                             Cancel
@@ -305,7 +319,7 @@ const AddRestaurant = () => {
                             className="ar-btn ar-btn--primary"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? 'Creating…' : 'Create Restaurant'}
+                            {isSubmitting ? 'Saving…' : 'Save Changes'}
                         </button>
                     </div>
 
@@ -315,4 +329,4 @@ const AddRestaurant = () => {
     );
 };
 
-export default AddRestaurant;
+export default EditRestaurant;

@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const orderController = require('../controllers/orderController');
-const authenticate = require('../middlewares/authMiddleware');
+const { authenticate } = require('../middlewares/authMiddleware');
 
 // All order endpoints require an authenticated user .
 router.use(authenticate);

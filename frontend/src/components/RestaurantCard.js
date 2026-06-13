@@ -59,9 +59,27 @@ const RestaurantCard = ({ restaurant }) => {
             <div className="restaurant-card__body">
                 <div className="restaurant-card__top">
                     <h3 className="restaurant-card__name">{name}</h3>
-                    {rating != null && rating !== '' && (
+                    {rating > 0 ? (
                         <span className="restaurant-card__rating">★ {rating}</span>
-                    )}
+                    ) : rating === 0 ? (
+                        <span className="restaurant-card__rating" style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '3px',
+                            background: 'linear-gradient(135deg, #00C2E8, #009de0)',
+                            color: 'white',
+                            padding: '3px 7px',
+                            fontSize: '0.75rem',
+                            fontWeight: '700',
+                            borderRadius: '12px',
+                            boxShadow: '0 2px 4px rgba(0, 194, 232, 0.3)'
+                        }}>
+                            New
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                        </span>
+                    ) : null}
                 </div>
                 {description && <p className="restaurant-card__desc">{description}</p>}
                 {address && <span className="restaurant-card__address">📍 {address}</span>}
