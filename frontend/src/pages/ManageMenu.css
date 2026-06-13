@@ -334,7 +334,7 @@
     
     .mm-product-actions {
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: fle-start;
     }
 }
 

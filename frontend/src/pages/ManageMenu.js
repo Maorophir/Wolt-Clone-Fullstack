@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { authHeaders, getCurrentUser } from '../utils/auth';
 import './ManageMenu.css';
 
@@ -23,6 +23,18 @@ const ManageMenu = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
+
+    const fetchProducts = useCallback(async () => {
+        try {
+            const res = await fetch(`/api/restaurants/${id}/products`);
+            if (res.ok) {
+                const data = await res.json();
+                setProducts(data);
+            }
+        } catch (err) {
+            console.error('Failed to fetch products', err);
+        }
+    }, [id]);
 
     useEffect(() => {
         const checkAuthAndFetchData = async () => {
@@ -51,19 +63,7 @@ const ManageMenu = () => {
             }
         };
         checkAuthAndFetchData();
-    }, [id, navigate]);
-
-    const fetchProducts = async () => {
-        try {
-            const res = await fetch(`/api/restaurants/${id}/products`);
-            if (res.ok) {
-                const data = await res.json();
-                setProducts(data);
-            }
-        } catch (err) {
-            console.error('Failed to fetch products', err);
-        }
-    };
+    }, [id, navigate, fetchProducts]);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
