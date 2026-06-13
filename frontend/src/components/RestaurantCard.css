@@ -81,3 +81,12 @@
     color: var(--muted);
     font-size: 0.82rem;
 }
+
+.restaurant-card__rating.new-rating,
+.restaurant-header__rating.new-rating {
+    background: linear-gradient(135deg, #4caf50, #81c784);
+    color: white;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}

@@ -14,7 +14,7 @@ app.use((req, res, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // --- Authentication & Orders routes  ---
 const userRoutes = require('./routes/userRoutes');
@@ -40,6 +40,9 @@ app.use((req, res) => {
 });
 
 if (require.main === module) {
+    const seedDatabase = require('./seed');
+    seedDatabase();
+
     app.listen(PORT, () => {
         console.log(`Server is running on http://localhost:${PORT}`);
     });

@@ -1,15 +1,8 @@
 /**
- * Minimal auth helper for(cart & checkout).
- *
- * The full authentication flow (login / register screens + JWT) is a separate
- * ticket that isn't merged yet. Until then, this thin shim stores the
- * authenticated user and produces the credential the Ex3 server currently
- * expects on protected requests: the `X-User-Id` header.
- *
- * When the JWT auth ticket lands, replace this module with the shared auth
- * context and switch authHeaders() to an `Authorization: Bearer <jwt>` header.
+ * Auth helper for JWT logic.
  */
 const USER_KEY = 'wolt_user';
+const TOKEN_KEY = 'wolt_jwt';
 
 export const getCurrentUser = () => {
     try {
@@ -20,18 +13,24 @@ export const getCurrentUser = () => {
     }
 };
 
-export const isAuthenticated = () => Boolean(getCurrentUser()?.id);
+export const isAuthenticated = () => Boolean(getCurrentUser()?.id) && Boolean(localStorage.getItem(TOKEN_KEY));
 
-export const setCurrentUser = (user) => {
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+export const setCurrentUser = (user, token) => {
+    if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
+    if (token) localStorage.setItem(TOKEN_KEY, token);
+    
+    // Dispatch event so Navbar updates instantly
+    window.dispatchEvent(new Event('user_updated'));
 };
 
 export const clearCurrentUser = () => {
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(TOKEN_KEY);
+    window.dispatchEvent(new Event('user_updated'));
 };
 
-/** Headers that authenticate a request against the Ex3 server. */
+/** Headers that authenticate a request against the server using JWT. */
 export const authHeaders = () => {
-    const user = getCurrentUser();
-    return user?.id ? { 'X-User-Id': user.id } : {};
+    const token = localStorage.getItem(TOKEN_KEY);
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
 };

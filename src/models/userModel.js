@@ -25,6 +25,13 @@ const getUserByUsername = (username) => {
     return users.find(user => user.username === username);
 };
 
+const updateUser = (id, updates) => {
+    const userIndex = users.findIndex(user => user.id === id);
+    if (userIndex === -1) return null;
+    users[userIndex] = { ...users[userIndex], ...updates };
+    return users[userIndex];
+};
+
 const getAllUsers = () => {
     return users;
 };
@@ -33,5 +40,6 @@ module.exports = {
     createUser,
     getUserById,
     getUserByUsername,
-    getAllUsers
+    getAllUsers,
+    updateUser
 };

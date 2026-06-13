@@ -20,7 +20,8 @@ const getProductById = (req, res) => {
     // recommendation server (Ex2). Best-effort and non-blocking: an absent or
     // unknown viewer, or a down recommendation server, never affects this
     // response.
-    const viewerId = req.header('X-User-Id');
+    const authHeader = req.header('Authorization');
+    const viewerId = (authHeader && authHeader.startsWith('Bearer ')) ? require('../utils/jwt').verifyToken(authHeader.split(' ')[1]).userId : null;
     if (viewerId && userModel.getUserById(viewerId)) {
         recommendationService.registerView(viewerId, product.id);
     }

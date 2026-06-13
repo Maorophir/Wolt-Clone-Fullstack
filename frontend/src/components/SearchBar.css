@@ -8,9 +8,10 @@
     align-items: center;
     justify-content: center;
     padding: 8px;
+    flex-shrink: 0;
 }
 
-/*  (Light Mode) */
+/* Magnifying glass icon — light mode */
 .searchbar__icon {
     display: inline-block;
     width: 16px;
@@ -21,7 +22,50 @@
     background-position: center;
 }
 
-/*  Dark Mode  data-theme="dark" */
+/* Dark mode icon */
 .searchbar[data-theme="dark"] .searchbar__icon {
     filter: invert(1);
+}
+
+/* ── Collapsed circle state (small screens only) ── */
+@media (max-width: 800px) {
+
+    /* Default on small screens: pill collapses to a circle */
+    .searchbar {
+        /* Override the flex: 1 from Navbar.css so it becomes a fixed circle */
+        flex: 0 0 40px !important;
+        width: 40px;
+        height: 40px;
+        max-width: 40px;
+        border-radius: 50%;
+        padding: 0;
+        background-color: var(--surface-muted);
+        overflow: hidden;
+        /* Smooth expand animation */
+        transition: flex 0.3s ease, max-width 0.3s ease, border-radius 0.3s ease, width 0.3s ease;
+        cursor: pointer;
+    }
+
+    /* Hide the text input when collapsed */
+    .searchbar:not(.searchbar--expanded) .searchbar__input {
+        display: none;
+    }
+
+    /* When expanded: go back to a full pill */
+    .searchbar.searchbar--expanded {
+        flex: 1 1 100% !important;
+        width: 100%;
+        max-width: none;
+        border-radius: 999px;
+        padding: 0.45rem 0.75rem;
+    }
+
+    .searchbar.searchbar--expanded .searchbar__input {
+        display: block;
+    }
+
+    /* Keep the button padding tight inside the circle */
+    .searchbar__btn {
+        padding: 6px;
+    }
 }
