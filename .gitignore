@@ -100,3 +100,5 @@ node_modules/
 Ex4.pdf
 Ex4.txt
 .gitignore
+test_login.js
+test_e2e.js
