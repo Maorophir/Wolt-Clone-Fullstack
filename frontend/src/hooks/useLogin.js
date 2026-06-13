@@ -6,7 +6,7 @@ export const useLogin = () => {
     const [formData, setFormData] = useState({ username: '', password: '' });
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -35,7 +35,7 @@ export const useLogin = () => {
                 body: JSON.stringify(formData)
             });
 
-            const data = await response.json;
+            const data = await response.json();
 
             if (!response.ok) {
                 setErrors({ submit: data.message || 'Login failed' });
@@ -54,7 +54,7 @@ export const useLogin = () => {
                 const userResponse = await fetch(`/api/users/${userId}`, {
                     headers: authHeaders()
                 });
-                const userData = await userResponse.json;
+                const userData = await userResponse.json();
                
                 // 4. Save user profile to localStorage
                 setCurrentUser({ id: userId, ...userData });

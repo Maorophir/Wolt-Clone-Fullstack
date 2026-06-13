@@ -13,11 +13,11 @@ import './AddRestaurant.css';
  *
  * API contract (POST /api/restaurants):
  *  Body:    { name, description, address, category, rating, image }
- *  Auth:    X-User-Id: <logged-in user's id>  (server middleware requirement)
+ *  Auth:    Authorization: <logged-in user's id>  (server middleware requirement)
  *  Success: HTTP 201 Created
  *
  * Note: When the server is upgraded to issue real JWT tokens (POST /api/tokens),
- *       swap the X-User-Id header here for Authorization: Bearer <token>.
+ *       swap the Authorization header here for Authorization: Bearer <token>.
  */
 const AddRestaurant = () => {
     const navigate = useNavigate();
@@ -119,13 +119,13 @@ const AddRestaurant = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...authHeaders,
+                    ...authHeaders(),
                 },
                 body: JSON.stringify({
-                    name: formData.name.trim,
-                    description: formData.description.trim,
-                    address: formData.address.trim,
-                    category: formData.category.trim,
+                    name: formData.name.trim(),
+                    description: formData.description.trim(),
+                    address: formData.address.trim(),
+                    category: formData.category.trim(),
                     rating: 0,
                     image: imageValue || undefined,
                 }),

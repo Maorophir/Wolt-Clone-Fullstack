@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import CartButton from './CartButton';
 import { useTheme } from '../context/ThemeContext';
 import { getCurrentUser, clearCurrentUser, isAuthenticated } from '../utils/auth';
+import siteLogo from '../assets/WoltClone_Logo.png';
 import './Navbar.css';
 
 /**
@@ -60,7 +61,17 @@ const Navbar = () => {
         <nav className="navbar">
             <div>
                 <Link to="/" className="navbar-brand">
-                    <span>Wolt</span>Clone
+                    <img 
+                        src={siteLogo} 
+                        alt="WoltClone Logo" 
+                        style={{ 
+                            height: '65px', 
+                            margin: '-12px 0',
+                            display: 'block',
+                            filter: isDarkMode ? 'brightness(0) invert(1)' : 'none',
+                            transition: 'filter 0.3s ease'
+                        }} 
+                    />
                 </Link>
             </div>
 

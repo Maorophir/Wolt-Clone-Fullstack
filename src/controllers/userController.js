@@ -1,3 +1,4 @@
+const { createToken } = require('../utils/jwt');
 const userModel = require('../models/userModel');
 
 /**
@@ -42,9 +43,11 @@ const createUser = (req, res) => {
 
     const createdUser = userModel.createUser({ displayName, username, password });
 
+    const token = createToken({ userId: createdUser.id });
+
     res.status(201)
    .location(`/api/users/${createdUser.id}`)
-   .json(toPublic(createdUser));
+   .json({ user: toPublic(createdUser), token });
 };
 
 /**

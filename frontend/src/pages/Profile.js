@@ -34,7 +34,7 @@ const Profile = () => {
                 headers: authHeaders()
             });
             if (response.ok) {
-                const data = await response.json;
+                const data = await response.json();
                 setRestaurants(data);
             }
         } catch (err) {
@@ -80,21 +80,21 @@ const Profile = () => {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
-                    ...authHeaders,
+                    ...authHeaders(),
                 },
                 body: JSON.stringify({
-                    displayName: displayName.trim,
+                    displayName: displayName.trim(),
                     profileImage: base64Image
                 })
             });
 
             if (response.ok) {
-                const updatedUser = await response.json;
+                const updatedUser = await response.json();
                 setCurrentUser(updatedUser);
                 setUser(updatedUser);
                 setMessage({ text: 'Profile updated successfully!', type: 'success' });
             } else {
-                const errData = await response.json;
+                const errData = await response.json();
                 setMessage({ text: errData.error || 'Failed to update profile.', type: 'error' });
             }
         } catch (err) {

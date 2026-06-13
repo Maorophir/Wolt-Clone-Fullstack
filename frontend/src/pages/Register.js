@@ -13,7 +13,7 @@ export default function Register() {
         handleInputChange,
         handleImageChange,
         submitForm
-    } = useRegister;
+    } = useRegister();
 
     const displayNameRef = useRef(null);
     const [passwordFocused, setPasswordFocused] = useState(false);

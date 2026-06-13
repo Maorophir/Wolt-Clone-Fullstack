@@ -1,31 +1,27 @@
+const { verifyToken } = require('../utils/jwt');
 const userModel = require('../models/userModel');
 
 /**
- * Authentication middleware .
- *
- * Protected routes (e.g. Orders) require a logged-in user. The client sends the
- * authenticated user's id in the `X-User-Id` HTTP header (obtained from the
- * login response, POST /api/tokens). This middleware extracts that id, verifies
- * the user exists, and exposes it to downstream handlers as `req.userId`.
- *
- * Kept as a standalone, single-responsibility unit so any route can opt into
- * authentication without duplicating the check (loose coupling / DRY).
+ * Authentication middleware.
+ * Expects Authorization: Bearer <token>
  */
-const AUTH_HEADER = 'X-User-Id';
-
 const authenticate = (req, res, next) => {
-    const userId = req.header(AUTH_HEADER);
-
-    if (!userId) {
+    const authHeader = req.header('Authorization');
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Authentication required' });
     }
 
-    if (!userModel.getUserById(userId)) {
-        return res.status(401).json({ error: 'Invalid or unknown user' });
+    const token = authHeader.split(' ')[1];
+    try {
+        const decoded = verifyToken(token);
+        if (!userModel.getUserById(decoded.userId)) {
+            return res.status(401).json({ error: 'Invalid or unknown user' });
+        }
+        req.userId = decoded.userId;
+        next();
+    } catch (err) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
     }
-
-    req.userId = userId;
-    next();
 };
 
 module.exports = authenticate;

@@ -10,7 +10,7 @@ export default function Login() {
         isLoading,
         handleInputChange,
         submitForm
-    } = useLogin;
+    } = useLogin();
 
     const usernameRef = useRef(null);
 
