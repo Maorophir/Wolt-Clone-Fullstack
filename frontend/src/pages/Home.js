@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { apiCall } from '../utils/api';
 import RestaurantCard from '../components/RestaurantCard';
 import CategoryBar from '../components/CategoryBar';
+import Carousel from '../components/Carousel';
 import './Home.css';
 
 /**
@@ -62,14 +63,11 @@ const Home = () => {
 
                     {!category && promoted.length > 0 && (
                         <section className="home-section">
-                            <h2 className="home-section__title">Popular right now</h2>
-                            <div className="home-carousel">
+                            <Carousel title="Popular right now" actionLabel="See all">
                                 {promoted.map((r) => (
-                                    <div className="home-carousel__item" key={r.id}>
-                                        <RestaurantCard restaurant={r} />
-                                    </div>
+                                    <RestaurantCard key={r.id} restaurant={r} />
                                 ))}
-                            </div>
+                            </Carousel>
                         </section>
                     )}
 

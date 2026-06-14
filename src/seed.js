@@ -56,6 +56,42 @@ const seedDatabase = () => {
         ownerId: lecturer.id
     });
 
+    const r4 = restaurantModel.createRestaurant({
+        name: 'Taco Fiesta',
+        description: 'Authentic Mexican street tacos and burritos.',
+        address: '321 Salsa Blvd',
+        category: 'Mexican',
+        deliveryTime: '15-25 min',
+        rating: 4.7,
+        priceRange: '$',
+        image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800',
+        ownerId: lecturer.id
+    });
+
+    const r5 = restaurantModel.createRestaurant({
+        name: 'Vegan Bites',
+        description: 'Healthy and delicious plant-based meals.',
+        address: '654 Green Way',
+        category: 'Healthy',
+        deliveryTime: '20-35 min',
+        rating: 4.8,
+        priceRange: '$$',
+        image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+        ownerId: lecturer.id
+    });
+
+    const r6 = restaurantModel.createRestaurant({
+        name: 'The Sweet Spot',
+        description: 'Artisanal desserts, cakes, and pastries.',
+        address: '987 Sugar Ave',
+        category: 'Desserts',
+        deliveryTime: '10-20 min',
+        rating: 4.9,
+        priceRange: '$$',
+        image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&q=80&w=800',
+        ownerId: lecturer.id
+    });
+
     // 3. Seed Products for Burger Joint
     productModel.createProduct(r1.id, {
         name: 'Classic Cheeseburger',

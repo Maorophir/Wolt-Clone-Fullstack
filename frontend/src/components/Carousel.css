@@ -1,0 +1,102 @@
+.carousel-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2.5rem;
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.carousel-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0;
+}
+
+.carousel-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.carousel-action-btn {
+    background: none;
+    border: none;
+    color: var(--brand);
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    transition: opacity 0.15s ease;
+}
+
+.carousel-action-btn:hover {
+    opacity: 0.8;
+}
+
+.carousel-arrows {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.carousel-arrow {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--surface);
+    color: var(--brand);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.carousel-arrow:hover:not(:disabled) {
+    background-color: var(--background);
+}
+
+.carousel-arrow--hidden {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.carousel-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scroll-snap-type: x mandatory;
+    width: 100%;
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-track > * {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+}
+
+@media (max-width: 768px) {
+    .carousel-arrows {
+        display: none;
+    }
+    
+    .carousel-track > * {
+        flex: 0 0 240px;
+    }
+}

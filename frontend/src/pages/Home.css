@@ -36,20 +36,6 @@
     margin: 0 0 1rem;
 }
 
-/* Horizontal "Popular right now" row, like Wolt's feed rows */
-.home-carousel {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scroll-snap-type: x mandatory;
-}
-
-.home-carousel__item {
-    flex: 0 0 280px;
-    scroll-snap-align: start;
-}
-
 /* Full responsive grid */
 .home-grid {
     display: grid;
