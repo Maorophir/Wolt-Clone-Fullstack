@@ -85,8 +85,6 @@ run_docker_tests.sh
 *.ipr
 /.vscode/
 
-# Mock data
-src/utils/
 
 # user history
 data/user_history.txt
