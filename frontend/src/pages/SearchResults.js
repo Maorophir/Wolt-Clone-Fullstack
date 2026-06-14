@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { apiCall } from '../utils/api';
 import RestaurantCard from '../components/RestaurantCard';
+import { useUserLocation } from '../context/LocationContext';
+import { haversineKm } from '../utils/geo';
 import './Home.css';
 import { formatPrice } from '../utils/format';
 
@@ -15,6 +17,12 @@ import { formatPrice } from '../utils/format';
 const SearchResults = () => {
     const [params] = useSearchParams();
     const query = params.get('q') || '';
+    const loc = useUserLocation();
+
+    const distanceOf = (r) =>
+        loc.coords && r.latitude != null && r.longitude != null
+            ? haversineKm(loc.coords, { lat: Number(r.latitude), lng: Number(r.longitude) })
+            : undefined;
 
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -64,7 +72,7 @@ const SearchResults = () => {
                             <h2 className="home-section__title">Restaurants</h2>
                             <div className="home-grid">
                                 {restaurants.map((r) => (
-                                    <RestaurantCard key={r.id} restaurant={r} />
+                                    <RestaurantCard key={r.id} restaurant={r} distanceKm={distanceOf(r)} />
                                 ))}
                             </div>
                         </section>

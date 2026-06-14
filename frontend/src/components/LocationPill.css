@@ -1,0 +1,283 @@
+/* Navbar location selector pill (mirrors Wolt's address selector). */
+.location-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    background: var(--surface, #fff);
+    border: 1.5px solid var(--text-color, var(--text, #1f3d4d));
+    color: var(--text-color, var(--text, #1f3d4d));
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem 0.3rem 0.35rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.location-pill:hover {
+    filter: brightness(0.97);
+}
+
+.location-pill__badge {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #d8eefb;
+    color: #0a4d68;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.location-pill__text {
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.location-pill__chevron {
+    display: inline-flex;
+    opacity: 0.85;
+}
+
+@media (max-width: 640px) {
+    .location-pill__text {
+        display: none;
+    }
+}
+
+/* --- "Where to?" modal --- */
+.loc-modal__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 8vh 1rem 1rem;
+}
+
+.loc-modal {
+    background: var(--surface, #fff);
+    color: var(--text, #1a1a1a);
+    width: min(560px, 94vw);
+    border-radius: 20px;
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.32);
+}
+
+.loc-modal__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.loc-modal__title {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+}
+
+.loc-modal__close {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border, #ececec);
+    background: var(--surface, #fff);
+    color: var(--text, #1a1a1a);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loc-modal__sub {
+    margin: 0.25rem 0 1rem;
+    color: var(--muted, #6b6b6b);
+    font-size: 0.95rem;
+}
+
+.loc-row {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-top: 1px solid var(--border, #ececec);
+    padding: 1rem 0.25rem;
+    cursor: pointer;
+    color: var(--text, #1a1a1a);
+}
+
+.loc-row:hover {
+    background: var(--surface-muted);
+}
+
+.loc-row:disabled {
+    opacity: 0.7;
+    cursor: default;
+}
+
+.loc-row__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #d8eefb;
+    color: #0a4d68;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+}
+
+.loc-row__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.loc-row__title {
+    font-weight: 700;
+}
+
+.loc-row__sub {
+    font-size: 0.85rem;
+    color: var(--muted, #6b6b6b);
+}
+
+.loc-row__check {
+    color: var(--brand, #009de0);
+    display: inline-flex;
+}
+
+.loc-row__check--inline {
+    margin-left: 8px;
+    vertical-align: -3px;
+}
+
+/* Saved address rows + actions */
+.loc-row--saved {
+    cursor: default;
+}
+
+.loc-row--saved:hover {
+    background: none;
+}
+
+.loc-row__actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.loc-btn {
+    background: var(--surface, #fff);
+    border: 1px solid var(--border, #ececec);
+    color: var(--text, #1a1a1a);
+    border-radius: 999px;
+    padding: 0.45rem 1rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.loc-btn:hover {
+    border-color: var(--brand, #009de0);
+    color: var(--brand, #009de0);
+}
+
+.loc-btn--primary,
+.loc-btn--primary:hover {
+    background: var(--brand, #009de0);
+    border-color: var(--brand, #009de0);
+    color: #fff;
+}
+
+.loc-btn--wide {
+    width: 100%;
+    margin: 0.25rem 0 0.75rem;
+}
+
+.loc-row--add {
+    color: var(--brand, #009de0);
+}
+
+.loc-row__icon--add {
+    background: #eef6fb;
+    color: var(--brand, #009de0);
+}
+
+/* Add / edit address form */
+.loc-form {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.5rem;
+}
+
+.loc-form__label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin: 0.6rem 0 0.25rem;
+    color: var(--muted, #6b6b6b);
+}
+
+.loc-form__input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border, #ececec);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    background: var(--surface, #fff);
+    color: var(--text, #1a1a1a);
+}
+
+.loc-form__coords {
+    display: flex;
+    gap: 10px;
+}
+
+.loc-form__coords .loc-form__input {
+    flex: 1;
+    min-width: 0;
+}
+
+.loc-form__error {
+    color: var(--danger, #c0392b);
+    font-size: 0.85rem;
+    margin: 0.5rem 0 0;
+}
+
+.loc-form__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.loc-btn--danger {
+    padding: 0.45rem 0.6rem;
+    color: var(--danger, #c0392b);
+}
+
+.loc-btn--danger:hover {
+    border-color: var(--danger, #c0392b);
+    color: var(--danger, #c0392b);
+}
+
+.loc-empty {
+    color: var(--muted, #6b6b6b);
+    font-size: 0.9rem;
+    padding: 1rem 0.25rem;
+    border-top: 1px solid var(--border, #ececec);
+}

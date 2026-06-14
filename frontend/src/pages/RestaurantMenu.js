@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiCall } from '../utils/api';
 import { useCart } from '../context/CartContext';
+import { useUserLocation } from '../context/LocationContext';
+import { haversineKm } from '../utils/geo';
 import RestaurantHeader from '../components/RestaurantHeader';
 import MenuList from '../components/MenuList';
 import './RestaurantMenu.css';
@@ -23,6 +25,7 @@ import './RestaurantMenu.css';
 const RestaurantMenu = () => {
     const { id } = useParams();
     const { addItem } = useCart();
+    const loc = useUserLocation();
 
     const [restaurant, setRestaurant] = useState(null);
     const [products, setProducts] = useState([]);
@@ -98,11 +101,16 @@ const RestaurantMenu = () => {
         );
     }
 
+    const distanceKm =
+        loc.coords && restaurant.latitude != null && restaurant.longitude != null
+            ? haversineKm(loc.coords, { lat: Number(restaurant.latitude), lng: Number(restaurant.longitude) })
+            : undefined;
+
     return (
         <div className="restaurant-menu-page">
             <Link to="/" className="menu-back-link">← Back to restaurants</Link>
 
-            <RestaurantHeader restaurant={restaurant} />
+            <RestaurantHeader restaurant={restaurant} distanceKm={distanceKm} />
             <MenuList products={products} onAddToCart={handleAddToCart} />
 
             {toast && <div className="menu-toast" role="status">{toast}</div>}

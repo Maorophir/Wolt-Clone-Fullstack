@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { authHeaders, getCurrentUser } from '../utils/auth';
+import { getCurrentPosition } from '../utils/geo';
 import './EditRestaurant.css';
 
 /**
@@ -17,11 +18,20 @@ const EditRestaurant = () => {
         address: '',
         category: '',
         image: '',  // base64 data URL or a remote URL string
+        latitude: '',
+        longitude: '',
     });
+
+    // Existing categories (fetched from the server) populate the category
+    // dropdown, so the choices stay data-derived — not hard-coded. The "Other"
+    // option flips on a free-text input so an owner can still add a new cuisine.
+    const [categoryOptions, setCategoryOptions] = useState([]);
+    const [isCustomCategory, setIsCustomCategory] = useState(false);
 
     // Separate state for the image file and its local preview URL
     const [imagePreview, setImagePreview] = useState(null);
     const [imageFile, setImageFile] = useState(null);
+    const [locating, setLocating] = useState(false);
 
     // UI state: validation errors and submission loading flag
     const [errors, setErrors] = useState({});
@@ -52,6 +62,8 @@ const EditRestaurant = () => {
                         address: data.address || '',
                         category: data.category || '',
                         image: data.image || '',
+                        latitude: data.latitude != null ? String(data.latitude) : '',
+                        longitude: data.longitude != null ? String(data.longitude) : '',
                     });
                     if (data.image) {
                         setImagePreview(data.image);
@@ -66,6 +78,25 @@ const EditRestaurant = () => {
         fetchRestaurant();
     }, [id, navigate]);
 
+    // Load the categories that already exist so the dropdown stays data-derived
+    // (mirrors how the Home category bar builds its list from server data).
+    useEffect(() => {
+        let cancelled = false;
+        fetch('/api/restaurants')
+            .then(res => (res.ok ? res.json() : []))
+            .then(list => {
+                if (cancelled) return;
+                const cats = [...new Set(
+                    (Array.isArray(list) ? list : [])
+                        .map(r => r.category)
+                        .filter(Boolean)
+                )].sort((a, b) => a.localeCompare(b));
+                setCategoryOptions(cats);
+            })
+            .catch(() => { /* non-fatal: the user can still type a new category */ });
+        return () => { cancelled = true; };
+    }, []);
+
     // Revoke the blob URL when the component unmounts or when the image changes
     useEffect(() => {
         return () => {
@@ -79,6 +110,19 @@ const EditRestaurant = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
         // Clear the error for this field as soon as the user starts typing again
         if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
+    };
+
+    /** Category dropdown: pick an existing category, or switch to "add new" mode. */
+    const handleCategorySelect = (e) => {
+        const { value } = e.target;
+        if (value === '__other__') {
+            setIsCustomCategory(true);
+            setFormData(prev => ({ ...prev, category: '' }));
+        } else {
+            setIsCustomCategory(false);
+            setFormData(prev => ({ ...prev, category: value }));
+        }
+        if (errors.category) setErrors(prev => ({ ...prev, category: '' }));
     };
 
     /** Image file picker handler — generates a local preview URL */
@@ -104,12 +148,39 @@ const EditRestaurant = () => {
         reader.readAsDataURL(file);
     });
 
+    /** Fills latitude/longitude from the browser geolocation (no libraries). */
+    const useMyLocation = async () => {
+        setLocating(true);
+        setErrors(prev => ({ ...prev, location: '' }));
+        try {
+            const { lat, lng } = await getCurrentPosition();
+            setFormData(prev => ({ ...prev, latitude: lat.toFixed(6), longitude: lng.toFixed(6) }));
+        } catch (err) {
+            setErrors(prev => ({ ...prev, location: err && err.code === 1 ? 'Location was blocked — enter coordinates manually.' : 'Could not get your location.' }));
+        } finally {
+            setLocating(false);
+        }
+    };
+
     /** Client-side validation — returns true when the form is valid */
     const validate = () => {
         const newErrors = {};
         if (!formData.name.trim()) newErrors.name = 'Restaurant name is required.';
         if (!formData.category.trim()) newErrors.category = 'Category is required.';
         if (!formData.address.trim()) newErrors.address = 'Address is required.';
+
+        const hasLat = String(formData.latitude).trim() !== '';
+        const hasLng = String(formData.longitude).trim() !== '';
+        if (hasLat !== hasLng) {
+            newErrors.location = 'Provide both latitude and longitude, or leave both empty.';
+        } else if (hasLat) {
+            const la = Number(formData.latitude);
+            const lo = Number(formData.longitude);
+            if (!Number.isFinite(la) || la < -90 || la > 90 || !Number.isFinite(lo) || lo < -180 || lo > 180) {
+                newErrors.location = 'Latitude must be -90..90 and longitude -180..180.';
+            }
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -117,7 +188,7 @@ const EditRestaurant = () => {
     /** Form submission — validates, encodes image, then POSTs to /api/restaurants */
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validate) return;
+        if (!validate()) return;
 
         setIsSubmitting(true);
         setSuccessMessage('');
@@ -143,6 +214,8 @@ const EditRestaurant = () => {
                     address: formData.address.trim(),
                     category: formData.category.trim(),
                     image: imageValue || formData.image || undefined,
+                    latitude: formData.latitude !== '' ? Number(formData.latitude) : undefined,
+                    longitude: formData.longitude !== '' ? Number(formData.longitude) : undefined,
                 }),
             });
 
@@ -150,7 +223,7 @@ const EditRestaurant = () => {
                 setSuccessMessage('Restaurant updated successfully!');
                 setTimeout(() => navigate('/profile'), 1500);
             } else {
-                const data = await response.json.catch(() => ({}));
+                const data = await response.json().catch(() => ({}));
                 setErrors(prev => ({
                     ...prev,
                     submit: data.error || data.message || 'Failed to update restaurant. Please try again.',
@@ -211,22 +284,42 @@ const EditRestaurant = () => {
                         {errors.name && <span className="ar-field-error">{errors.name}</span>}
                     </div>
 
-                    {/* ── Category (required) ── */}
+                    {/* ── Category (required) — choose an existing one or add a new one ── */}
                     <div className="ar-group">
                         <label htmlFor="ar-category" className="ar-label">
                             Category <span className="ar-required">*</span>
                         </label>
-                        <input
-                            type="text"
+                        <select
                             id="ar-category"
                             name="category"
-                            value={formData.category}
-                            onChange={handleChange}
-                            placeholder="e.g., Italian, Sushi, Burgers"
+                            value={isCustomCategory ? '__other__' : formData.category}
+                            onChange={handleCategorySelect}
                             disabled={isSubmitting}
-                            className={`ar-input${errors.category ? ' ar-input--error' : ''}`}
-                            autoComplete="off"
-                        />
+                            className={`ar-input ar-select${errors.category ? ' ar-input--error' : ''}`}
+                        >
+                            <option value="" disabled>Select a category…</option>
+                            {(formData.category && !isCustomCategory && !categoryOptions.includes(formData.category)
+                                ? [formData.category, ...categoryOptions]
+                                : categoryOptions
+                            ).map((c) => (
+                                <option key={c} value={c}>{c}</option>
+                            ))}
+                            <option value="__other__">+ Add a new category…</option>
+                        </select>
+                        {isCustomCategory && (
+                            <input
+                                type="text"
+                                name="category"
+                                value={formData.category}
+                                onChange={handleChange}
+                                placeholder="New category name, e.g., Ramen"
+                                disabled={isSubmitting}
+                                className={`ar-input${errors.category ? ' ar-input--error' : ''}`}
+                                style={{ marginTop: '0.5rem' }}
+                                autoComplete="off"
+                                aria-label="New category name"
+                            />
+                        )}
                         {errors.category && <span className="ar-field-error">{errors.category}</span>}
                     </div>
 
@@ -247,6 +340,49 @@ const EditRestaurant = () => {
                             autoComplete="off"
                         />
                         {errors.address && <span className="ar-field-error">{errors.address}</span>}
+                    </div>
+
+                    {/* ── Location / coordinates (optional — powers "nearby") ── */}
+                    <div className="ar-group">
+                        <label className="ar-label">
+                            Location <span className="ar-optional">(optional — enables "nearby" search)</span>
+                        </label>
+                        <button
+                            type="button"
+                            className="ar-btn ar-btn--secondary"
+                            onClick={useMyLocation}
+                            disabled={isSubmitting || locating}
+                            style={{ marginBottom: '0.5rem' }}
+                        >
+                            {locating ? 'Locating…' : '📍 Use my current location'}
+                        </button>
+                        <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <input
+                                type="number"
+                                step="any"
+                                name="latitude"
+                                value={formData.latitude}
+                                onChange={handleChange}
+                                placeholder="Latitude"
+                                disabled={isSubmitting}
+                                className="ar-input"
+                                style={{ flex: 1, minWidth: 0 }}
+                                aria-label="Latitude"
+                            />
+                            <input
+                                type="number"
+                                step="any"
+                                name="longitude"
+                                value={formData.longitude}
+                                onChange={handleChange}
+                                placeholder="Longitude"
+                                disabled={isSubmitting}
+                                className="ar-input"
+                                style={{ flex: 1, minWidth: 0 }}
+                                aria-label="Longitude"
+                            />
+                        </div>
+                        {errors.location && <span className="ar-field-error">{errors.location}</span>}
                     </div>
 
                     {/* ── Description (optional) ── */}

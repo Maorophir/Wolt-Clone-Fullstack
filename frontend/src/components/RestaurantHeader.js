@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentUser } from '../utils/auth';
+import { formatDistance } from '../utils/geo';
+import { PinIcon } from './icons';
 
 /**
  * The hero header at the top of a restaurant's menu page: name, short
  * description, rating and address. Purely presentational — it renders whatever
  * the server returned and hides fields that are missing.
  */
-const RestaurantHeader = ({ restaurant }) => {
+const RestaurantHeader = ({ restaurant, distanceKm }) => {
     if (!restaurant) return null;
 
     const { id, name, description, address, rating, ownerId } = restaurant;
@@ -79,6 +81,11 @@ const RestaurantHeader = ({ restaurant }) => {
                 ) : null}
                 {address && (
                     <span className="restaurant-header__address">{address}</span>
+                )}
+                {distanceKm != null && (
+                    <span className="restaurant-header__address" style={{ color: '#009de0', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <PinIcon /> {formatDistance(distanceKm)} away
+                    </span>
                 )}
             </div>
         </header>

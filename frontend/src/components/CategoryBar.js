@@ -12,6 +12,15 @@ const ICONS = {
     Desserts: '🍰',
     Italian: '🍝',
     Coffee: '☕',
+    Breakfast: '🍳',
+    Indian: '🍛',
+    Vegan: '🥬',
+    Seafood: '🦐',
+    Bakery: '🥐',
+    Grill: '🍖',
+    Thai: '🍲',
+    Mediterranean: '🥙',
+    Chinese: '🥡',
 };
 const iconFor = (c) => ICONS[c] || '🍽️';
 
@@ -22,11 +31,12 @@ const iconFor = (c) => ICONS[c] || '🍽️';
  * not hard-coded. Selecting a category filters the feed; clicking the active one
  * again clears the filter.
  */
-const CategoryBar = ({ categories, selected, onSelect }) => {
-    if (!categories || categories.length === 0) return null;
+const CategoryBar = ({ categories, selected, onSelect, leading = null }) => {
+    if ((!categories || categories.length === 0) && !leading) return null;
 
     return (
         <div className="category-bar" role="tablist" aria-label="Restaurant categories">
+            {leading}
             {categories.map((c) => {
                 const active = c === selected;
                 return (
