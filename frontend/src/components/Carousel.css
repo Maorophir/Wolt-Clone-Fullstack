@@ -73,7 +73,7 @@
 
 .carousel-track {
     display: flex;
-    gap: 1rem;
+    gap: 1.25rem;
     overflow-x: auto;
     padding-bottom: 0.5rem;
     scroll-snap-type: x mandatory;
@@ -87,16 +87,35 @@
 }
 
 .carousel-track > * {
-    flex: 0 0 280px;
+    /* ~4.5 items per view by default (desktop) */
+    flex: 0 0 calc(100% / 4.5 - 1.25rem);
     scroll-snap-align: start;
 }
 
-@media (max-width: 768px) {
-    .carousel-arrows {
-        display: none;
-    }
-    
+@media (max-width: 1200px) {
     .carousel-track > * {
-        flex: 0 0 240px;
+        /* ~3.5 items per view */
+        flex: 0 0 calc(100% / 3.5 - 1.25rem);
+    }
+}
+
+@media (max-width: 900px) {
+    .carousel-track > * {
+        /* ~2.5 items per view */
+        flex: 0 0 calc(100% / 2.5 - 1.25rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-track > * {
+        /* ~2.2 items per view */
+        flex: 0 0 calc(100% / 2.2 - 1.25rem);
+    }
+}
+
+@media (max-width: 500px) {
+    .carousel-track > * {
+        /* ~1.15 items per view */
+        flex: 0 0 calc(100% / 1.15 - 1.25rem);
     }
 }
