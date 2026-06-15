@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, setCurrentUser, authHeaders } from '../utils/auth';
 import RestaurantCard from '../components/RestaurantCard';
+import AddressBook from '../components/AddressBook';
 import './Profile.css';
 
 const Profile = () => {
@@ -129,7 +130,7 @@ const Profile = () => {
                                     {imagePreview ? (
                                         <img src={imagePreview} alt="Profile preview" />
                                     ) : (
-                                        <span>{user.displayName ? user.displayName.charAt(0).toUpperCase : '?'}</span>
+                                        <span>{user.displayName ? user.displayName.charAt(0).toUpperCase() : '?'}</span>
                                     )}
                                 </div>
                                 <div className="profile-avatar-actions">
@@ -162,6 +163,14 @@ const Profile = () => {
                                 {isSaving ? 'Saving...' : 'Save Changes'}
                             </button>
                         </form>
+                    </section>
+
+                    <section className="profile-section">
+                        <h2>Delivery Addresses</h2>
+                        <p style={{ color: 'var(--muted)', marginTop: '-0.5rem', marginBottom: '1rem' }}>
+                            Add or edit the addresses you order to. The selected one is used to sort restaurants by distance.
+                        </p>
+                        <AddressBook includeCurrentLocation />
                     </section>
 
                     {user.isBusinessOwner && (

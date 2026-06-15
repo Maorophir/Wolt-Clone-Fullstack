@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { apiCall } from '../utils/api';
 import { authHeaders, getCurrentUser } from '../utils/auth';
+import { useUserLocation } from '../context/LocationContext';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 import { formatPrice } from '../utils/format';
@@ -15,10 +16,12 @@ import { formatPrice } from '../utils/format';
 const CheckoutPage = () => {
     const { cart, totalItems, totalPrice, clearCart } = useCart();
     const navigate = useNavigate();
+    const loc = useUserLocation();
     const [placing, setPlacing] = useState(false);
     const [error, setError] = useState('');
 
     const user = getCurrentUser();
+    const deliverTo = loc.active;
 
     if (totalItems === 0) {
         return (
@@ -43,6 +46,7 @@ const CheckoutPage = () => {
                         price: i.price,
                         quantity: i.quantity,
                     })),
+                    deliveryAddress: deliverTo || undefined,
                 },
             });
             clearCart();
@@ -59,9 +63,15 @@ const CheckoutPage = () => {
             <h2 className="cart-title">Checkout</h2>
             {user && (
                 <p className="checkout-user">
-                    Ordering as <strong>{user.name || user.email}</strong>
+                    Ordering as <strong>{user.displayName || user.name || user.username || user.email}</strong>
                 </p>
             )}
+
+            <div style={{ margin: '0 0 1.25rem', color: 'var(--muted)', fontSize: '0.95rem' }}>
+                {deliverTo
+                    ? <>Deliver to <strong>{deliverTo.label}</strong>{deliverTo.address ? ` · ${deliverTo.address}` : ''}</>
+                    : <>No delivery location set — pick one from the location selector in the top bar.</>}
+            </div>
 
             <div className="cart-items">
                 {cart.items.map((i) => (

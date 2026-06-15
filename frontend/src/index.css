@@ -19,6 +19,12 @@
   --border: #ececec;
   --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
   --danger: #c0392b;
+
+  /* Aliases: some components use --text/--bg. Must be literal values in BOTH
+     :root and .app-dark — a `var(--text-color)` alias would be computed once at
+     :root and inherited, so it would NOT flip in dark mode. */
+  --text: #1a1a1a;
+  --bg: #ffffff;
 }
 
 /* --- Dark Mode Variables (Activated via .app-dark class) --- */
@@ -40,6 +46,8 @@
   --border: #1a2f4c;
   --shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   --danger: #ff6b6b;
+  --text: #ffffff;
+  --bg: #0a1526;
 }
 
 /* --- Global Base Styles --- */

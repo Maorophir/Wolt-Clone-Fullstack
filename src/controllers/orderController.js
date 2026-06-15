@@ -21,7 +21,7 @@ const findOwnedOrder = (id, userId) => {
 
 // POST /api/orders -> create a new order for the authenticated user.
 const createOrder = (req, res) => {
-    const { restaurantId, items } = req.body;
+    const { restaurantId, items, deliveryAddress } = req.body;
 
     if (!restaurantId) {
         return res.status(400).json({ error: 'restaurantId is required' });
@@ -33,7 +33,8 @@ const createOrder = (req, res) => {
     const createdOrder = orderModel.createOrder({
         userId: req.userId,
         restaurantId,
-        items
+        items,
+        deliveryAddress
     });
 
     res.status(201).location(`/api/orders/${createdOrder.id}`).end();

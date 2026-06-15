@@ -25,7 +25,7 @@ const getAllUsers = (req, res) => {
  * location in the Location header with an empty body (201 Created).
  */
 const createUser = (req, res) => {
-    const { displayName, username, password, profileImage, isBusinessOwner } = req.body;
+    const { displayName, username, password, profileImage, isBusinessOwner, addresses } = req.body;
 
     if (!displayName) {
         return res.status(400).json({ message: 'Display name is required' });
@@ -41,7 +41,23 @@ const createUser = (req, res) => {
         return res.status(409).json({ message: 'Username already taken' });
     }
 
-    const createdUser = userModel.createUser({ displayName, username, password, profileImage, isBusinessOwner });
+    // Optional saved delivery addresses; each must carry valid coordinates
+    // (powers "nearby" sorting once the user is logged in).
+    if (addresses !== undefined) {
+        if (!Array.isArray(addresses)) {
+            return res.status(400).json({ message: 'addresses must be an array' });
+        }
+        for (const a of addresses) {
+            const lat = Number(a && a.latitude);
+            const lng = Number(a && a.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+                lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                return res.status(400).json({ message: 'Each address needs a valid latitude/longitude' });
+            }
+        }
+    }
+
+    const createdUser = userModel.createUser({ displayName, username, password, profileImage, isBusinessOwner, addresses });
 
     const token = createToken({ userId: createdUser.id });
 
@@ -74,10 +90,24 @@ const updateUser = (req, res) => {
         return res.status(403).json({ error: 'You can only update your own profile' });
     }
 
-    const { displayName, profileImage } = req.body;
+    const { displayName, profileImage, addresses } = req.body;
     const updates = {};
     if (displayName !== undefined) updates.displayName = displayName;
     if (profileImage !== undefined) updates.profileImage = profileImage;
+    if (addresses !== undefined) {
+        if (!Array.isArray(addresses)) {
+            return res.status(400).json({ message: 'addresses must be an array' });
+        }
+        for (const a of addresses) {
+            const lat = Number(a && a.latitude);
+            const lng = Number(a && a.longitude);
+            if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+                lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+                return res.status(400).json({ message: 'Each address needs a valid latitude/longitude' });
+            }
+        }
+        updates.addresses = addresses;
+    }
 
     const updatedUser = userModel.updateUser(req.params.id, updates);
     if (!updatedUser) {

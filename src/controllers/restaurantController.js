@@ -15,14 +15,27 @@ const getRestaurantById = (req, res) => {
 };
 
 const createRestaurant = (req, res) => {
-    const { name, description, address, rating, category, image } = req.body;
+    const { name, description, address, rating, category, image, latitude, longitude } = req.body;
 
     if (!name) {
         return res.status(400).json({ error: "Name is required" });
     }
 
+    // Coordinates are optional; but if either is supplied, both must be valid
+    // numbers in range (powers the "nearby" / distance filtering on the client).
+    let lat;
+    let lng;
+    if (latitude !== undefined || longitude !== undefined) {
+        lat = Number(latitude);
+        lng = Number(longitude);
+        if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
+            lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            return res.status(400).json({ error: "Invalid coordinates: latitude must be -90..90 and longitude -180..180" });
+        }
+    }
+
     const ownerId = req.userId;
-    const newRestaurantData = { name, description, address, rating, category, image, ownerId };
+    const newRestaurantData = { name, description, address, rating, category, image, ownerId, latitude: lat, longitude: lng };
     const createdRestaurant = restaurantModel.createRestaurant(newRestaurantData);
 
     res.status(201).location(`/api/restaurants/${createdRestaurant.id}`).end();

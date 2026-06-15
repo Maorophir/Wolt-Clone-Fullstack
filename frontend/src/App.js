@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { CartProvider } from './context/CartContext';
+import { LocationProvider } from './context/LocationContext';
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -25,6 +26,7 @@ const App = () => {
     <ThemeProvider>
       {/* CartProvider wraps the Router to make cart state globally accessible */}
       <CartProvider>
+        <LocationProvider>
         <Router>
           <Navbar />
           <main>
@@ -92,6 +94,7 @@ const App = () => {
             </Routes>
           </main>
         </Router>
+        </LocationProvider>
       </CartProvider>
     </ThemeProvider>
   );

@@ -100,18 +100,18 @@
 }
 
 /* Keep status pills legible on dark cards. */
-[data-theme="dark"] .order-status {
+.app-dark .order-status {
     background: #4a3f1e;
     color: #f5d98a;
 }
 
-[data-theme="dark"] .order-status--delivered,
-[data-theme="dark"] .order-status--completed {
+.app-dark .order-status--delivered,
+.app-dark .order-status--completed {
     background: #1e3a28;
     color: #8fe0aa;
 }
 
-[data-theme="dark"] .order-status--cancelled {
+.app-dark .order-status--cancelled {
     background: #4a2320;
     color: #ff9b94;
 }

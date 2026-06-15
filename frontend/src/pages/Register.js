@@ -10,9 +10,11 @@ export default function Register() {
         errors,
         isLoading,
         successMessage,
+        locating,
         handleInputChange,
         handleToggleChange,
         handleImageChange,
+        useMyLocation,
         submitForm
     } = useRegister();
 
@@ -142,6 +144,54 @@ export default function Register() {
                             disabled={isLoading}
                         />
                         {errors.confirmPassword && <span className="auth-error">{errors.confirmPassword}</span>}
+                    </div>
+
+                    {/* Delivery location (optional) — saved as the user's first address */}
+                    <div className="auth-input-group">
+                        <label className="auth-label">Delivery location <span style={{ color: '#999', fontWeight: 400 }}>(optional)</span></label>
+                        <input
+                            type="text"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                            className="auth-input"
+                            placeholder="Address (e.g., Sderot HaKibutsim 17)"
+                            disabled={isLoading}
+                        />
+                        <button
+                            type="button"
+                            onClick={useMyLocation}
+                            disabled={isLoading || locating}
+                            className="custom-file-btn"
+                            style={{ marginTop: '8px', display: 'inline-block' }}
+                        >
+                            {locating ? 'Locating…' : '📍 Use my current location'}
+                        </button>
+                        <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                            <input
+                                type="number"
+                                step="any"
+                                name="latitude"
+                                value={formData.latitude}
+                                onChange={handleInputChange}
+                                className="auth-input"
+                                placeholder="Latitude"
+                                disabled={isLoading}
+                                style={{ flex: 1, minWidth: 0 }}
+                            />
+                            <input
+                                type="number"
+                                step="any"
+                                name="longitude"
+                                value={formData.longitude}
+                                onChange={handleInputChange}
+                                className="auth-input"
+                                placeholder="Longitude"
+                                disabled={isLoading}
+                                style={{ flex: 1, minWidth: 0 }}
+                            />
+                        </div>
+                        {errors.location && <span className="auth-error">{errors.location}</span>}
                     </div>
 
                     <div className="auth-toggle-group" style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>

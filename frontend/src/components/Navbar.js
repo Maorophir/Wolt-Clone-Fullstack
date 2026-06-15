@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CartButton from './CartButton';
+import LocationPill from './LocationPill';
 import { useTheme } from '../context/ThemeContext';
 import { getCurrentUser, clearCurrentUser, isAuthenticated } from '../utils/auth';
 import siteLogo from '../assets/WoltClone_Logo.png';
@@ -84,6 +85,8 @@ const Navbar = () => {
                     />
                 </Link>
             </div>
+
+            <LocationPill />
 
             <SearchBar />
 
