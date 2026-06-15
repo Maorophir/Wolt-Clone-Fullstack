@@ -4,8 +4,8 @@
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0;
-    background: var(--surface, #fff);
-    border: 1.5px solid var(--text-color, var(--text, #1f3d4d));
+    background: transparent;
+    border: 1.5px solid transparent;
     color: var(--text-color, var(--text, #1f3d4d));
     border-radius: 999px;
     padding: 0.3rem 0.9rem 0.3rem 0.35rem;
