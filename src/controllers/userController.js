@@ -36,6 +36,9 @@ const createUser = (req, res) => {
     if (!password) {
         return res.status(400).json({ message: 'Password is required' });
     }
+    if (password.length < 8 || !/[a-zA-Z]/.test(password) || !/[0-9]/.test(password)) {
+        return res.status(400).json({ message: 'Password must be at least 8 characters long and contain both letters and numbers' });
+    }
 
     if (userModel.getUserByUsername(username)) {
         return res.status(409).json({ message: 'Username already taken' });

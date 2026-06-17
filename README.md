@@ -1,139 +1,65 @@
-# Wolt-Clone Project — Exercise 3 (Node.js MVC)
+# Wolt-Clone Project — Exercise 4 (React + Node.js + C++)
 
 ## 📖 Description of the Project
-This repository contains a modernized implementation for **Exercise 3**: a Node.js MVC web server that implements a RESTful API for a food delivery app (similar to Wolt). 
+This repository contains the complete implementation for **Exercise 4**: a full-stack web application replicating the core features and design of the **Wolt** food delivery platform.
 
-The Node server acts as the primary web backend, exposing JSON API endpoints for:
-- User Registration & Authentication (Login)
-- Restaurant & Menu (Product) Management
-- Order Processing
-- Searching functionality
+This phase introduces a dynamic, responsive **React Frontend**, which communicates with the RESTful API built in Exercise 3 (Node.js MVC server). The system also continues to interoperate with the C++ TCP Server from Exercise 2 for user tracking.
 
-**Architectural Highlights:**
-- **MVC Pattern**: Clear separation of concerns with Routes, Controllers, and Models.
-- **In-Memory Storage**: Data is kept volatile in process memory without a persistent DB, per exercise requirements.
-- **Microservice Interoperability**: Designed to communicate with the C++ TCP Server from Exercise 2 (`cpp-server/`) via client sockets for recording user-product views and fetching recommendations.
-- **RESTful Principles**: Uses appropriate HTTP methods (`GET`, `POST`, `PATCH`, `DELETE`) and strict status codes (`200 OK`, `201 Created`, `204 No Content`, `400 Bad Request`, `404 Not Found`).
+### 🌟 Key Features
+- **Wolt-Inspired Design**: A beautiful, modern UI inspired by Wolt, complete with smooth animations, high-quality images, and a fully functional layout.
+- **Dynamic Data**: All data (restaurants, products, users) is dynamically loaded from the Node.js server. No hardcoded mock data!
+- **User Authentication**: Secure Login & Registration using JWT (JSON Web Tokens). Includes both frontend and backend validation for passwords (8+ chars, letters + numbers).
+- **Dark Mode**: Fully functional Light & Dark themes with a toggle switch in the navigation bar.
+- **Restaurant Management**: Business owners can create restaurants, upload images, and manage their menus.
+- **Cart & Ordering System**: Add items to your cart from a restaurant and checkout.
+- **Search**: Search for restaurants and dishes right from the navbar.
+- **Routing**: Single Page Application (SPA) routing powered by React Router.
+- **JIRA Integration**: Agile workflow managed strictly via JIRA with Epics, User Stories, and Sprint cycles.
 
 ## 🗂️ Project Structure
 
 ```text
 Wolt-Clone-Project/
-├── cpp-server/                 # Exercise 2 C++ TCP server (for interoperability)
-├── src/                        # Exercise 3 Node.js MVC server (main submission)
+├── frontend/                   # Exercise 4: React Application (SPA)
+│   ├── src/                    # React components, pages, context, and hooks
+│   ├── public/                 # Static assets
+│   └── package.json            # Frontend dependencies
+├── src/                        # Exercise 3: Node.js MVC server
 │   ├── server.js               # Express application entry point
-│   ├── controllers/            # Request handlers (e.g., restaurantController.js)
-│   ├── models/                 # In-memory data models & storage logic
+│   ├── controllers/            # Request handlers
+│   ├── models/                 # In-memory data models & storage
 │   ├── routes/                 # API route definitions
-│   ├── services/               # Background services (e.g., TCP client for Ex2)
 │   └── middlewares/            # Auth/Validation middlewares
-├── docker-compose.yml          # Runs both Node server and Ex2 C++ server
-├── Dockerfile                  # Container definition for the Node server
-└── package.json                # Project dependencies and npm scripts
+├── cpp-server/                 # Exercise 2: C++ TCP server
+├── docker-compose.yml          # Runs React, Node.js, and C++ servers together
+├── details.txt                 # Student details and GitHub link
+└── README.md                   # This file
 ```
 
-## 🚀 Running Instructions
+## 🚀 Running Instructions (Docker Compose)
 
-There are two primary ways to run the server:
+The easiest and recommended way to run the entire stack (React UI, Node.js API, and C++ Server) is using Docker Compose.
 
-### Option 1: Docker Compose (Recommended)
-This spins up both the Node.js API server and the C++ Recommendation server, linking them automatically.
-
-1. Ensure Docker and Docker Compose are installed.
-2. Run the following command from the root of the project:
+1. **Ensure Docker and Docker Compose are installed and running.**
+2. **Open a terminal in the root of the project.**
+3. **Run the following command:**
    ```bash
    docker-compose up --build
    ```
-3. The Node.js server will be available at `http://localhost:3000`.
+4. **Access the application:**
+   - **Frontend (React UI):** Open your browser and go to `http://localhost:3000`
+   - **Backend API (Node.js):** Available internally to the frontend or directly via `http://localhost:3001`
+   - **C++ Server:** Runs internally on port `5555`
 
-To stop the containers:
+To stop the containers gracefully, press `Ctrl+C` or run:
 ```bash
 docker-compose down
 ```
 
-### Option 2: Run Locally (Node Server Only)
-If you only want to test the REST API without the C++ service:
+## 🛠️ Work Process & JIRA
+This sprint was managed using Agile methodology on JIRA. 
+- All tasks were divided into Epics and User Stories.
+- Tasks were assigned before work began.
+- We used Git Feature Branches matching our JIRA issue keys.
+- Code was merged to the `main` branch via Pull Requests (PRs), which required code review and approval from teammates.
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Start the server (runs on port 3000 by default):
-   ```bash
-   npm start
-   ```
-
----
-
-## 💻 Running Examples (curl)
-
-Below are example API calls matching the workflows described in the Exercise 3 specification.
-
-**1. Create a User (Registration)**
-```bash
-curl -i -X POST http://localhost:3000/api/users \
-  -H "Content-Type: application/json" \
-  -d '{"name":"John Doe", "phone":"050-1234567", "address":"Tel Aviv", "password":"123"}'
-```
-*Expected Output:* `201 Created`
-
-**2. Login (Tokens)**
-```bash
-curl -i -X POST http://localhost:3000/api/tokens \
-  -H "Content-Type: application/json" \
-  -d '{"name":"John Doe", "password":"123"}'
-```
-*Expected Output:* `200 OK` (with User ID in the JSON body)
-
-**3. Create a Restaurant**
-```bash
-curl -i -X POST http://localhost:3000/api/restaurants \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Pizza Place", "description":"Best Pizza"}'
-```
-*Expected Output:* `201 Created` (returns the new restaurant object with ID)
-
-**4. List all Restaurants**
-```bash
-curl -i http://localhost:3000/api/restaurants
-```
-*Expected Output:* `200 OK` (returns a JSON array of restaurant objects)
-
-**5. Get a Specific Restaurant**
-```bash
-# Replace <id> with the actual ID returned from the POST request
-curl -i http://localhost:3000/api/restaurants/<id>
-```
-*Expected Output:* `200 OK` (returns the specific restaurant JSON)
-
-**6. Update a Restaurant**
-```bash
-curl -i -X PATCH http://localhost:3000/api/restaurants/<id> \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Pizza Place & Pasta"}'
-```
-*Expected Output:* `204 No Content`
-
-**7. Add a Product to a Restaurant Menu**
-```bash
-curl -i -X POST http://localhost:3000/api/restaurants/<id>/products \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Margherita", "price":50}'
-```
-*Expected Output:* `201 Created`
-
-**8. Delete a Restaurant**
-```bash
-curl -i -X DELETE http://localhost:3000/api/restaurants/<id>
-```
-*Expected Output:* `204 No Content`
-
-**9. Search Restaurants & Products**
-```bash
-# Searches for the query in both restaurant and product names/descriptions
-curl -i http://localhost:3000/api/search/pizza
-```
-*Expected Output:* `200 OK` (returns a JSON array of matching items)
-
-> Note: For actions requiring an authenticated user (like placing an order or viewing a product), you must pass the connected user's ID within the HTTP headers. 
-Example: -H "x-user-id: <user_id>"
