@@ -107,14 +107,24 @@ const RestaurantMenu = () => {
             : undefined;
 
     return (
-        <div className="restaurant-menu-page">
-            <Link to="/" className="menu-back-link">← Back to restaurants</Link>
+        <>
+            {restaurant?.image && (
+                <div 
+                    className="restaurant-hero-bg" 
+                    style={{ backgroundImage: `url(${restaurant.image})` }}
+                >
+                    <div className="restaurant-hero-overlay"></div>
+                </div>
+            )}
+            <div className="restaurant-menu-page">
+                <Link to="/" className="menu-back-link">← Back to restaurants</Link>
 
-            <RestaurantHeader restaurant={restaurant} distanceKm={distanceKm} />
-            <MenuList products={products} onAddToCart={handleAddToCart} />
+                <RestaurantHeader restaurant={restaurant} distanceKm={distanceKm} />
+                <MenuList products={products} onAddToCart={handleAddToCart} />
 
-            {toast && <div className="menu-toast" role="status">{toast}</div>}
-        </div>
+                {toast && <div className="menu-toast" role="status">{toast}</div>}
+            </div>
+        </>
     );
 };
 

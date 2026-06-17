@@ -6,6 +6,20 @@
  * data-theme="dark" on a parent element, this page follows automatically.
  */
 
+.restaurant-hero-bg {
+    width: 100%;
+    height: 320px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.restaurant-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, var(--bg) 100%);
+}
+
 .restaurant-menu-page {
     /* Theme tokens aliased to the global set (index.css) so the theme toggle
        drives every page from one source of truth (light + dark). */
@@ -18,8 +32,10 @@
     --wolt-border: var(--border);
     --wolt-shadow: var(--shadow);
 
+    position: relative;
+    z-index: 2;
     max-width: 960px;
-    margin: 0 auto;
+    margin: -150px auto 0; /* Overlaps the hero image */
     padding: 1.5rem 1rem 4rem;
     color: var(--wolt-text);
 }
