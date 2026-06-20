@@ -18,7 +18,10 @@ const productSchema = new mongoose.Schema({
     isAvailable: { type: Boolean, default: true },
     
     // Optional image
-    image: { type: String }
+    image: { type: String },
+    
+    // Category for grouping inside a restaurant's menu
+    category: { type: String, default: 'General' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

@@ -225,12 +225,15 @@ const seedDatabase = async () => {
                 image: r.image,
                 ownerId: adminUser._id, // Assign to admin
             });
-            for (const p of r.products) {
+            for (let i = 0; i < r.products.length; i++) {
+                const p = r.products[i];
+                const categories = ['Most Ordered', 'Mains', 'Extras'];
                 await Product.create({
                     restaurantId: created._id,
                     name: p.name,
                     description: p.description,
                     price: p.price,
+                    category: categories[i % categories.length],
                     image: p.image // Uniquely assigned
                 });
             }

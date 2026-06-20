@@ -43,7 +43,7 @@ const getProductById = async (req, res) => {
 const createProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, description, price, isAvailable, image } = req.body;
+        const { name, description, price, category, isAvailable, image } = req.body;
 
         // Validate required fields
         if (!name) {
@@ -54,6 +54,7 @@ const createProduct = async (req, res) => {
             name, 
             description, 
             price, 
+            category,
             isAvailable, 
             image,
             restaurantId: id

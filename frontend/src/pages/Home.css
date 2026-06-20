@@ -73,18 +73,18 @@
     flex-direction: column;
     gap: 0.35rem;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid #ebebeb;
     border-radius: 14px;
     padding: 1rem 1.1rem;
     text-decoration: none;
     color: var(--text);
-    box-shadow: var(--shadow);
-    transition: transform 0.14s ease, box-shadow 0.14s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backface-visibility: hidden;
 }
 
 .dish-result:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: scale(1.02) translateZ(0);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .dish-result__name {
@@ -140,15 +140,16 @@
     width: 96px;
     padding: 0.9rem 0.5rem;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid #ebebeb;
     border-radius: 14px;
     cursor: pointer;
     color: var(--text);
-    transition: transform 0.12s ease, border-color 0.12s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+    backface-visibility: hidden;
 }
 
 .category-tile:hover {
-    transform: translateY(-2px);
+    transform: scale(1.03) translateZ(0);
     border-color: var(--brand);
 }
 

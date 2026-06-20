@@ -17,18 +17,30 @@ const MenuList = ({ products, onAddToCart }) => {
         return <p className="menu-empty">This restaurant has no menu items yet.</p>;
     }
 
+    // Group products by category
+    const groupedProducts = visibleProducts.reduce((acc, product) => {
+        const cat = product.category || 'General';
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(product);
+        return acc;
+    }, {});
+
     return (
         <section className="menu-list">
-            <h2 className="menu-list__title">Menu</h2>
-            <div className="menu-list__grid">
-                {visibleProducts.map((product) => (
-                    <MenuItemCard
-                        key={product.id}
-                        product={product}
-                        onAddToCart={onAddToCart}
-                    />
-                ))}
-            </div>
+            {Object.keys(groupedProducts).map(category => (
+                <div key={category} className="menu-category-section">
+                    <h2 className="menu-category-title">{category}</h2>
+                    <div className="menu-list__grid">
+                        {groupedProducts[category].map((product) => (
+                            <MenuItemCard
+                                key={product.id}
+                                product={product}
+                                onAddToCart={onAddToCart}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ))}
         </section>
     );
 };
