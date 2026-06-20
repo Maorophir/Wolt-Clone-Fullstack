@@ -8,11 +8,12 @@
     text-decoration: none;
     color: var(--text);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    backface-visibility: hidden;
 }
 
 .restaurant-card:hover {
-    transform: translateY(-3px);
+    transform: scale(1.03) translateZ(0);
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.13);
 }
 

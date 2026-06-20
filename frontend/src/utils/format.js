@@ -6,7 +6,6 @@
  * values so callers render gracefully when the server omits a price.
  */
 export const formatPrice = (value) => {
-    const n = Number(value);
-    if (Number.isNaN(n)) return '';
-    return `₪${n.toFixed(2)}`;
+    const num = Number(value);
+    return isNaN(num) ? '₪0.00' : `₪${num.toFixed(2)}`;
 };

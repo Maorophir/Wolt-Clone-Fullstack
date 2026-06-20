@@ -14,7 +14,7 @@ const RestaurantHeader = ({ restaurant, distanceKm }) => {
 
     const { id, name, description, address, rating, ownerId } = restaurant;
     const currentUser = getCurrentUser();
-    const isOwner = currentUser && currentUser.id === ownerId;
+    const isOwner = currentUser && (currentUser.id === ownerId || currentUser.isAdmin);
 
     return (
         <header className="restaurant-header">

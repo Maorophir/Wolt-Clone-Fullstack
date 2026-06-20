@@ -17,27 +17,32 @@ const MenuItemCard = ({ product, onAddToCart }) => {
 
     return (
         <article className={`menu-item${available ? '' : ' menu-item--unavailable'}`}>
-            {image && (
-                <img
-                    src={image}
-                    alt={name || 'Dish'}
-                    className="menu-item__image"
-                />
-            )}
             <div className="menu-item__body">
-                <h3 className="menu-item__name">{name}</h3>
-                {description && <p className="menu-item__desc">{description}</p>}
+                <div className="menu-item__info">
+                    <h3 className="menu-item__name">{name}</h3>
+                    {description && <p className="menu-item__desc">{description}</p>}
+                </div>
                 <span className="menu-item__price">{formatPrice(price)}</span>
             </div>
 
-            <button
-                type="button"
-                className="menu-item__add"
-                disabled={!available}
-                onClick={() => onAddToCart(product)}
-            >
-                {available ? 'Add to cart' : 'Unavailable'}
-            </button>
+            <div className="menu-item__media">
+                <button
+                    type="button"
+                    className="menu-item__add"
+                    disabled={!available}
+                    onClick={() => onAddToCart(product)}
+                    aria-label={available ? 'Add to cart' : 'Unavailable'}
+                >
+                    +
+                </button>
+                {image && (
+                    <img
+                        src={image}
+                        alt={name || 'Dish'}
+                        className="menu-item__image"
+                    />
+                )}
+            </div>
         </article>
     );
 };

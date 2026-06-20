@@ -1,6 +1,6 @@
 services:
   # --------------------------------------------------------
-  # Service 1: The New Node.js Web Server (Ex3)
+  # Service 1: The Node.js Web Server (Ex3 & Ex5 - MongoDB Integrated)
   # --------------------------------------------------------
   web-server:
     build:
@@ -11,11 +11,13 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
+      - MONGO_URI=mongodb://mongodb:27017/wolt
       # Critical for Epic 7: In Docker, containers communicate using service names, not localhost
       - RECOMMENDATION_SERVER_HOST=recommendation-server
       - RECOMMENDATION_SERVER_PORT=5555
     depends_on:
       - recommendation-server
+      - mongodb
     restart: unless-stopped
 
   # --------------------------------------------------------
@@ -58,4 +60,16 @@ services:
     # Critical flags to keep Create React App running in the background inside Docker
     stdin_open: true
     tty: true
+    restart: unless-stopped
+
+  # --------------------------------------------------------
+  # Service 4: MongoDB Database (Ex5)
+  # --------------------------------------------------------
+  mongodb:
+    image: mongo:latest
+    container_name: wolt-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-data:/data/db
     restart: unless-stopped

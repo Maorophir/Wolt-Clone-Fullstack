@@ -1,7 +1,7 @@
 {
-  "name": "wolt-project-ex3",
+  "name": "wolt-project",
   "version": "1.0.0",
-  "description": "Node.js MVC server for Wolt Delivery App",
+  "description": "Node.js MongoDB Backend Server for Wolt Delivery App (Ex5)",
   "main": "server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -9,18 +9,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Maorophir/Wolt-Clone-Project-.git"
+    "url": "git+https://github.com/Maorophir/Wolt-Clone-Finale.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Maorophir/Wolt-Clone-Project-/issues"
+    "url": "https://github.com/Maorophir/Wolt-Clone-Finale/issues"
   },
-  "homepage": "https://github.com/Maorophir/Wolt-Clone-Project-#readme",
+  "homepage": "https://github.com/Maorophir/Wolt-Clone-Finale#readme",
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "mongoose": "^9.7.1"
   }
 }

@@ -454,3 +454,45 @@
 .app-dark .custom-file-btn:hover {
   background-color: #2a3f5c;
 }
+
+/* Password Toggle Styling */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper .auth-input {
+  width: 100%;
+  padding-right: 40px; /* Space for the icon */
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.password-toggle-btn:hover {
+  color: #667eea;
+}
+
+.password-toggle-btn:focus {
+  outline: none;
+}
+
+.app-dark .password-toggle-btn {
+  color: #6b7f96;
+}
+
+.app-dark .password-toggle-btn:hover {
+  color: #00C2E8;
+}

@@ -1,79 +1,101 @@
-const restaurantModel = require('../models/restaurantModel');
+const Restaurant = require('../models/restaurantModel');
+const { parseAddressData } = require('../utils/addressUtils');
 
-const getAllRestaurants = (req, res) => {
-    const { q } = req.query;
-    const restaurants = restaurantModel.getAllRestaurants(q);
-    res.status(200).json(restaurants);
-};
-
-const getRestaurantById = (req, res) => {
-    const restaurant = restaurantModel.getRestaurantById(req.params.id);
-    if (!restaurant) {
-        return res.status(404).json({ error: 'Restaurant not found' });
-    }
-    res.status(200).json(restaurant);
-};
-
-const createRestaurant = (req, res) => {
-    const { name, description, address, rating, category, image, latitude, longitude } = req.body;
-
-    if (!name) {
-        return res.status(400).json({ error: "Name is required" });
-    }
-
-    // Coordinates are optional; but if either is supplied, both must be valid
-    // numbers in range (powers the "nearby" / distance filtering on the client).
-    let lat;
-    let lng;
-    if (latitude !== undefined || longitude !== undefined) {
-        lat = Number(latitude);
-        lng = Number(longitude);
-        if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
-            lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-            return res.status(400).json({ error: "Invalid coordinates: latitude must be -90..90 and longitude -180..180" });
+const getAllRestaurants = async (req, res) => {
+    try {
+        const { q } = req.query;
+        let query = {};
+        if (q) {
+            query.name = { $regex: q, $options: 'i' };
         }
+        const restaurants = await Restaurant.find(query);
+        res.status(200).json(restaurants);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error fetching restaurants' });
     }
-
-    const ownerId = req.userId;
-    const newRestaurantData = { name, description, address, rating, category, image, ownerId, latitude: lat, longitude: lng };
-    const createdRestaurant = restaurantModel.createRestaurant(newRestaurantData);
-
-    res.status(201).location(`/api/restaurants/${createdRestaurant.id}`).end();
 };
 
-const updateRestaurant = (req, res) => {
-    const { id } = req.params;
-   
-    const updateData = req.body;
-
-  
-    if (updateData.name === "") {
-        return res.status(400).json({ error: "Name cannot be empty" });
+const getRestaurantById = async (req, res) => {
+    try {
+        const restaurant = await Restaurant.findById(req.params.id);
+        if (!restaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+        res.status(200).json(restaurant);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error fetching restaurant' });
     }
-
-   
-    const updatedRestaurant = restaurantModel.updateRestaurant(id, updateData);
-   
-  
-    if (!updatedRestaurant) {
-        return res.status(404).json({ error: 'Restaurant not found' });
-    }
-    res.status(204).send();
 };
 
-const deleteRestaurant = (req, res) => {
-   
-    const { id } = req.params;
-   
-    const isDeleted = restaurantModel.deleteRestaurant(id);
+const createRestaurant = async (req, res) => {
+    try {
+        const { name, description, address, rating, category, image, latitude, longitude } = req.body;
 
+        if (!name) {
+            return res.status(400).json({ error: "Name is required" });
+        }
 
-    if (!isDeleted) {
-        return res.status(404).json({ error: 'Restaurant not found' });
+        let restaurantAddress;
+        try {
+            restaurantAddress = parseAddressData(address, latitude, longitude);
+        } catch (err) {
+            return res.status(400).json({ error: err.message });
+        }
+
+        const ownerId = req.userId;
+        
+        const newRestaurantData = { 
+            name, 
+            description, 
+            address: restaurantAddress, 
+            rating, 
+            category, 
+            image, 
+            ownerId 
+        };
+
+        const createdRestaurant = await Restaurant.create(newRestaurantData);
+
+        res.status(201).location(`/api/restaurants/${createdRestaurant._id}`).end();
+    } catch (error) {
+        res.status(500).json({ error: 'Server error creating restaurant', details: error.message });
     }
+};
 
-  
-    res.status(204).send();
+const updateRestaurant = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = req.body;
+
+        if (updateData.name === "") {
+            return res.status(400).json({ error: "Name cannot be empty" });
+        }
+
+        const updatedRestaurant = await Restaurant.findByIdAndUpdate(id, updateData, { new: true });
+       
+        if (!updatedRestaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ error: 'Server error updating restaurant' });
+    }
+};
+
+const deleteRestaurant = async (req, res) => {
+    try {
+        const { id } = req.params;
+       
+        const deletedRestaurant = await Restaurant.findByIdAndDelete(id);
+
+        if (!deletedRestaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ error: 'Server error deleting restaurant' });
+    }
 };
 
 module.exports = {

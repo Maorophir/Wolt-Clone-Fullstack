@@ -16,6 +16,7 @@ const ManageMenu = () => {
         name: '',
         description: '',
         price: '',
+        category: 'General',
         isAvailable: true,
         image: ''
     });
@@ -48,7 +49,7 @@ const ManageMenu = () => {
                 const resData = await resRestaurant.json();
                 
                 const user = getCurrentUser();
-                if (!user || user.id !== resData.ownerId) {
+                if (!user || (user.id !== resData.ownerId && !user.isAdmin)) {
                     navigate('/');
                     return;
                 }
@@ -99,6 +100,7 @@ const ManageMenu = () => {
             name: '',
             description: '',
             price: '',
+            category: 'General',
             isAvailable: true,
             image: ''
         });
@@ -112,6 +114,7 @@ const ManageMenu = () => {
             name: product.name,
             description: product.description || '',
             price: product.price,
+            category: product.category || 'General',
             isAvailable: product.isAvailable !== false,
             image: product.image || ''
         });
@@ -153,6 +156,7 @@ const ManageMenu = () => {
                 name: formData.name.trim(),
                 description: formData.description.trim(),
                 price: parseFloat(formData.price),
+                category: formData.category.trim() || 'General',
                 isAvailable: formData.isAvailable,
                 image: imageValue || formData.image || undefined
             };
@@ -239,6 +243,18 @@ const ManageMenu = () => {
                         </div>
 
                         <div className="mm-form-group">
+                            <label>Category *</label>
+                            <input 
+                                type="text" 
+                                name="category"
+                                value={formData.category}
+                                onChange={handleInputChange}
+                                placeholder="e.g. Starters, Mains, Drinks"
+                                required
+                            />
+                        </div>
+
+                        <div className="mm-form-group">
                             <label>Description</label>
                             <textarea 
                                 name="description"
@@ -305,7 +321,7 @@ const ManageMenu = () => {
                                     )}
                                     <div className="mm-product-info">
                                         <h3>{product.name} {!product.isAvailable && <span className="mm-badge">Unavailable</span>}</h3>
-                                        <p className="mm-product-price">${Number(product.price).toFixed(2)}</p>
+                                        <p className="mm-product-price">₪{Number(product.price).toFixed(2)} &nbsp;&nbsp;|&nbsp;&nbsp; {product.category || 'General'}</p>
                                         {product.description && <p className="mm-product-desc">{product.description}</p>}
                                     </div>
                                     <div className="mm-product-actions">

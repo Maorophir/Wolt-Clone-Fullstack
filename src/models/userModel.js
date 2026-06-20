@@ -1,45 +1,30 @@
-const { randomUUID } = require('crypto');
+const mongoose = require('mongoose');
+const addressSchema = require('./addressSchema');
 
-/**
- * In-memory user store (volatile: cleared on restart).
- * Mirrors the array-based pattern used by restaurantModel / productModel.
- *
- * A user record holds the fields a registration screen collects. The
- * `password` is an exercise-only value used solely to verify logins; it is
- * never exposed by the API (see userController.toPublic) and must never hold a
- * real secret.
- */
-let users = [];
+// The main User Schema acts as a strict blueprint for our MongoDB database.
+const userSchema = new mongoose.Schema({
+    // username must be a string, is required, and must be completely unique in the DB.
+    username: { type: String, required: true, unique: true },
+    
+    // displayName and password are required strings
+    displayName: { type: String, required: true },
+    password: { type: String, required: true },
+    
+    // profileImage is optional, so we don't set 'required'
+    profileImage: { type: String },
+    
+    // isBusinessOwner is a boolean that defaults to false if not provided
+    isBusinessOwner: { type: Boolean, default: false },
+    
+    // isAdmin allows global CRUD operations across the platform
+    isAdmin: { type: Boolean, default: false },
+    
+    // addresses is an array of our addressSchema defined above
+    addresses: [addressSchema]
+}, 
+// The timestamps option automatically adds 'createdAt' and 'updatedAt' fields!
+{ timestamps: true });
 
-const createUser = (userData) => {
-    const newUser = { id: randomUUID(), isBusinessOwner: false, ...userData };
-    users.push(newUser);
-    return newUser;
-};
-
-const getUserById = (id) => {
-    return users.find(user => user.id === id);
-};
-
-const getUserByUsername = (username) => {
-    return users.find(user => user.username === username);
-};
-
-const updateUser = (id, updates) => {
-    const userIndex = users.findIndex(user => user.id === id);
-    if (userIndex === -1) return null;
-    users[userIndex] = { ...users[userIndex], ...updates };
-    return users[userIndex];
-};
-
-const getAllUsers = () => {
-    return users;
-};
-
-module.exports = {
-    createUser,
-    getUserById,
-    getUserByUsername,
-    getAllUsers,
-    updateUser
-};
+// We compile the Schema into a Model called 'User' and export it.
+// This gives us access to MongoDB methods like User.find() or new User().
+module.exports = mongoose.model('User', userSchema);

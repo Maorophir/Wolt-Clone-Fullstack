@@ -51,7 +51,7 @@ const EditRestaurant = () => {
                     
                     // Verify ownership
                     const user = getCurrentUser();
-                    if (!user || user.id !== data.ownerId) {
+                    if (!user || (user.id !== data.ownerId && !user.isAdmin)) {
                         navigate('/');
                         return;
                     }

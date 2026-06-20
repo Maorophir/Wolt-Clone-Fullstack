@@ -34,9 +34,9 @@
 
     position: relative;
     z-index: 2;
-    max-width: 960px;
+    max-width: 1440px; /* Increased to allow grid layout */
     margin: -150px auto 0; /* Overlaps the hero image */
-    padding: 1.5rem 1rem 4rem;
+    padding: 1.5rem 4rem 4rem; /* Significantly increased horizontal padding */
     color: var(--wolt-text);
 }
 
@@ -96,91 +96,140 @@
     color: var(--wolt-text-muted);
 }
 
-/* --- Menu list --- */
-.menu-list__title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
+/* --- Menu Categories --- */
+.menu-category-section {
+    margin-bottom: 3rem;
+}
+
+.menu-category-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0 0 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--wolt-border);
 }
 
 .menu-list__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .menu-list__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1200px) {
+    .menu-list__grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 /* --- Menu item card --- */
 .menu-item {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-direction: row;
+    align-items: stretch;
     background: var(--wolt-surface);
-    border: 1px solid var(--wolt-border);
+    border: 1px solid #d1d1d1; /* Reverted back to the visible frame */
     border-radius: 14px;
-    padding: 1rem 1.1rem 1.1rem;
-    box-shadow: var(--wolt-shadow);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    padding: 0.8rem; /* Reduced padding for a skinnier feel */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); /* Reverted heavy shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: 1.2rem; /* Tighter gap */
+    position: relative;
+    direction: ltr;
+    backface-visibility: hidden;
 }
 
 .menu-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    transform: scale(1.02) translateZ(0);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16); /* Deep shadow on hover */
+}
+
+.menu-item__media {
+    position: relative;
+    width: 150px; /* Much skinnier image width */
+    height: 110px; /* Much skinnier image height */
+    flex-shrink: 0;
 }
 
 .menu-item__image {
     width: 100%;
-    height: 120px;
+    height: 100%;
     object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 0.75rem;
+    border-radius: 12px;
 }
 
 .menu-item--unavailable {
     opacity: 0.55;
 }
 
+.menu-item__add {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: 40px; /* Smaller button to match the skinnier image */
+    height: 40px;
+    background: #e3f5fb; /* Softer light blue */
+    color: #0b5368;
+    border: none;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    font-size: 1.6rem;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    z-index: 2;
+    padding: 0;
+    line-height: 1;
+}
+
+.menu-item__add:hover:not(:disabled) {
+    background: #bce6f2;
+}
+
+.menu-item__add:disabled {
+    background: #e0e0e0;
+    color: #999;
+    cursor: not-allowed;
+}
+
 .menu-item__body {
-    margin-bottom: 0.9rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: left; /* LTR orientation */
+}
+
+.menu-item__info {
+    margin-bottom: 0.5rem;
 }
 
 .menu-item__name {
-    margin: 0 0 0.35rem;
-    font-size: 1.05rem;
+    margin: 0 0 0.3rem;
+    font-size: 1.05rem; /* Slightly smaller text so it fits the skinnier card */
     font-weight: 700;
 }
 
 .menu-item__desc {
-    margin: 0 0 0.6rem;
+    margin: 0;
     color: var(--wolt-text-muted);
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 0.9rem; /* Smaller desc */
+    line-height: 1.3;
 }
 
 .menu-item__price {
-    font-weight: 800;
+    font-weight: 600;
     font-size: 1.05rem;
-}
-
-.menu-item__add {
-    align-self: flex-start;
-    background: var(--wolt-brand);
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    padding: 0.5rem 1.1rem;
-    font-weight: 700;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: background 0.12s ease;
-}
-
-.menu-item__add:hover:not(:disabled) {
-    background: var(--wolt-brand-dark);
-}
-
-.menu-item__add:disabled {
-    background: #c4c4c4;
-    cursor: not-allowed;
+    color: var(--wolt-brand);
 }
 
 /* --- States --- */

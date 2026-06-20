@@ -1,75 +1,106 @@
-const productModel = require('../models/productModel');
-const userModel = require('../models/userModel');
+const Product = require('../models/productModel');
+const User = require('../models/userModel');
 const recommendationService = require('../services/recommendationService');
 
-const getProducts = (req, res) => {
-    const { id } = req.params;
-    const products = productModel.getProductsByRestaurantId(id);
-    res.status(200).json(products);
+const getProducts = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const products = await Product.find({ restaurantId: id });
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ error: "Server error fetching products" });
+    }
 };
 
-const getProductById = (req, res) => {
-    const { pId } = req.params;
-    const product = productModel.getProductById(pId);
-   
-    if (!product) {
-        return res.status(404).json({ error: "Product not found" });
-    }
+const getProductById = async (req, res) => {
+    try {
+        const { pId } = req.params;
+        const product = await Product.findById(pId);
+       
+        if (!product) {
+            return res.status(404).json({ error: "Product not found" });
+        }
 
-    // If a logged-in user is viewing this product, record the view in the
-    // recommendation server (Ex2). Best-effort and non-blocking: an absent or
-    // unknown viewer, or a down recommendation server, never affects this
-    // response.
-    const authHeader = req.header('Authorization');
-    const viewerId = (authHeader && authHeader.startsWith('Bearer ')) ? require('../utils/jwt').verifyToken(authHeader.split(' ')[1]).userId : null;
-    if (viewerId && userModel.getUserById(viewerId)) {
-        recommendationService.registerView(viewerId, product.id);
-    }
+        // If a logged-in user is viewing this product, record the view in the
+        // recommendation server (Ex2). Best-effort and non-blocking: an absent or
+        // unknown viewer, or a down recommendation server, never affects this
+        // response.
+        const authHeader = req.header('Authorization');
+        const viewerId = (authHeader && authHeader.startsWith('Bearer ')) ? require('../utils/jwt').verifyToken(authHeader.split(' ')[1]).userId : null;
+        if (viewerId) {
+            const user = await User.findById(viewerId);
+            if (user) {
+                recommendationService.registerView(viewerId, product._id.toString());
+            }
+        }
 
-    res.status(200).json(product);
+        res.status(200).json(product);
+    } catch (error) {
+        res.status(500).json({ error: "Server error fetching product" });
+    }
 };
 
-const createProduct = (req, res) => {
-    const { id } = req.params;
-    const { name, description, price, isAvailable, image } = req.body;
+const createProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { name, description, price, category, isAvailable, image } = req.body;
 
-    // Validate required fields
-    if (!name) {
-        return res.status(400).json({ error: "Product name is required" });
+        // Validate required fields
+        if (!name) {
+            return res.status(400).json({ error: "Product name is required" });
+        }
+
+        const newProductData = { 
+            name, 
+            description, 
+            price, 
+            category,
+            isAvailable, 
+            image,
+            restaurantId: id
+        };
+        const createdProduct = await Product.create(newProductData);
+
+        res.status(201).location(`/api/restaurants/${id}/products/${createdProduct._id}`).end();
+    } catch (error) {
+        res.status(500).json({ error: "Server error creating product" });
     }
-
-    const newProductData = { name, description, price, isAvailable, image };
-    const createdProduct = productModel.createProduct(id, newProductData);
-
-    res.status(201).location(`/api/restaurants/${id}/products/${createdProduct.id}`).end();
 };
 
-const updateProduct = (req, res) => {
-    const { pId } = req.params;
-    const updateData = req.body;
+const updateProduct = async (req, res) => {
+    try {
+        const { pId } = req.params;
+        const updateData = req.body;
 
-    if (updateData.name === "") {
-        return res.status(400).json({ error: "Product name cannot be empty" });
+        if (updateData.name === "") {
+            return res.status(400).json({ error: "Product name cannot be empty" });
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(pId, updateData, { new: true });
+       
+        if (!updatedProduct) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+
+        res.status(204).send(); // 204 No Content on success
+    } catch (error) {
+        res.status(500).json({ error: "Server error updating product" });
     }
-
-    const updatedProduct = productModel.updateProduct(pId, updateData);
-   
-    if (!updatedProduct) {
-        return res.status(404).json({ error: "Product not found" });
-    }
-
-    res.status(204).send(); // 204 No Content on success
 };
 
-const deleteProduct = (req, res) => {
-    const { pId } = req.params;
-    const isDeleted = productModel.deleteProduct(pId);
+const deleteProduct = async (req, res) => {
+    try {
+        const { pId } = req.params;
+        const deletedProduct = await Product.findByIdAndDelete(pId);
 
-    if (!isDeleted) {
-        return res.status(404).json({ error: "Product not found" });
+        if (!deletedProduct) {
+            return res.status(404).json({ error: "Product not found" });
+        }
+
+        res.status(204).send(); // 204 No Content on success
+    } catch (error) {
+        res.status(500).json({ error: "Server error deleting product" });
     }
-
-    res.status(204).send(); // 204 No Content on success
 };
 
 module.exports = {
