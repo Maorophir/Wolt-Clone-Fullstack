@@ -45,14 +45,23 @@ if (require.main === module) {
     // Connect to MongoDB using the environment variable passed from docker-compose
     const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/wolt';
     
+    // Globally configure Mongoose to serialize _id as id for React frontend compatibility
+    mongoose.set('toJSON', {
+        virtuals: true,
+        transform: (doc, ret) => {
+            delete ret._id;
+            delete ret.__v;
+        }
+    });
+
     mongoose.connect(MONGO_URI)
-        .then(() => {
+        .then(async () => {
             console.log('✅ Successfully connected to MongoDB.');
             
             // We still call seedDatabase here, but later in Step 5 we will 
             // update seed.js to push data to MongoDB instead of memory arrays.
             const seedDatabase = require('./seed');
-            seedDatabase();
+            await seedDatabase();
 
             app.listen(PORT, () => {
                 console.log(`🚀 Server is running on http://localhost:${PORT}`);

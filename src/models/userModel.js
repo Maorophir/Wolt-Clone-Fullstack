@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
     // isBusinessOwner is a boolean that defaults to false if not provided
     isBusinessOwner: { type: Boolean, default: false },
     
+    // isAdmin allows global CRUD operations across the platform
+    isAdmin: { type: Boolean, default: false },
+    
     // addresses is an array of our addressSchema defined above
     addresses: [addressSchema]
 }, 

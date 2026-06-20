@@ -52,13 +52,15 @@ const createUser = async (req, res) => {
             if (!Array.isArray(addresses)) {
                 return res.status(400).json({ message: 'addresses must be an array' });
             }
-            for (const a of addresses) {
-                const lat = Number(a && a.latitude);
-                const lng = Number(a && a.longitude);
-                if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
-                    lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-                    return res.status(400).json({ message: 'Each address needs a valid latitude/longitude' });
+            try {
+                // Map over the array and validate each address using our shared utility
+                // We reassign 'addresses' to the properly formatted data returned by parseAddressData
+                const { parseAddressData } = require('../utils/addressUtils');
+                for (let i = 0; i < addresses.length; i++) {
+                    addresses[i] = parseAddressData(addresses[i]);
                 }
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
             }
         }
 
@@ -103,8 +105,8 @@ const getUserById = async (req, res) => {
  */
 const updateUser = async (req, res) => {
     try {
-        if (req.userId !== req.params.id) {
-            return res.status(403).json({ error: 'You can only update your own profile' });
+        if (req.userId !== req.params.id && !req.isAdmin) {
+            return res.status(403).json({ error: 'You can only update your own profile or must be an admin' });
         }
 
         const { displayName, profileImage, addresses } = req.body;
@@ -115,15 +117,15 @@ const updateUser = async (req, res) => {
             if (!Array.isArray(addresses)) {
                 return res.status(400).json({ message: 'addresses must be an array' });
             }
-            for (const a of addresses) {
-                const lat = Number(a && a.latitude);
-                const lng = Number(a && a.longitude);
-                if (!Number.isFinite(lat) || !Number.isFinite(lng) ||
-                    lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-                    return res.status(400).json({ message: 'Each address needs a valid latitude/longitude' });
+            try {
+                const { parseAddressData } = require('../utils/addressUtils');
+                for (let i = 0; i < addresses.length; i++) {
+                    addresses[i] = parseAddressData(addresses[i]);
                 }
+                updates.addresses = addresses;
+            } catch (err) {
+                return res.status(400).json({ message: err.message });
             }
-            updates.addresses = addresses;
         }
 
         // Mongoose query: find by ID and update. 

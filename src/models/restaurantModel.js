@@ -25,4 +25,21 @@ const restaurantSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// Flatten the address sub-document into top-level fields so the API
+// response matches the shape the React frontend expects:
+//   { address: "123 Main St", latitude: 32.07, longitude: 34.78, ... }
+restaurantSchema.set('toJSON', {
+    virtuals: true,
+    transform: (doc, ret) => {
+        if (ret.address && typeof ret.address === 'object') {
+            ret.latitude = ret.address.latitude;
+            ret.longitude = ret.address.longitude;
+            ret.address = ret.address.name || '';
+        }
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+    }
+});
+
 module.exports = mongoose.model('Restaurant', restaurantSchema);

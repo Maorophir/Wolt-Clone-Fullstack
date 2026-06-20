@@ -1,11 +1,12 @@
 const { verifyToken } = require('../utils/jwt');
-const userModel = require('../models/userModel');
+const User = require('../models/userModel');
+const Restaurant = require('../models/restaurantModel');
 
 /**
  * Authentication middleware.
  * Expects Authorization: Bearer <token>
  */
-const authenticate = (req, res, next) => {
+const authenticate = async (req, res, next) => {
     const authHeader = req.header('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: 'Authentication required' });
@@ -14,10 +15,12 @@ const authenticate = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     try {
         const decoded = verifyToken(token);
-        if (!userModel.getUserById(decoded.userId)) {
+        const user = await User.findById(decoded.userId);
+        if (!user) {
             return res.status(401).json({ error: 'Invalid or unknown user' });
         }
         req.userId = decoded.userId;
+        req.isAdmin = user.isAdmin === true;
         next();
     } catch (err) {
         return res.status(401).json({ error: 'Invalid or expired token' });
@@ -28,31 +31,38 @@ const authenticate = (req, res, next) => {
  * Authorization middleware.
  * Must be used after authenticate middleware.
  */
-const authorizeBusiness = (req, res, next) => {
-    const user = userModel.getUserById(req.userId);
-    if (!user || !user.isBusinessOwner) {
-        return res.status(403).json({ error: 'Access denied: Business Owner only' });
+const authorizeBusiness = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userId);
+        if (!user || (!user.isBusinessOwner && !user.isAdmin)) {
+            return res.status(403).json({ error: 'Access denied: Business Owner only' });
+        }
+        next();
+    } catch (err) {
+        return res.status(500).json({ error: 'Server error checking authorization' });
     }
-    next();
 };
 
 /**
  * Authorization middleware for restaurant owners.
  * Must be used after authenticate and authorizeBusiness.
  */
-const authorizeRestaurantOwner = (req, res, next) => {
-    const restaurantModel = require('../models/restaurantModel');
-    const restaurantId = req.params.id;
-    const restaurant = restaurantModel.getRestaurantById(restaurantId);
+const authorizeRestaurantOwner = async (req, res, next) => {
+    try {
+        const restaurantId = req.params.id;
+        const restaurant = await Restaurant.findById(restaurantId);
 
-    if (!restaurant) {
-        return res.status(404).json({ error: 'Restaurant not found' });
-    }
+        if (!restaurant) {
+            return res.status(404).json({ error: 'Restaurant not found' });
+        }
 
-    if (restaurant.ownerId !== req.userId) {
-        return res.status(403).json({ error: 'Access denied: You do not own this restaurant' });
+        if (restaurant.ownerId.toString() !== req.userId && !req.isAdmin) {
+            return res.status(403).json({ error: 'Access denied: You do not own this restaurant' });
+        }
+        next();
+    } catch (err) {
+        return res.status(500).json({ error: 'Server error checking restaurant ownership' });
     }
-    next();
 };
 
 module.exports = { authenticate, authorizeBusiness, authorizeRestaurantOwner };

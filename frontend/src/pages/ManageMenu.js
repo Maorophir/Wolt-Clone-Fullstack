@@ -48,7 +48,7 @@ const ManageMenu = () => {
                 const resData = await resRestaurant.json();
                 
                 const user = getCurrentUser();
-                if (!user || user.id !== resData.ownerId) {
+                if (!user || (user.id !== resData.ownerId && !user.isAdmin)) {
                     navigate('/');
                     return;
                 }
@@ -305,7 +305,7 @@ const ManageMenu = () => {
                                     )}
                                     <div className="mm-product-info">
                                         <h3>{product.name} {!product.isAvailable && <span className="mm-badge">Unavailable</span>}</h3>
-                                        <p className="mm-product-price">${Number(product.price).toFixed(2)}</p>
+                                        <p className="mm-product-price">₪{Number(product.price).toFixed(2)}</p>
                                         {product.description && <p className="mm-product-desc">{product.description}</p>}
                                     </div>
                                     <div className="mm-product-actions">
