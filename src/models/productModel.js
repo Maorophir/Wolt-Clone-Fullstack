@@ -1,53 +1,24 @@
-const { randomUUID } = require('crypto');
-const storage = require('./storage');
+const mongoose = require('mongoose');
 
-const getProductsByRestaurantId = (restaurantId) => {
-    return Array.from(storage.products.values()).filter(product => product.restaurantId === restaurantId);
-};
+const productSchema = new mongoose.Schema({
+    // A product ALWAYS belongs to a specific restaurant. 
+    // This acts like a Foreign Key.
+    restaurantId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Restaurant',
+        required: true 
+    },
+    
+    // Product details
+    name: { type: String, required: true },
+    description: { type: String },
+    price: { type: Number, required: true },
+    
+    // Is the item currently in stock?
+    isAvailable: { type: Boolean, default: true },
+    
+    // Optional image
+    image: { type: String }
+}, { timestamps: true });
 
-const getProductById = (productId) => {
-    return storage.products.get(productId) || null;
-};
-
-const createProduct = (restaurantId, productData) => {
-    const newProduct = {
-        id: randomUUID(),
-        restaurantId,
-        isAvailable: true,
-        ...productData
-    };
-    if (newProduct.isAvailable === undefined) {
-        newProduct.isAvailable = true;
-    }
-
-    storage.products.set(newProduct.id, newProduct);
-    return newProduct;
-};
-
-const updateProduct = (productId, updateData) => {
-    const product = storage.products.get(productId);
-    if (!product) {
-        return null;
-    }
-
-    const updatedProduct = {
-        ...product,
-        ...updateData,
-        id: productId
-    };
-
-    storage.products.set(productId, updatedProduct);
-    return updatedProduct;
-};
-
-const deleteProduct = (productId) => {
-    return storage.products.delete(productId);
-};
-
-module.exports = {
-    getProductsByRestaurantId,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct
-};
+module.exports = mongoose.model('Product', productSchema);
