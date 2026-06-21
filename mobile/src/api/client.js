@@ -64,7 +64,8 @@ const api = async (endpoint, options = {}) => {
 
   // --- Step 5: Throw on error (fetch doesn't do this by default!) ---
   if (!response.ok) {
-    const error = new Error(data?.error || `Request failed: ${response.status}`);
+    // Server uses `error` on most routes but `message` on user creation/validation.
+    const error = new Error(data?.error || data?.message || `Request failed: ${response.status}`);
     error.status = response.status;
     error.data = data;
     throw error;
