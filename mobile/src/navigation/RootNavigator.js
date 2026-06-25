@@ -8,6 +8,9 @@ import Checkout from '../screens/Checkout';
 import OrderConfirmation from '../screens/OrderConfirmation';
 import Login from '../screens/Login';
 import Register from '../screens/Register';
+import AddRestaurant from '../screens/AddRestaurant';
+import EditRestaurant from '../screens/EditRestaurant';
+import ManageMenu from '../screens/ManageMenu';
 import CartButton from '../components/CartButton';
 import { useTheme } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
@@ -48,6 +51,9 @@ export default function RootNavigator() {
             />
             <Stack.Screen name="Login" component={Login} options={{ title: 'Log in' }} />
             <Stack.Screen name="Register" component={Register} options={{ title: 'Sign up' }} />
+            <Stack.Screen name="AddRestaurant" component={AddRestaurant} options={{ title: 'Add restaurant' }} />
+            <Stack.Screen name="EditRestaurant" component={EditRestaurant} options={{ title: 'Edit restaurant' }} />
+            <Stack.Screen name="ManageMenu" component={ManageMenu} options={{ title: 'Manage menu' }} />
         </Stack.Navigator>
     );
 }
