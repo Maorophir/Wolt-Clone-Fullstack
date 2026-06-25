@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import Screen from '../components/Screen';
 import WoltInput from '../components/WoltInput';
 import Button from '../components/Button';
+import AnimatedLogo from '../components/AnimatedLogo';
 import { useAuth } from '../context/AuthContext';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
@@ -52,7 +53,7 @@ export default function Login({ navigation }) {
     return (
         <Screen scroll contentContainerStyle={styles.content}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-                <Text style={[styles.logo, { color: c.brand }]}>WoltClone</Text>
+                <AnimatedLogo style={{ marginBottom: spacing.md }} />
                 <Text style={[styles.title, { color: c.text }]}>Log in to your account</Text>
 
                 {errors.submit ? (
@@ -100,7 +101,6 @@ export default function Login({ navigation }) {
 
 const styles = StyleSheet.create({
     content: { padding: spacing.lg, flexGrow: 1, justifyContent: 'center' },
-    logo: { fontSize: 32, fontWeight: '900', textAlign: 'center', marginBottom: spacing.sm },
     title: { fontSize: 20, fontWeight: '700', textAlign: 'center', marginBottom: spacing.lg },
     errorBox: { padding: spacing.md, borderRadius: 10, marginBottom: spacing.md, textAlign: 'center', fontWeight: '600' },
     footer: { flexDirection: 'row', justifyContent: 'center', marginTop: spacing.lg },

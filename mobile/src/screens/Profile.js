@@ -87,7 +87,7 @@ export default function Profile() {
         <Screen scroll contentContainerStyle={styles.content}>
             {/* Personal details */}
             <Text style={[styles.sectionTitle, { color: c.text }]}>Personal details</Text>
-            <ImagePickerField value={image} onChange={setImage} rounded height={110} />
+            <ImagePickerField value={image} onChange={setImage} rounded height={110} fallbackName={user?.displayName} />
             <WoltInput label="Display name" value={displayName} onChangeText={setDisplayName} placeholder="Your name" editable={!saving} />
             <Text style={[styles.username, { color: c.muted }]}>
                 @{user?.username}{user?.isBusinessOwner ? '  ·  Business owner' : ''}

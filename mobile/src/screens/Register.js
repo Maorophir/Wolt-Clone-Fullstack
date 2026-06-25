@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Switch, Pressable, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, Switch, Pressable, KeyboardAvoidingView, Platform, Alert, Image } from 'react-native';
 import Screen from '../components/Screen';
 import WoltInput from '../components/WoltInput';
 import Button from '../components/Button';
@@ -121,13 +121,27 @@ export default function Register({ navigation }) {
     return (
         <Screen scroll contentContainerStyle={styles.content}>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+                <View style={{ alignItems: 'center', marginBottom: spacing.sm, marginTop: spacing.md }}>
+                    <Image 
+                        source={require('../../assets/WoltClone_Logo.png')} 
+                        style={{ width: '90%', height: 140 }} 
+                        resizeMode="contain" 
+                    />
+                </View>
                 <Text style={[styles.title, { color: c.text }]}>Create your account</Text>
 
                 {errors.submit ? (
                     <Text style={[styles.errorBox, { backgroundColor: 'rgba(192,57,43,0.12)', color: c.danger }]}>{errors.submit}</Text>
                 ) : null}
 
-                <ImagePickerField label="Profile photo (optional)" value={image} onChange={setImage} rounded height={110} error={errors.image} />
+                <ImagePickerField 
+                    label="Profile photo (optional)" 
+                    value={image} 
+                    onChange={setImage} 
+                    rounded 
+                    height={110} 
+                    error={errors.image} 
+                />
 
                 <WoltInput label="Display name" value={form.displayName} onChangeText={set('displayName')} placeholder="Your name" editable={!loading} error={errors.displayName} />
                 <WoltInput label="Username" value={form.username} onChangeText={set('username')} placeholder="Choose a username" autoCapitalize="none" autoCorrect={false} editable={!loading} error={errors.username} />

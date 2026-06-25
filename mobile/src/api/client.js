@@ -10,6 +10,15 @@ import Constants from 'expo-constants';
  * on every machine, every network, for every team member.
  */
 const getApiBase = () => {
+
+  // Priority 1: Manual override via app.json extra config.
+  // WSL/tunnel users set this in app.json under "expo.extra.apiUrl"
+  const manualUrl = Constants.expoConfig?.extra?.apiUrl;
+  if (manualUrl) {
+    return manualUrl;
+  }
+
+  // Priority 2: Auto-detect from Expo dev server (not tunnel mode)
   const debuggerHost =
     Constants.expoGoConfig?.debuggerHost ||   // Expo Go
     Constants.manifest?.debuggerHost;          // Older SDKs fallback
@@ -17,9 +26,11 @@ const getApiBase = () => {
     const ip = debuggerHost.split(':')[0]; // "192.168.1.62:8081" → "192.168.1.62"
     return `http://${ip}:3001/api`;
   }
+  
   // Fallback (shouldn't happen in dev, but just in case)
   return 'http://localhost:3001/api';
 };
+
 const API_BASE = getApiBase();
 
 /**
