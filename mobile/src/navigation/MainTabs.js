@@ -27,10 +27,12 @@ export default function MainTabs() {
             screenOptions={({ route }) => ({
                 headerStyle: { backgroundColor: c.navbarBg },
                 headerTintColor: c.text,
+                headerTitleStyle: { fontWeight: '800' },
                 headerShadowVisible: false,
                 headerRight: () => <HeaderRight />,
                 tabBarActiveTintColor: c.brand,
                 tabBarInactiveTintColor: c.muted,
+                tabBarLabelStyle: { fontSize: 11, fontWeight: '600' },
                 tabBarStyle: { backgroundColor: c.navbarBg, borderTopColor: c.border },
                 tabBarIcon: ({ color, size, focused }) => {
                     const base = ICONS[route.name] || 'ellipse';

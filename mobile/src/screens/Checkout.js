@@ -10,6 +10,7 @@ import api from '../api/client';
 import { formatPrice } from '../utils/format';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
+import { shadow } from '../theme/shadows';
 
 /**
  * Checkout (RN port of pages/CheckoutPage.js). Protected — bounces to Login if
@@ -88,7 +89,7 @@ export default function Checkout({ navigation }) {
                         : 'No delivery location set — pick one from the location selector on Home.'}
                 </Text>
 
-                <View style={[styles.card, { borderColor: c.border, backgroundColor: c.surface }]}>
+                <View style={[styles.card, { borderColor: c.border, backgroundColor: c.surface }, shadow(1)]}>
                     {cart.items.map((i) => (
                         <View key={i.productId} style={styles.line}>
                             <Text style={[styles.lineTxt, { color: c.text }]}>{i.quantity} × {i.name}</Text>

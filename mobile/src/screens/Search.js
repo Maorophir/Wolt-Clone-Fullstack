@@ -58,9 +58,12 @@ export default function Search() {
                     keyExtractor={(item, idx) => `${item.type}-${getId(item) || idx}`}
                     contentContainerStyle={styles.list}
                     ListEmptyComponent={
-                        <Text style={[styles.msg, { color: c.muted }]}>
-                            {searched ? 'No results found.' : 'Search for restaurants or dishes.'}
-                        </Text>
+                        <View style={styles.emptyWrap}>
+                            <Ionicons name={searched ? 'sad-outline' : 'search'} size={56} color={c.border} />
+                            <Text style={[styles.msg, { color: c.muted }]}>
+                                {searched ? 'No results found.' : 'Search for restaurants or dishes.'}
+                            </Text>
+                        </View>
                     }
                     renderItem={({ item }) => (
                         <Pressable onPress={() => openItem(item)} style={[styles.row, { backgroundColor: c.surface, borderColor: c.border }]}>
@@ -84,7 +87,8 @@ export default function Search() {
 
 const styles = StyleSheet.create({
     center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-    msg: { textAlign: 'center', padding: spacing.xl, fontSize: 15 },
+    emptyWrap: { alignItems: 'center', paddingTop: spacing.xxl, gap: spacing.sm },
+    msg: { textAlign: 'center', paddingHorizontal: spacing.xl, fontSize: 15 },
     list: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
     row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderRadius: 12, padding: spacing.md, marginBottom: spacing.sm },
     rowInfo: { flex: 1 },

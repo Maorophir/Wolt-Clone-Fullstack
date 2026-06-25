@@ -3,6 +3,7 @@ import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
+import { shadow } from '../theme/shadows';
 import { formatPrice } from '../utils/format';
 
 /**
@@ -15,7 +16,7 @@ const MenuItemCard = ({ product, onAddToCart }) => {
     const available = isAvailable !== false;
 
     return (
-        <View style={[styles.card, { backgroundColor: c.surface, borderColor: c.border, opacity: available ? 1 : 0.55 }]}>
+        <View style={[styles.card, { backgroundColor: c.surface, borderColor: c.border, opacity: available ? 1 : 0.55 }, shadow(1)]}>
             <View style={styles.info}>
                 <Text style={[styles.name, { color: c.text }]}>{name}</Text>
                 {description ? (
@@ -41,7 +42,7 @@ const MenuItemCard = ({ product, onAddToCart }) => {
 
 const styles = StyleSheet.create({
     card: {
-        flexDirection: 'row', borderRadius: 14, borderWidth: 1, padding: spacing.sm + 2,
+        flexDirection: 'row', borderRadius: 14, borderWidth: StyleSheet.hairlineWidth, padding: spacing.sm + 2,
         marginBottom: spacing.sm, gap: spacing.sm,
     },
     info: { flex: 1, justifyContent: 'center' },

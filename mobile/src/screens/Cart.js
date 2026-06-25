@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView, Pressable, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import Screen from '../components/Screen';
 import Button from '../components/Button';
 import CartItemRow from '../components/CartItemRow';
@@ -20,6 +21,7 @@ export default function Cart({ navigation }) {
     if (totalItems === 0) {
         return (
             <Screen style={styles.center}>
+                <Ionicons name="cart-outline" size={64} color={c.border} />
                 <Text style={[styles.emptyTitle, { color: c.text }]}>Your cart is empty</Text>
                 <Pressable onPress={() => navigation.navigate('MainTabs', { screen: 'Home' })}>
                     <Text style={[styles.link, { color: c.brand }]}>Browse restaurants →</Text>

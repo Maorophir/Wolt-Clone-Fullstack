@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { View, Text, FlatList, ActivityIndicator, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import Screen from '../components/Screen';
 import { useRequireAuth } from '../hooks/useRequireAuth';
@@ -8,6 +9,7 @@ import { formatPrice } from '../utils/format';
 import { getId } from '../utils/id';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
+import { shadow } from '../theme/shadows';
 
 const orderTotal = (items = []) =>
     items.reduce((s, i) => s + (Number(i.price) || 0) * (i.quantity || 0), 0);
@@ -58,7 +60,13 @@ export default function Orders() {
         return <Screen style={styles.center}><Text style={[styles.error, { color: c.danger }]}>{error}</Text></Screen>;
     }
     if (orders.length === 0) {
-        return <Screen style={styles.center}><Text style={[styles.emptyTitle, { color: c.text }]}>No orders yet</Text></Screen>;
+        return (
+            <Screen style={styles.center}>
+                <Ionicons name="receipt-outline" size={64} color={c.border} />
+                <Text style={[styles.emptyTitle, { color: c.text }]}>No orders yet</Text>
+                <Text style={[styles.emptySub, { color: c.muted }]}>Your past orders will show up here.</Text>
+            </Screen>
+        );
     }
 
     const sorted = [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -72,7 +80,7 @@ export default function Orders() {
                 renderItem={({ item: order }) => {
                     const color = STATUS_COLORS[order.status] || c.muted;
                     return (
-                        <View style={[styles.card, { backgroundColor: c.surface, borderColor: c.border }]}>
+                        <View style={[styles.card, { backgroundColor: c.surface, borderColor: c.border }, shadow(1)]}>
                             <View style={styles.cardHead}>
                                 <View style={[styles.status, { backgroundColor: `${color}22` }]}>
                                     <Text style={[styles.statusTxt, { color }]}>{order.status}</Text>
@@ -104,8 +112,9 @@ export default function Orders() {
 }
 
 const styles = StyleSheet.create({
-    center: { alignItems: 'center', justifyContent: 'center' },
+    center: { alignItems: 'center', justifyContent: 'center', gap: spacing.sm, padding: spacing.lg },
     emptyTitle: { fontSize: 20, fontWeight: '700' },
+    emptySub: { fontSize: 14, textAlign: 'center' },
     error: { fontSize: 15, textAlign: 'center', paddingHorizontal: spacing.lg },
     list: { padding: spacing.md },
     card: { borderWidth: 1, borderRadius: 14, padding: spacing.md, marginBottom: spacing.md },

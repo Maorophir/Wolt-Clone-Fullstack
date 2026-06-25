@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, Pressable, ActivityIndicator, StyleSheet } from 'react-native';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
+import { shadow } from '../theme/shadows';
 
 /**
  * Themed button used across the app. Variants: primary (brand fill), danger
@@ -19,6 +20,7 @@ const Button = ({ title, onPress, loading, disabled, variant = 'primary', style,
             disabled={isDisabled}
             style={({ pressed }) => [
                 styles.btn,
+                variant === 'primary' && !isDisabled ? shadow(2) : null,
                 {
                     backgroundColor: fill,
                     borderColor: c.brand,

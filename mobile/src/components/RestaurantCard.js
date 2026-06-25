@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
+import { radii, shadow } from '../theme/shadows';
 import { formatDistance } from '../utils/geo';
 import { getId } from '../utils/id';
 
@@ -17,8 +18,8 @@ const pickColor = (key = '') => {
 
 /**
  * Wolt-style restaurant tile (RN port of the web RestaurantCard): image-forward
- * with a meta row (rating · delivery time · price) and an optional "X km away"
- * chip when the user has shared their location. Tapping opens the menu.
+ * with a favorite heart, a rating pill, and an optional "X km away" chip when the
+ * user has shared their location. Elevated card; tapping opens the menu.
  */
 const RestaurantCard = ({ restaurant, distanceKm, width }) => {
     const c = useThemeColors();
@@ -30,7 +31,11 @@ const RestaurantCard = ({ restaurant, distanceKm, width }) => {
     return (
         <Pressable
             onPress={() => navigation.navigate('Restaurant', { id })}
-            style={[styles.card, { backgroundColor: c.surface, borderColor: c.border, width }]}
+            style={({ pressed }) => [
+                styles.card,
+                { backgroundColor: c.surface, borderColor: c.border, width, opacity: pressed ? 0.96 : 1 },
+                shadow(2),
+            ]}
         >
             <View style={[styles.media, { backgroundColor: image ? '#000' : pickColor(name) }]}>
                 {image ? (
@@ -38,6 +43,9 @@ const RestaurantCard = ({ restaurant, distanceKm, width }) => {
                 ) : (
                     <Text style={styles.initial}>{name ? name.charAt(0).toUpperCase() : '?'}</Text>
                 )}
+                <View style={styles.heart}>
+                    <Ionicons name="heart-outline" size={16} color="#fff" />
+                </View>
                 {distanceKm != null && (
                     <View style={styles.distance}>
                         <Ionicons name="location-sharp" size={11} color="#fff" />
@@ -49,9 +57,9 @@ const RestaurantCard = ({ restaurant, distanceKm, width }) => {
             <View style={styles.body}>
                 <Text style={[styles.name, { color: c.text }]} numberOfLines={1}>{name}</Text>
                 <View style={styles.meta}>
-                    <View style={styles.metaItem}>
-                        <Ionicons name="star" size={13} color={isNew ? c.muted : '#F5A623'} />
-                        <Text style={[styles.metaTxt, { color: c.muted }]}>{isNew ? 'New' : rating}</Text>
+                    <View style={[styles.ratingPill, { backgroundColor: isNew ? c.border : 'rgba(245,166,35,0.16)' }]}>
+                        <Ionicons name="star" size={12} color={isNew ? c.muted : '#F5A623'} />
+                        <Text style={[styles.ratingTxt, { color: isNew ? c.muted : c.text }]}>{isNew ? 'New' : rating}</Text>
                     </View>
                     {deliveryTime ? (
                         <View style={styles.metaItem}>
@@ -67,18 +75,24 @@ const RestaurantCard = ({ restaurant, distanceKm, width }) => {
 };
 
 const styles = StyleSheet.create({
-    card: { borderRadius: 16, borderWidth: 1, overflow: 'hidden' },
-    media: { height: 120, alignItems: 'center', justifyContent: 'center' },
+    card: { borderRadius: radii.lg, borderWidth: StyleSheet.hairlineWidth, overflow: 'hidden' },
+    media: { height: 124, alignItems: 'center', justifyContent: 'center' },
     image: { width: '100%', height: '100%' },
     initial: { fontSize: 44, fontWeight: '800', color: 'rgba(255,255,255,0.92)' },
+    heart: {
+        position: 'absolute', top: 8, right: 8, width: 30, height: 30, borderRadius: 15,
+        backgroundColor: 'rgba(0,0,0,0.35)', alignItems: 'center', justifyContent: 'center',
+    },
     distance: {
         position: 'absolute', bottom: 8, left: 8, flexDirection: 'row', alignItems: 'center',
-        gap: 3, backgroundColor: 'rgba(0,0,0,0.6)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: 12,
+        gap: 3, backgroundColor: 'rgba(0,0,0,0.6)', paddingHorizontal: 8, paddingVertical: 3, borderRadius: radii.pill,
     },
     distanceTxt: { color: '#fff', fontSize: 11, fontWeight: '600' },
     body: { padding: spacing.sm + 2 },
-    name: { fontSize: 15, fontWeight: '700', marginBottom: 4 },
+    name: { fontSize: 15, fontWeight: '700', marginBottom: 5 },
     meta: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, flexWrap: 'wrap' },
+    ratingPill: { flexDirection: 'row', alignItems: 'center', gap: 3, paddingHorizontal: 7, paddingVertical: 2, borderRadius: radii.pill },
+    ratingTxt: { fontSize: 12, fontWeight: '700' },
     metaItem: { flexDirection: 'row', alignItems: 'center', gap: 3 },
     metaTxt: { fontSize: 12, fontWeight: '500' },
 });
