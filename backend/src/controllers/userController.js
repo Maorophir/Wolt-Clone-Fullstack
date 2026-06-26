@@ -109,10 +109,11 @@ const updateUser = async (req, res) => {
             return res.status(403).json({ error: 'You can only update your own profile or must be an admin' });
         }
 
-        const { displayName, profileImage, addresses } = req.body;
+        const { displayName, profileImage, addresses, favorites } = req.body;
         const updates = {};
         if (displayName !== undefined) updates.displayName = displayName;
         if (profileImage !== undefined) updates.profileImage = profileImage;
+        if (favorites !== undefined) updates.favorites = favorites;
         if (addresses !== undefined) {
             if (!Array.isArray(addresses)) {
                 return res.status(400).json({ message: 'addresses must be an array' });

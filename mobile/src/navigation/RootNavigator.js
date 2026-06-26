@@ -42,6 +42,7 @@ export default function RootNavigator() {
                 headerTintColor: c.text,
                 headerShadowVisible: false,
                 contentStyle: { backgroundColor: c.bg },
+                headerBackButtonDisplayMode: 'minimal',
             }}
         >
             {!isAuthenticated ? (
@@ -53,7 +54,7 @@ export default function RootNavigator() {
             ) : (
                 // --- MAIN APP (Logged In) ---
                 <>
-                    <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+                    <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false, title: '' }} />
                     <Stack.Screen
                         name="Restaurant"
                         component={RestaurantMenu}

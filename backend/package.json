@@ -4,7 +4,7 @@
   "description": "Node.js MongoDB Backend Server for Wolt Delivery App (Ex5)",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node --watch src/server.js",
     "test": "node tests/api.test.js"
   },
   "repository": {
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/Maorophir/Wolt-Clone-Finale#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "mongoose": "^9.7.1"

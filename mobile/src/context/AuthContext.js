@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from '../utils/storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../api/client';
 import { getId } from '../utils/id';
@@ -92,6 +92,31 @@ export const AuthProvider = ({ children }) => {
         return next;
     };
 
+    // Toggle favorite status for a restaurant
+    const toggleFavorite = async (restaurantId) => {
+        if (!user) return;
+        const currentFavs = user.favorites || [];
+        const isFav = currentFavs.includes(restaurantId);
+        const nextFavs = isFav
+            ? currentFavs.filter(id => id !== restaurantId)
+            : [...currentFavs, restaurantId];
+        
+        // Optimistically update local state
+        await updateUser({ favorites: nextFavs });
+        
+        // Persist to backend
+        try {
+            await api(`/users/${user.id}`, {
+                method: 'PATCH',
+                body: { favorites: nextFavs },
+            });
+        } catch (error) {
+            // Revert on failure
+            await updateUser({ favorites: currentFavs });
+            console.error('Failed to toggle favorite', error);
+        }
+    };
+
     const value = {
         user,
         token,
@@ -101,6 +126,7 @@ export const AuthProvider = ({ children }) => {
         logout,
         refreshUser,
         updateUser,
+        toggleFavorite,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

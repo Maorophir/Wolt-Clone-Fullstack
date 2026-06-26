@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Image, Pressable, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColors } from '../theme/ThemeContext';
@@ -21,7 +21,7 @@ const pickColor = (key = '') => {
  * with a favorite heart, a rating pill, and an optional "X km away" chip when the
  * user has shared their location. Elevated card; tapping opens the menu.
  */
-const RestaurantCard = ({ restaurant, distanceKm, width }) => {
+const RestaurantCard = ({ restaurant, distanceKm, width, isFavorite, onToggleFavorite }) => {
     const c = useThemeColors();
     const navigation = useNavigation();
     const { name, rating, image, deliveryTime, priceRange } = restaurant;
@@ -43,9 +43,23 @@ const RestaurantCard = ({ restaurant, distanceKm, width }) => {
                 ) : (
                     <Text style={styles.initial}>{name ? name.charAt(0).toUpperCase() : '?'}</Text>
                 )}
-                <View style={styles.heart}>
-                    <Ionicons name="heart-outline" size={16} color="#fff" />
-                </View>
+                {onToggleFavorite ? (
+                    <TouchableOpacity
+                        style={styles.heart}
+                        onPress={(e) => { e.stopPropagation(); onToggleFavorite(id); }}
+                        hitSlop={10}
+                    >
+                        <Ionicons
+                            name={isFavorite ? 'heart' : 'heart-outline'}
+                            size={16}
+                            color={isFavorite ? c.brand : '#fff'}
+                        />
+                    </TouchableOpacity>
+                ) : (
+                    <View style={styles.heart}>
+                        <Ionicons name="heart-outline" size={16} color="#fff" />
+                    </View>
+                )}
                 {distanceKm != null && (
                     <View style={styles.distance}>
                         <Ionicons name="location-sharp" size={11} color="#fff" />

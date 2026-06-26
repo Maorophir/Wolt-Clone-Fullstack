@@ -7,6 +7,7 @@ import RestaurantCard from '../components/RestaurantCard';
 import CategoryBar from '../components/CategoryBar';
 import Carousel from '../components/Carousel';
 import api from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { useUserLocation } from '../context/LocationContext';
 import { haversineKm } from '../utils/geo';
 import { getId } from '../utils/id';
@@ -27,6 +28,7 @@ const parseMinutes = (dt) => {
 export default function Home() {
     const c = useThemeColors();
     const loc = useUserLocation();
+    const { user, toggleFavorite } = useAuth();
     const { width } = useWindowDimensions();
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,7 +60,11 @@ export default function Home() {
         return <View style={[styles.center, { backgroundColor: c.bg }]}><Text style={[styles.error, { color: c.danger }]}>{error}</Text></View>;
     }
 
-    const categories = [...new Set(restaurants.map((r) => r.category).filter(Boolean))].sort();
+    const categories = ['Favorites', ...new Set(restaurants.map((r) => r.category).filter(Boolean))].sort((a, b) => {
+        if (a === 'Favorites') return -1;
+        if (b === 'Favorites') return 1;
+        return a.localeCompare(b);
+    });
 
     const withDistance = loc.coords
         ? restaurants.map((r) => ({
@@ -69,7 +75,11 @@ export default function Home() {
         }))
         : restaurants;
 
-    const filtered = category ? withDistance.filter((r) => r.category === category) : withDistance;
+    const filtered = category
+        ? category === 'Favorites'
+            ? withDistance.filter((r) => user?.favorites?.includes(getId(r)))
+            : withDistance.filter((r) => r.category === category)
+        : withDistance;
 
     const popular = [...withDistance]
         .filter((r) => Number(r.rating) >= 4.5)
@@ -81,7 +91,18 @@ export default function Home() {
         .slice(0, 10);
 
     const cardW = Math.min(260, width * 0.66);
-    const renderRow = ({ item }) => <RestaurantCard restaurant={item} distanceKm={item.distanceKm} width={cardW} />;
+    const renderRow = ({ item }) => {
+        const rId = getId(item);
+        return (
+            <RestaurantCard
+                restaurant={item}
+                distanceKm={item.distanceKm}
+                width={cardW}
+                isFavorite={user?.favorites?.includes(rId)}
+                onToggleFavorite={toggleFavorite}
+            />
+        );
+    };
 
     return (
         <ScrollView
@@ -109,11 +130,19 @@ export default function Home() {
                 {filtered.length === 0 ? (
                     <Text style={[styles.empty, { color: c.muted }]}>No restaurants in this category.</Text>
                 ) : (
-                    filtered.map((r) => (
-                        <View key={getId(r)} style={styles.gridItem}>
-                            <RestaurantCard restaurant={r} distanceKm={r.distanceKm} />
-                        </View>
-                    ))
+                    filtered.map((r) => {
+                        const rId = getId(r);
+                        return (
+                            <View key={rId} style={styles.gridItem}>
+                                <RestaurantCard
+                                    restaurant={r}
+                                    distanceKm={r.distanceKm}
+                                    isFavorite={user?.favorites?.includes(rId)}
+                                    onToggleFavorite={toggleFavorite}
+                                />
+                            </View>
+                        );
+                    })
                 )}
             </View>
         </ScrollView>

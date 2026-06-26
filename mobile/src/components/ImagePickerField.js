@@ -56,10 +56,17 @@ const ImagePickerField = ({ label, value, onChange, error, rounded = false, heig
 
     const radius = rounded ? height / 2 : 12;
 
+    // React Native cannot resolve relative paths from the backend (like /admin_avatar.png)
+    // because it doesn't run in a browser with a base URL.
+    // We intercept it and use the bundled asset instead.
+    const imageSource = value === '/admin_avatar.png' 
+        ? require('../../assets/admin_avatar.png') 
+        : { uri: value };
+
     const boxContent = (
         <>
             {value ? (
-                <Image source={{ uri: value }} style={[styles.img, { borderRadius: radius }]} />
+                <Image source={imageSource} style={[styles.img, { borderRadius: radius }]} />
             ) : (fallbackName && rounded) ? (
                 <View style={{ width: '100%', height: '100%', borderRadius: radius, alignItems: 'center', justifyContent: 'center', backgroundColor: getAvatarColor(fallbackName) }}>
                     <Text style={{ fontSize: height * 0.35, color: '#ffffff', fontWeight: '800' }}>
