@@ -94,6 +94,7 @@ user_history.txt
 cmake-build-*/
 
 # node_modules
+mobile/local.config.json
 node_modules/
 Ex4.pdf
 Ex4.txt

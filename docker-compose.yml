@@ -4,7 +4,7 @@ services:
   # --------------------------------------------------------
   web-server:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: wolt-web-server
     ports:
@@ -15,6 +15,8 @@ services:
       # Critical for Epic 7: In Docker, containers communicate using service names, not localhost
       - RECOMMENDATION_SERVER_HOST=recommendation-server
       - RECOMMENDATION_SERVER_PORT=5555
+    volumes:
+      - ./backend/src:/app/src
     depends_on:
       - recommendation-server
       - mongodb
@@ -72,4 +74,18 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo-data:/data/db
+    restart: unless-stopped
+
+  # --------------------------------------------------------
+  # Service 5: Mongo Express (Web GUI for MongoDB)
+  # --------------------------------------------------------
+  mongo-express:
+    image: mongo-express:latest
+    container_name: wolt-mongo-express
+    ports:
+      - "8082:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+    depends_on:
+      - mongodb
     restart: unless-stopped

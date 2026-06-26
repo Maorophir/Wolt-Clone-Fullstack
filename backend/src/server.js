@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors');
 const restaurantRoutes = require('./routes/restaurantRoutes');
 const productRoutes = require('./routes/productRoutes');
 const searchRoutes = require('./routes/searchRoutes');
 
 const app = express();
+app.use(cors());
 
 // Disable ETag and Date header generation for cleaner responses
 app.disable('etag');

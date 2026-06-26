@@ -1,13 +1,13 @@
 export const light = {
   brand: '#00C2E8',       // Wolt Cyan — your --brand
   brandDark: '#00a0c4',   // --brand-dark
-  bg: '#FFFFFF',          // --bg
+  bg: '#F4F5F7',          // light grey feed background so white cards pop
   surface: '#FFFFFF',     // --surface (card backgrounds)
   text: '#1A1A1A',        // --text
   muted: '#6B6B6B',       // --muted (secondary text)
   border: '#ECECEC',      // --border
   danger: '#C0392B',      // --danger
-  navbarBg: '#F8F9FA',    // --navbar-bg
+  navbarBg: '#FFFFFF',    // header + tab bar (white over the grey feed)
 };
 
 export const dark = {
