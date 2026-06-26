@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import { useTheme } from '../theme/ThemeContext';
 
 export default function AnimatedLogo({ style }) {
+    const { isDarkMode } = useTheme();
     // Initial values: invisible (opacity 0) and slightly shrunk (scale 0.5)
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const scaleAnim = useRef(new Animated.Value(0.5)).current;
@@ -33,7 +35,8 @@ export default function AnimatedLogo({ style }) {
                     style,
                     {
                         opacity: fadeAnim,
-                        transform: [{ scale: scaleAnim }]
+                        transform: [{ scale: scaleAnim }],
+                        tintColor: isDarkMode ? '#FFFFFF' : undefined
                     }
                 ]}
                 resizeMode="contain"

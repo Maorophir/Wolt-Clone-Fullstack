@@ -5,8 +5,9 @@ import WoltInput from '../components/WoltInput';
 import Button from '../components/Button';
 import ImagePickerField from '../components/ImagePickerField';
 import api from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import { getCurrentPosition } from '../utils/geo';
-import { useThemeColors } from '../theme/ThemeContext';
+import { useTheme } from '../theme/ThemeContext';
 import { spacing } from '../theme/spacing';
 
 const genId = () => `a_${Date.now()}_${Math.random().toString(36).slice(2)}`;
@@ -18,7 +19,8 @@ const genId = () => `a_${Date.now()}_${Math.random().toString(36).slice(2)}`;
  * coordinates. Profile photo via the gallery; optional first delivery address.
  */
 export default function Register({ navigation }) {
-    const c = useThemeColors();
+    const { colors: c, isDarkMode } = useTheme();
+    const { login } = useAuth();
     const [form, setForm] = useState({
         displayName: '', username: '', password: '', confirmPassword: '',
         isBusinessOwner: false, label: 'Home', address: '', latitude: '', longitude: '',
@@ -108,9 +110,7 @@ export default function Register({ navigation }) {
                 },
             });
 
-            Alert.alert('Welcome!', 'Registration successful — please log in.', [
-                { text: 'OK', onPress: () => navigation.replace('Login') },
-            ]);
+            await login(form.username, form.password);
         } catch (err) {
             setErrors((e) => ({ ...e, submit: err.message || 'Registration failed. Please try again.' }));
         } finally {
@@ -124,7 +124,7 @@ export default function Register({ navigation }) {
                 <View style={{ alignItems: 'center', marginBottom: spacing.sm, marginTop: spacing.md }}>
                     <Image 
                         source={require('../../assets/WoltClone_Logo.png')} 
-                        style={{ width: '90%', height: 140 }} 
+                        style={{ width: '90%', height: 140, tintColor: isDarkMode ? '#FFFFFF' : undefined }} 
                         resizeMode="contain" 
                     />
                 </View>
