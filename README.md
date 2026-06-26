@@ -1,6 +1,10 @@
 # Wolt-Clone Project — Exercise 5 (React Native + React + Node.js + MongoDB + C++)
 
-## 📖 Description of the Project
+## 📖 Full Documentation & App Previews
+
+For a comprehensive guide, detailed running instructions, and screenshots of all the app's features (including the React Native mobile client and MongoDB integration), please visit our **[Project Wiki](https://github.com/Maorophir/Wolt-Clone-Finale/wiki)**.
+
+## Description of the Project
 This repository contains the complete implementation for **Exercise 5**: a full-stack system replicating the core features and design of the **Wolt** food delivery platform across multiple clients.
 
 This final phase introduces a dynamic, premium **React Native (Expo) Mobile Application** for customers, seamlessly integrated with the RESTful API built in Exercise 3 (Node.js MVC server). Furthermore, we've transitioned the backend from in-memory arrays to a robust **MongoDB database** using Mongoose. The system continues to interoperate with the C++ TCP Server from Exercise 2 for user tracking, and the React Web Application from Exercise 4 for cross-platform management.
