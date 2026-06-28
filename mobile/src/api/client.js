@@ -11,17 +11,25 @@ import Constants from 'expo-constants';
  */
 const getApiBase = () => {
 
-  // Priority 1: Manual override via app.json extra config.
+  // Priority 1: Environment variable injected by our start-mobile.js script
+  if (process.env.EXPO_PUBLIC_API_URL) {
+    return process.env.EXPO_PUBLIC_API_URL;
+  }
+
+  // Priority 2: Manual override via app.json extra config.
   // WSL/tunnel users set this in app.json under "expo.extra.apiUrl"
   const manualUrl = Constants.expoConfig?.extra?.apiUrl;
   if (manualUrl) {
     return manualUrl;
   }
 
-  // Priority 2: Auto-detect from Expo dev server (not tunnel mode)
+  // Priority 2: Auto-detect from Expo dev server (LAN mode)
+  // This automatically finds your computer's Wi-Fi IP address so you don't need local.config.json!
   const debuggerHost =
-    Constants.expoGoConfig?.debuggerHost ||   // Expo Go
-    Constants.manifest?.debuggerHost;          // Older SDKs fallback
+    Constants.expoConfig?.hostUri ||          // Expo SDK 50+
+    Constants.expoGoConfig?.debuggerHost ||   // Older Expo Go
+    Constants.manifest?.debuggerHost;         // Legacy SDKs
+
   if (debuggerHost) {
     const ip = debuggerHost.split(':')[0]; // "192.168.1.62:8081" → "192.168.1.62"
     return `http://${ip}:3001/api`;
