@@ -36,39 +36,35 @@ Wolt-Clone-Project/
 
 ## 🚀 Running Instructions 
 
-### Part 1: The Backend & Web Infrastructure (Docker Compose)
-The easiest way to spin up the servers, databases, and the Web app is via Docker Compose.
+We have completely Dockerized the **entire system** (Backend, Database, C++ Server, Web Frontend, and Mobile Expo server). You do **not** need Node.js, npm, or Expo installed on your machine to run the project!
 
-1. **Ensure Docker and Docker Compose are running.**
-2. **Open a terminal in the root of the project.**
-3. **Run the following command:**
-   ```bash
-   docker-compose up --build
-   ```
-4. **Access the infrastructure:**
-   - **Frontend (React Web):** Open your browser to `http://localhost:3000`
-   - **Backend API (Node.js):** Available at `http://localhost:3001`
-   - **MongoDB Admin GUI (Mongo Express):** Available at `http://localhost:8082`
-   - **C++ Server:** Runs internally on port `5555`
+There are two ways to run the project. We recommend Option 1 for the cleanest, zero-config experience.
 
-### Part 2: The Mobile App (React Native / Expo)
-The mobile app runs natively on your host machine to easily connect to your physical device or simulator.
+### Option 1: The Automated Script (Recommended)
+We created a helper script that automatically detects your Wi-Fi IP, silently boots the Docker cluster in the background, and isolates the Expo logs so you get a perfectly clean QR code.
 
-1. **Open a separate terminal.**
-2. **Navigate to the `mobile` directory:**
-   ```bash
-   cd mobile
-   ```
-3. **Start the Expo server:**
-   ```bash
-   npx expo start
-   ```
-   *(If you are running the backend in Docker/WSL and testing on a physical phone, you may need to use `npx expo start --tunnel` and ensure your mobile's IP is configured correctly in `mobile/app.config.js` or `mobile/src/api/client.js`).*
-4. **Run the app:**
-   - Press `i` for iOS Simulator
-   - Press `a` for Android Emulator
-   - Press `w` for Web Browser
-   - Or scan the QR code with the Expo Go app on your physical device.
+**For Mac/Linux:**
+```bash
+chmod +x run.sh
+./run.sh
+```
+
+**For Windows:**
+```bash
+# Double-click run.bat in your file explorer, OR run in terminal:
+.\run.bat
+```
+*(Press `Ctrl+C` to stop the logs, then run `docker-compose down` when you are finished).*
+
+### Option 2: Pure Docker Compose (Manual)
+If you prefer not to use the helper scripts, you can run everything purely through Docker Compose. Because Expo is running inside a virtual Linux container, you must manually pass your computer's Wi-Fi IP address so the QR code generates correctly.
+
+1. Find your computer's local Wi-Fi IP address (e.g., `192.168.1.15`).
+2. Open a terminal and start the cluster:
+   - **Mac/Linux:** `HOST_IP=192.168.1.15 docker-compose up --build`
+   - **Windows:** `$env:HOST_IP="192.168.1.15"; docker-compose up --build`
+3. Open a second terminal and run `docker logs -f wolt-mobile` to see the QR code without database log spam.
+4. Scan the QR code with the **Expo Go** app on your phone.
 
 ## 🛠️ Work Process & JIRA
 This entire phase was managed using Agile methodology on JIRA. 
