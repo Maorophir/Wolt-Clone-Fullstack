@@ -11,16 +11,22 @@ std::string PostCommand::execute(const std::vector<std::string>& args) {
     }
 
     int userId = stoi(args[1]);
-    if (storageManager->userExists(userId)) {
-        return "404 Not Found";
-    }
 
     std::vector<int> productIds;
     for (size_t i = 2; i < args.size(); i++) {
         productIds.push_back(stoi(args[i]));
     }
 
-    storageManager->addProductsToUser(userId, productIds);
+    // Single atomic "create if absent" instead of userExists() followed by
+    // addProductsToUser(). Those were two separate critical sections, so two
+    // threads POSTing the same user could both see "absent" and both answer
+    // 201 Created for one user - a classic check-then-act (TOCTOU) race.
+    // createUserWithProducts() does the check and the insert under one
+    // exclusive lock, so exactly one caller ever gets 201.
+    if (!storageManager->createUserWithProducts(userId, productIds)) {
+        return "404 Not Found";
+    }
+
     return "201 Created";
 }
 

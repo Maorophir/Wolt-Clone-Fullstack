@@ -10,18 +10,19 @@ std::string PatchCommand::execute(const std::vector<std::string>& args) {
 
     int userId = std::stoi(args[1]);
 
-    //PATCH is valid only if the user already exists (created by POST).
-    //syntactically valid but logically impossible -> 404 Not Found.
-    if (!storageManager->userExists(userId)) {
-        return "404 Not Found";
-    }
-
     std::vector<int> productIds;
     for (size_t i = 2; i < args.size(); i++) {
         productIds.push_back(std::stoi(args[i]));
     }
 
-    storageManager->addProductsToUser(userId, productIds);
+    //PATCH is valid only if the user already exists (created by POST).
+    //syntactically valid but logically impossible -> 404 Not Found.
+    // The existence check and the append happen inside one exclusive lock:
+    // checking first and appending afterwards would let a concurrent DELETE
+    // (or a concurrent user removal) slip in between and resurrect the user.
+    if (!storageManager->appendProductsIfUserExists(userId, productIds)) {
+        return "404 Not Found";
+    }
 
     return "204 No Content";
 }

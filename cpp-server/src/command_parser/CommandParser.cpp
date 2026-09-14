@@ -15,6 +15,14 @@ CommandParser::CommandParser(const std::string& dataFile) : watchList(dataFile) 
     commands["delete"] = std::make_unique<DeleteCommand>(&watchList);
 }
 
+bool CommandParser::hasCommand(const std::string& name) const {
+    return commands.count(name) > 0;
+}
+
+std::size_t CommandParser::commandCount() const {
+    return commands.size();
+}
+
 std::string CommandParser::processCommand(const std::string& line) {
     std::vector<std::string> args = parseCommand(line);
     if (args.empty()) {
@@ -28,8 +36,12 @@ std::string CommandParser::processCommand(const std::string& line) {
         c = tolower(c);
     }
 
-    if (commands.count(cmdName)) {
-        return commands[cmdName]->execute(args);
+    // find() rather than operator[]: operator[] on a std::map INSERTS a
+    // default-constructed entry when the key is missing, which would be an
+    // unsynchronised write to a container other worker threads are reading.
+    auto it = commands.find(cmdName);
+    if (it != commands.end()) {
+        return it->second->execute(args);
     }
     //malformed or unsupported command -> 400 Bad Request.
     return "400 Bad Request";
