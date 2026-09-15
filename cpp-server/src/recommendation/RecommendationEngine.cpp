@@ -3,8 +3,8 @@
 #include <algorithm>
 
 RecommendationEngine::RecommendationEngine(
-    const std::unordered_map<int, std::unordered_set<int>>& watchedProductsByUser)
-    : watchedProductsByUser(watchedProductsByUser)
+    std::unordered_map<int, std::unordered_set<int>> watchedProductsByUser)
+    : watchedProductsByUser(std::move(watchedProductsByUser))
 {
 }
    

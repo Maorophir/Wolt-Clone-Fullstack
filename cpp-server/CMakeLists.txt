@@ -8,6 +8,27 @@ project(WoltProject)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# Threading support.
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+# Opt-in ThreadSanitizer build:  cmake -DENABLE_TSAN=ON ..
+option(ENABLE_TSAN "Build with ThreadSanitizer" OFF)
+if (ENABLE_TSAN)
+    message(STATUS "ThreadSanitizer enabled")
+    add_compile_options(-fsanitize=thread -g -O1 -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=thread)
+endif()
+
+# Opt-in AddressSanitizer build:  cmake -DENABLE_ASAN=ON ..
+option(ENABLE_ASAN "Build with AddressSanitizer" OFF)
+if (ENABLE_ASAN)
+    message(STATUS "AddressSanitizer enabled")
+    add_compile_options(-fsanitize=address,undefined -g -O1 -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address,undefined)
+endif()
+
+
 # Testing support.
 enable_testing()
 find_package(GTest REQUIRED)
@@ -34,6 +55,7 @@ include_directories(
 # --- CORE SOURCES ---
 set(CORE_SOURCES
         src/network/TCPServer.cpp
+        src/network/ThreadPool.cpp
         src/commands/PostCommand.cpp
         src/commands/HelpCommand.cpp
         src/commands/GetCommand.cpp
@@ -49,6 +71,8 @@ set(CORE_SOURCES
 set(TEST_SOURCES
         src/tests/test_main.cpp
         src/tests/TCPServerTest.cpp
+        src/tests/ThreadPoolTest.cpp 
+        src/tests/ConcurrencyTest.cpp
         src/tests/ParserTest.cpp
         src/tests/StorageManagerTest.cpp
         src/tests/test_recommend.cpp
@@ -82,9 +106,16 @@ add_executable(WoltProjectTests
 # 5. Linking & Test Registration
 # ==========================================
 
-# Link GoogleTest and pthread to the test executable.
-target_link_libraries(WoltProjectTests ${GTEST_BOTH_LIBRARIES} pthread)
+# Link GoogleTest and Threads.
+target_link_libraries(WoltProject PRIVATE Threads::Threads)
+target_link_libraries(WoltProjectTests PRIVATE ${GTEST_BOTH_LIBRARIES} Threads::Threads)
 
 # Register tests automatically with CTest (Modern CMake way for GTest)
 include(GoogleTest)
 gtest_discover_tests(WoltProjectTests)
+
+# Concurrent load generator used to measure throughput before/after.
+add_executable(WoltLoadTest
+        src/tools/LoadTest.cpp
+)
+target_link_libraries(WoltLoadTest PRIVATE Threads::Threads)
